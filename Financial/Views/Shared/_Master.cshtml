@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>داشبورد | @ViewBag.Title</title>
+
+    <link href="~/lib/Bootstarp/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Fonts/font awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="~/css/font.css" rel="stylesheet" />
+
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <link href="~/lib/DataTables-1.10.18/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/jQuery.Select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/jQuery.Select2/css/select2-bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/jQuery.toastr/css/toastr.css" rel="stylesheet" />
+    <link href="~/lib/MaterialDesignSwitch/MaterialDesignSwitch.css" rel="stylesheet" />
+
+    @RenderSection("Styles", false)
+
+</head>
+<body>
+
+    <header class="main-header container-fluid  navbar-fixed-top">
+
+        <div class="row">
+
+            <div class="col-md-3  navHeader">
+                <img src="~/Content/Images/LogoTitel.png" style="height:45px;margin-top:-8px" />
+            </div>
+            <nav class="col-md-9  navbar navbar-inverse " style="border-radius:0;">
+
+                <partial name="_Nav" />
+
+            </nav>
+        </div>
+
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer></footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/lib/Bootstarp/js/bootstrap.min.js"></script>
+    <script src="~/lib/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/DataTables-1.10.18/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/lib/jQuery.Select2/js/select2.js"></script>
+    <script src="~/lib/jQuery.Select2/js/i18n/fa.js"></script>
+    <script src="~/lib/jQuery.toastr/js/toastr.min.js"></script>
+
+    @*<script src="~/Scripts/MyScripts/DataTabels_Config.js"></script>
+        <script src="~/Scripts/MyScripts/Toastr_Config.js"></script>
+        <script src="~/Scripts/MyScripts/Select2_Config.js"></script>*@
+
+    <partial name="_Toster" />
+
+
+    @RenderSection("Scripts", false)
+
+    @RenderSection("Modal", false)
+
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+
+</body>
+</html>
