@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Financial.Models.ViewModels
 {
-    public class Model_Login
+    public class LoginViewModel
     {
         [Display(Name = "نام کاربری")]
         [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
@@ -18,6 +18,6 @@ namespace Financial.Models.ViewModels
         public string Password { get; set; }
 
         [Display(Name = " ")]
-        public bool RemenberMe { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

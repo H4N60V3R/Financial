@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Financial.Migrations
 {
-    public partial class AddingIdentity : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,11 +39,33 @@ namespace Financial.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    NationalCode = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: false),
+                    IsDelete = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CodeGroup",
+                columns: table => new
+                {
+                    Guid = table.Column<Guid>(nullable: false),
+                    Key = table.Column<string>(maxLength: 128, nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    IsDelete = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CodeGroup", x => x.Guid);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,6 +87,32 @@ namespace Financial.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Account",
+                columns: table => new
+                {
+                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    UserString = table.Column<string>(nullable: true),
+                    BankName = table.Column<string>(maxLength: 128, nullable: false),
+                    AccountName = table.Column<string>(maxLength: 128, nullable: false),
+                    AccountNumber = table.Column<string>(maxLength: 128, nullable: false),
+                    CardNumber = table.Column<string>(maxLength: 128, nullable: true),
+                    Credit = table.Column<long>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    IsDelete = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Account", x => x.Guid);
+                    table.ForeignKey(
+                        name: "FK_UserAccount_User",
+                        column: x => x.UserString,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -152,6 +200,95 @@ namespace Financial.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Code",
+                columns: table => new
+                {
+                    Guid = table.Column<Guid>(nullable: false),
+                    CodeGroupGuid = table.Column<Guid>(nullable: false),
+                    Value = table.Column<string>(maxLength: 128, nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    IsDelete = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Code", x => x.Guid);
+                    table.ForeignKey(
+                        name: "FK_Code_CodeGroup",
+                        column: x => x.CodeGroupGuid,
+                        principalTable: "CodeGroup",
+                        principalColumn: "Guid",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transaction",
+                columns: table => new
+                {
+                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    AccountGuid = table.Column<Guid>(nullable: true),
+                    Title = table.Column<string>(maxLength: 128, nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    Cost = table.Column<int>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    IsDelete = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAccountTransaction", x => x.Guid);
+                    table.ForeignKey(
+                        name: "FK_Transaction_Account",
+                        column: x => x.AccountGuid,
+                        principalTable: "Account",
+                        principalColumn: "Guid",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Check",
+                columns: table => new
+                {
+                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    StateCodeGuid = table.Column<Guid>(nullable: false),
+                    AccountGuid = table.Column<Guid>(nullable: true),
+                    TransactionGuid = table.Column<Guid>(nullable: false),
+                    Serial = table.Column<string>(maxLength: 128, nullable: false),
+                    Destination = table.Column<string>(maxLength: 128, nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    IsDelete = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCheck", x => x.Guid);
+                    table.ForeignKey(
+                        name: "FK_UserCheck_UserAccount",
+                        column: x => x.AccountGuid,
+                        principalTable: "Account",
+                        principalColumn: "Guid",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Check_Code",
+                        column: x => x.StateCodeGuid,
+                        principalTable: "Code",
+                        principalColumn: "Guid",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Check_Transaction",
+                        column: x => x.TransactionGuid,
+                        principalTable: "Transaction",
+                        principalColumn: "Guid",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Account_UserString",
+                table: "Account",
+                column: "UserString");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -190,6 +327,31 @@ namespace Financial.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Check_AccountGuid",
+                table: "Check",
+                column: "AccountGuid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Check_StateCodeGuid",
+                table: "Check",
+                column: "StateCodeGuid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Check_TransactionGuid",
+                table: "Check",
+                column: "TransactionGuid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Code_CodeGroupGuid",
+                table: "Code",
+                column: "CodeGroupGuid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transaction_AccountGuid",
+                table: "Transaction",
+                column: "AccountGuid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -210,7 +372,22 @@ namespace Financial.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Check");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Code");
+
+            migrationBuilder.DropTable(
+                name: "Transaction");
+
+            migrationBuilder.DropTable(
+                name: "CodeGroup");
+
+            migrationBuilder.DropTable(
+                name: "Account");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
