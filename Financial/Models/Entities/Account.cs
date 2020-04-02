@@ -14,7 +14,7 @@ namespace Financial.Models.Entities
 
         public Guid Guid { get; set; }
 
-        public string UserString { get; set; }
+        public string UserGuid { get; set; }
 
         public string BankName { get; set; }
 
@@ -33,7 +33,7 @@ namespace Financial.Models.Entities
         public bool IsDelete { get; set; }
 
 
-        public virtual ApplicationUser UserSt { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<Check> Check { get; set; }
 

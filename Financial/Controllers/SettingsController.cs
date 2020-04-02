@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Financial.Controllers
 {
-    public class SettingController : Controller
+    public class SettingsController : Controller
     {
         public IActionResult Index()
         {

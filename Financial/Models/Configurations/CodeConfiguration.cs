@@ -20,6 +20,9 @@ namespace Financial.Models.Configurations
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())");
 
+            entity.Property(e => e.IsDelete)
+                .HasDefaultValueSql("((0))");
+
             entity.Property(e => e.ModifiedDate)
                 .HasDefaultValueSql("(getdate())");
 
@@ -27,7 +30,7 @@ namespace Financial.Models.Configurations
                 .IsRequired()
                 .HasMaxLength(128);
 
-            entity.HasOne(d => d.CodeGroupGu)
+            entity.HasOne(d => d.CodeGroup)
                 .WithMany(p => p.Code)
                 .HasForeignKey(d => d.CodeGroupGuid)
                 .OnDelete(DeleteBehavior.ClientSetNull)

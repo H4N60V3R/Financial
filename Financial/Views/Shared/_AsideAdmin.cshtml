@@ -1,84 +1,113 @@
 ﻿<ul class="navbar nav aside-panel">
 
     <li>
-        <img src="~/Content/Images/logo-uni.png" alt="Logo" class="img-responsive img-rounded img-logo" style="height:200px;">
-        <a href="@Url.Action("index", "Dashboard")">
+        <img src="~/Content/Images/logo-uni.png" alt="Logo" class="img-responsive img-rounded img-logo" style="height: 200px;">
+        <a href="@Url.Action("Index", "Home")">
             <i class="glyphicon glyphicon-dashboard"></i>
             داشبورد
         </a>
+    </li>
+
+    <li data-toggle="collapse" data-target="#sub-users">
+
+        <a href="javascript:void(0)">
+            <i class="glyphicon glyphicon-book"></i>
+            مدیریت کاربران
+            <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
+        </a>
+
+        <ul class="collapse nav aside-sub-panel" id="sub-users">
+            <li>
+                <a href="@Url.Action("", "")">
+                    <i class="glyphicon glyphicon-book"></i>
+                    لیست کاربران
+                </a>
+            </li>
+        </ul>
+
     </li>
 
     <li data-toggle="collapse" data-target="#sub-menu-site">
 
         <a href="javascript:void(0)">
             <i class="glyphicon glyphicon-book"></i>
-            مدیرت دانشجویان
+            مدیرت حساب ها
             <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
         </a>
 
-        <ul class="collapse nav aside-sub-panel " id="sub-menu-site">
+        <ul class="collapse nav aside-sub-panel" id="sub-menu-site">
             <li>
-                <a href="@Url.Action("Index", "Student")">
+                <a href="@Url.Action("Index", "Accounts")">
                     <i class="glyphicon glyphicon-book"></i>
-                    لیست دانشجویان
+                    لیست حساب ها
                 </a>
             </li>
-
-            @*<li>
-                    <a href="#">
-                        <i class="glyphicon glyphicon-book"></i>
-                        شرکت کننده در نظرسنجی
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#">
-                        <i class="glyphicon glyphicon-book"></i>
-                        شرکت نکرده در نظرسنجی
-                    </a>
-                </li>*@
-
         </ul>
 
     </li>
 
+    <li data-toggle="collapse" data-target="#sub-checks">
 
-
-    <li>
-        <a href="@Url.Action("index","Turn")">
-            <i class="glyphicon glyphicon-list"></i>
-            نوبت دهی
+        <a href="javascript:void(0)">
+            <i class="glyphicon glyphicon-book"></i>
+            مدیریت دسته چک ها
+            <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
         </a>
+
+        <ul class="collapse nav aside-sub-panel" id="sub-checks">
+            <li>
+                <a href="@Url.Action("", "")">
+                    <i class="glyphicon glyphicon-book"></i>
+                    تست
+                </a>
+            </li>
+        </ul>
+
     </li>
 
-    <li>
-        <a href="@Url.Action("Index", "Form")">
-            <i class="glyphicon glyphicon-list"></i>
-            پرسش نامه ها
+    <li data-toggle="collapse" data-target="#sub-transactions">
+
+        <a href="javascript:void(0)">
+            <i class="glyphicon glyphicon-book"></i>
+            تراکنش ها
+            <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
         </a>
+
+        <ul class="collapse nav aside-sub-panel" id="sub-transactions">
+            <li>
+                <a href="@Url.Action("", "")">
+                    <i class="glyphicon glyphicon-book"></i>
+                    تست
+                </a>
+            </li>
+        </ul>
+
     </li>
 
-    @*<li>
-            <a href="@Url.Action("Excel", "File")">
-                <i class="glyphicon glyphicon-list"></i>
-                فایل
-            </a>
-        </li>*@
+    <li data-toggle="collapse" data-target="#sub-reports">
 
-    <li>
-        <a href="@Url.Action("index","Report")">
+        <a href="javascript:void(0)">
             <i class="glyphicon glyphicon-book"></i>
             گزارشات
+            <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
         </a>
+
+        <ul class="collapse nav aside-sub-panel" id="sub-reports">
+            <li>
+                <a href="@Url.Action("", "")">
+                    <i class="glyphicon glyphicon-book"></i>
+                    تست
+                </a>
+            </li>
+        </ul>
 
     </li>
 
     <li>
-        <a href="@Url.Action("index","Setting")">
+        <a href="@Url.Action("Index", "Settings")">
             <i class="glyphicon glyphicon-book"></i>
-            تنظیمات سامانه
+            تنظیمات
         </a>
-
     </li>
 
 </ul>

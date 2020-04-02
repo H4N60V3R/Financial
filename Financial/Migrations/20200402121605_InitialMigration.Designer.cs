@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Financial.Migrations
 {
     [DbContext(typeof(FinancialContext))]
-    [Migration("20200401164056_InitialMigration")]
+    [Migration("20200402121605_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,6 @@ namespace Financial.Migrations
                         .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("AccountName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
@@ -39,7 +38,6 @@ namespace Financial.Migrations
                         .HasMaxLength(128);
 
                     b.Property<string>("BankName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
@@ -53,22 +51,27 @@ namespace Financial.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<long>("Credit")
-                        .HasColumnType("bigint");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("UserString")
+                    b.Property<string>("UserGuid")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Guid");
 
-                    b.HasIndex("UserString");
+                    b.HasIndex("UserGuid");
 
                     b.ToTable("Account");
                 });
@@ -89,7 +92,9 @@ namespace Financial.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
@@ -99,13 +104,19 @@ namespace Financial.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -114,10 +125,13 @@ namespace Financial.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("NationalCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
@@ -180,7 +194,9 @@ namespace Financial.Migrations
                         .HasMaxLength(128);
 
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()
@@ -199,7 +215,7 @@ namespace Financial.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Guid")
-                        .HasName("PK_UserCheck");
+                        .HasName("PK_Check");
 
                     b.HasIndex("AccountGuid");
 
@@ -224,7 +240,9 @@ namespace Financial.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()
@@ -254,7 +272,9 @@ namespace Financial.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -294,7 +314,9 @@ namespace Financial.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()
@@ -310,7 +332,7 @@ namespace Financial.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Guid")
-                        .HasName("PK_UserAccountTransaction");
+                        .HasName("PK_AccountTransaction");
 
                     b.HasIndex("AccountGuid");
 
@@ -450,26 +472,27 @@ namespace Financial.Migrations
 
             modelBuilder.Entity("Financial.Models.Entities.Account", b =>
                 {
-                    b.HasOne("Financial.Models.Entities.ApplicationUser", "UserSt")
+                    b.HasOne("Financial.Models.Entities.ApplicationUser", "User")
                         .WithMany("Account")
-                        .HasForeignKey("UserString")
-                        .HasConstraintName("FK_UserAccount_User");
+                        .HasForeignKey("UserGuid")
+                        .HasConstraintName("FK_Account_User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Financial.Models.Entities.Check", b =>
                 {
-                    b.HasOne("Financial.Models.Entities.Account", "AccountGu")
+                    b.HasOne("Financial.Models.Entities.Account", "Account")
                         .WithMany("Check")
                         .HasForeignKey("AccountGuid")
-                        .HasConstraintName("FK_UserCheck_UserAccount");
+                        .HasConstraintName("FK_Check_Account");
 
-                    b.HasOne("Financial.Models.Entities.Code", "StateCodeGu")
+                    b.HasOne("Financial.Models.Entities.Code", "Code")
                         .WithMany("Check")
                         .HasForeignKey("StateCodeGuid")
                         .HasConstraintName("FK_Check_Code")
                         .IsRequired();
 
-                    b.HasOne("Financial.Models.Entities.Transaction", "TransactionGu")
+                    b.HasOne("Financial.Models.Entities.Transaction", "Transaction")
                         .WithMany("Check")
                         .HasForeignKey("TransactionGuid")
                         .HasConstraintName("FK_Check_Transaction")
@@ -478,7 +501,7 @@ namespace Financial.Migrations
 
             modelBuilder.Entity("Financial.Models.Entities.Code", b =>
                 {
-                    b.HasOne("Financial.Models.Entities.CodeGroup", "CodeGroupGu")
+                    b.HasOne("Financial.Models.Entities.CodeGroup", "CodeGroup")
                         .WithMany("Code")
                         .HasForeignKey("CodeGroupGuid")
                         .HasConstraintName("FK_Code_CodeGroup")
@@ -487,7 +510,7 @@ namespace Financial.Migrations
 
             modelBuilder.Entity("Financial.Models.Entities.Transaction", b =>
                 {
-                    b.HasOne("Financial.Models.Entities.Account", "AccountGu")
+                    b.HasOne("Financial.Models.Entities.Account", "Account")
                         .WithMany("Transaction")
                         .HasForeignKey("AccountGuid")
                         .HasConstraintName("FK_Transaction_Account");

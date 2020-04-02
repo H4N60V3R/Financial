@@ -24,7 +24,7 @@ namespace Financial.Models.Entities
         public bool IsDelete { get; set; }
 
 
-        public virtual CodeGroup CodeGroupGu { get; set; }
+        public virtual CodeGroup CodeGroup { get; set; }
 
         public virtual ICollection<Check> Check { get; set; }
     }

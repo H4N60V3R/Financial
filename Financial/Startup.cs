@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,13 +32,16 @@ namespace Financial
         {
             services.AddControllersWithViews();
 
-            services.AddDbContextPool<FinancialContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<FinancialContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
             }).AddEntityFrameworkStores<FinancialContext>();
+
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/User/Login");
 
             services.AddMvc(config =>
             {
@@ -46,6 +50,7 @@ namespace Financial
                     .Build();
 
                 config.Filters.Add(new AuthorizeFilter(policy));
+                config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
         }
 

@@ -13,7 +13,7 @@ namespace Financial.Models.Configurations
         public void Configure(EntityTypeBuilder<Transaction> entity)
         {
             entity.HasKey(e => e.Guid)
-                .HasName("PK_UserAccountTransaction");
+                .HasName("PK_AccountTransaction");
 
             entity.Property(e => e.Guid)
                 .HasDefaultValueSql("(newid())");
@@ -24,6 +24,9 @@ namespace Financial.Models.Configurations
             entity.Property(e => e.Description)
                 .IsRequired();
 
+            entity.Property(e => e.IsDelete)
+                .HasDefaultValueSql("((0))");
+
             entity.Property(e => e.ModifiedDate)
                 .HasDefaultValueSql("(getdate())");
 
@@ -31,7 +34,7 @@ namespace Financial.Models.Configurations
                 .IsRequired()
                 .HasMaxLength(128);
 
-            entity.HasOne(d => d.AccountGu)
+            entity.HasOne(d => d.Account)
                 .WithMany(p => p.Transaction)
                 .HasForeignKey(d => d.AccountGuid)
                 .HasConstraintName("FK_Transaction_Account");

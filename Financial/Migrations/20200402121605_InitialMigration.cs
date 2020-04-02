@@ -40,13 +40,13 @@ namespace Financial.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    NationalCode = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(maxLength: 128, nullable: false),
+                    LastName = table.Column<string>(maxLength: 128, nullable: false),
+                    NationalCode = table.Column<string>(maxLength: 128, nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ModifiedDate = table.Column<DateTime>(nullable: false),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
@@ -61,7 +61,7 @@ namespace Financial.Migrations
                     Key = table.Column<string>(maxLength: 128, nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
@@ -94,22 +94,22 @@ namespace Financial.Migrations
                 columns: table => new
                 {
                     Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
-                    UserString = table.Column<string>(nullable: true),
-                    BankName = table.Column<string>(maxLength: 128, nullable: false),
-                    AccountName = table.Column<string>(maxLength: 128, nullable: false),
+                    UserGuid = table.Column<string>(nullable: false),
+                    BankName = table.Column<string>(maxLength: 128, nullable: true),
+                    AccountName = table.Column<string>(maxLength: 128, nullable: true),
                     AccountNumber = table.Column<string>(maxLength: 128, nullable: false),
                     CardNumber = table.Column<string>(maxLength: 128, nullable: true),
-                    Credit = table.Column<long>(nullable: false),
+                    Credit = table.Column<long>(nullable: false, defaultValueSql: "((0))"),
                     CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Account", x => x.Guid);
                     table.ForeignKey(
-                        name: "FK_UserAccount_User",
-                        column: x => x.UserString,
+                        name: "FK_Account_User",
+                        column: x => x.UserGuid,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -209,7 +209,7 @@ namespace Financial.Migrations
                     Value = table.Column<string>(maxLength: 128, nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
@@ -234,11 +234,11 @@ namespace Financial.Migrations
                     Cost = table.Column<int>(nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserAccountTransaction", x => x.Guid);
+                    table.PrimaryKey("PK_AccountTransaction", x => x.Guid);
                     table.ForeignKey(
                         name: "FK_Transaction_Account",
                         column: x => x.AccountGuid,
@@ -259,13 +259,13 @@ namespace Financial.Migrations
                     Destination = table.Column<string>(maxLength: 128, nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserCheck", x => x.Guid);
+                    table.PrimaryKey("PK_Check", x => x.Guid);
                     table.ForeignKey(
-                        name: "FK_UserCheck_UserAccount",
+                        name: "FK_Check_Account",
                         column: x => x.AccountGuid,
                         principalTable: "Account",
                         principalColumn: "Guid",
@@ -285,9 +285,9 @@ namespace Financial.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Account_UserString",
+                name: "IX_Account_UserGuid",
                 table: "Account",
-                column: "UserString");
+                column: "UserGuid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

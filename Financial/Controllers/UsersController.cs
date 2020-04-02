@@ -10,12 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Financial.Controllers
 {
-    public class AccountController : Controller
+    public class UsersController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
+        public UsersController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
@@ -45,7 +45,7 @@ namespace Financial.Controllers
                         return Redirect(returnUrl);
                     }
 
-                    return RedirectToAction("index", "Dashboard");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
@@ -67,18 +67,13 @@ namespace Financial.Controllers
         {
             if (ModelState.IsValid)
             {
-                DateTime now = DateTime.Now;
-
                 var user = new ApplicationUser
                 {
                     UserName = model.Username,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     NationalCode = model.NationalCode,
-                    Address = model.Address,
-                    CreationDate = now,
-                    ModifiedDate = now,
-                    IsDelete = false
+                    Address = model.Address
                 };
 
                 var result = await userManager.CreateAsync(user, model.Password);
@@ -86,7 +81,7 @@ namespace Financial.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, false);
-                    return RedirectToAction("index", "Dashboard");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
@@ -102,7 +97,7 @@ namespace Financial.Controllers
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("login", "account");
+            return RedirectToAction("Login", "Users");
         }
     }
 }

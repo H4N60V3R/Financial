@@ -30,7 +30,7 @@ namespace Financial.Models.Entities
         public bool IsDelete { get; set; }
 
 
-        public virtual Account AccountGu { get; set; }
+        public virtual Account Account { get; set; }
 
         public virtual ICollection<Check> Check { get; set; }
     }

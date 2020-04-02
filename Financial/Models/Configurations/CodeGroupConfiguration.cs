@@ -20,6 +20,9 @@ namespace Financial.Models.Configurations
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())");
 
+            entity.Property(e => e.IsDelete)
+                .HasDefaultValueSql("((0))");
+
             entity.Property(e => e.Key)
                 .IsRequired()
                 .HasMaxLength(128);

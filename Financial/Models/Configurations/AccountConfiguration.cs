@@ -18,7 +18,6 @@ namespace Financial.Models.Configurations
                 .HasDefaultValueSql("(newid())");
 
             entity.Property(e => e.AccountName)
-                .IsRequired()
                 .HasMaxLength(128);
 
             entity.Property(e => e.AccountNumber)
@@ -26,7 +25,6 @@ namespace Financial.Models.Configurations
                 .HasMaxLength(128);
 
             entity.Property(e => e.BankName)
-                .IsRequired()
                 .HasMaxLength(128);
 
             entity.Property(e => e.CardNumber)
@@ -35,14 +33,23 @@ namespace Financial.Models.Configurations
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())");
 
+            entity.Property(e => e.Credit)
+                .HasDefaultValueSql("((0))");
+
+            entity.Property(e => e.IsDelete)
+                .HasDefaultValueSql("((0))");
+
             entity.Property(e => e.ModifiedDate)
                 .HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.UserSt)
+            entity.Property(e => e.UserGuid)
+                .IsRequired();
+
+            entity.HasOne(d => d.User)
                 .WithMany(p => p.Account)
-                .HasForeignKey(d => d.UserString)
+                .HasForeignKey(d => d.UserGuid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserAccount_User");
+                .HasConstraintName("FK_Account_User");
         }
     }
 }

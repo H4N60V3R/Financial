@@ -67,11 +67,11 @@ hr {
 }
 
     .breadcrumb > .active {
-        color: #333333;
+        color: whitesmoke;
     }
 
     .breadcrumb > li + li:before {
-        color: #333333;
+        color: whitesmoke;
     }
 
 .navigation nav {
@@ -179,8 +179,12 @@ hr {
     }
 
 
-.table-striped > tbody > tr:nth-of-type(2n+1) {
+.table-striped > tbody > tr:nth-of-type(2n) {
     background-color: #2b3337;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+     background-color: initial; 
 }
 
 .table-body {

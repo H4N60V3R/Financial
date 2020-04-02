@@ -17,63 +17,18 @@
     "hideMethod": "fadeOut"
 };
 
-function TosterWithOutTitel(TosterState, TosterMassage) {
-    switch (TosterState) {
-        case "success":
-            toastr.success(TosterMassage);
-            break;
-        case "info":
-            toastr.info(TosterMassage);
-            break;
-        case "error":
-            toastr.error(TosterMassage);
-            break;
-        case "warning":
-            toastr.warning(TosterMassage);
-            break;
-        default:
-            toastr.error("invalid");
-            break;
-    }
-};
+function ToastSuccess(message, title) {
+    toastr.success(message, title);
+}
 
-function TosterWithTitel(TosterState, TosterMassage, titel) {
-    switch (TosterState) {
-        case "success":
-            toastr.success(TosterMassage, titel);
-            break;
-        case "info":
-            toastr.info(TosterMassage, titel);
-            break;
-        case "error":
-            toastr.error(TosterMassage, titel);
-            break;
-        case "warning":
-            toastr.warning(TosterMassage, titel);
-            break;
-        default:
-            toastr.error("invalid");
-            break;
-    }
-};
+function ToastInfo(message, title) {
+    toastr.info(message, title);
+}
 
+function ToastWarning(message, title) {
+    toastr.warning(message, title);
+}
 
-function TosterJustTitel(TosterState, titel) {
-    switch (TosterState) {
-        case "success":
-            toastr.success("", titel);
-            break;
-        case "info":
-            toastr.info("", titel);
-            break;
-        case "error":
-            toastr.error("", titel);
-            break;
-        case "warning":
-            toastr.warning("", titel);
-            break;
-        default:
-            toastr.error("invalid");
-            break;
-    }
-};
+function ToastError(message, title) {
+    toastr.error(message, title);
+}

@@ -12,63 +12,25 @@ namespace Financial.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> entity)
         {
-            //entity.Property(e => e.Address)
-            //    .IsRequired();
+            entity.Property(e => e.CreationDate)
+                .HasDefaultValueSql("(getdate())");
 
-            //entity.Property(e => e.CreationDate)
-            //    .HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.FirstName)
+                .IsRequired()
+                .HasMaxLength(128);
 
-            //entity.Property(e => e.FirstName)
-            //    .IsRequired()
-            //    .HasMaxLength(128);
+            entity.Property(e => e.IsDelete)
+                .HasDefaultValueSql("((0))");
 
-            //entity.Property(e => e.LastName)
-            //    .IsRequired()
-            //    .HasMaxLength(128);
+            entity.Property(e => e.LastName)
+                .IsRequired()
+                .HasMaxLength(128);
 
-            //entity.Property(e => e.ModifiedDate)
-            //    .HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.ModifiedDate)
+                .HasDefaultValueSql("(getdate())");
 
-            //entity.Property(e => e.NationalCode)
-            //    .IsRequired()
-            //    .HasMaxLength(128);
-
-            //modelBuilder.Entity<User>(entity =>
-            //{
-            //    entity.HasKey(e => e.Guid);
-
-            //    entity.Property(e => e.Guid).HasDefaultValueSql("(newid())");
-
-            //    entity.Property(e => e.Address).IsRequired();
-
-            //    entity.Property(e => e.CreationDate).HasDefaultValueSql("(getdate())");
-
-            //    entity.Property(e => e.Email)
-            //        .IsRequired()
-            //        .HasMaxLength(128);
-
-            //    entity.Property(e => e.FirstName)
-            //        .IsRequired()
-            //        .HasMaxLength(128);
-
-            //    entity.Property(e => e.LastName)
-            //        .IsRequired()
-            //        .HasMaxLength(128);
-
-            //    entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
-
-            //    entity.Property(e => e.NationalCode)
-            //        .IsRequired()
-            //        .HasMaxLength(128);
-
-            //    entity.Property(e => e.Password)
-            //        .IsRequired()
-            //        .HasMaxLength(128);
-
-            //    entity.Property(e => e.PhoneNumber)
-            //        .IsRequired()
-            //        .HasMaxLength(128);
-            //});
+            entity.Property(e => e.NationalCode)
+                .HasMaxLength(128);
         }
     }
 }

@@ -24,10 +24,10 @@ namespace Financial.Models.Entities
         public bool IsDelete { get; set; }
 
 
-        public virtual Account AccountGu { get; set; }
+        public virtual Account Account { get; set; }
 
-        public virtual Code StateCodeGu { get; set; }
+        public virtual Code Code { get; set; }
 
-        public virtual Transaction TransactionGu { get; set; }
+        public virtual Transaction Transaction { get; set; }
     }
 }
