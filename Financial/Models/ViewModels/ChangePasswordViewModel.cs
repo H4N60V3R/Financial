@@ -8,19 +8,20 @@ namespace Financial.Models.ViewModels
 {
     public class ChangePasswordViewModel
     {
-        [Required]
-        [DataType(DataType.Password)]
         [Display(Name = "رمز فعلی")]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
         public string CurrentPassword { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
         [Display(Name = "رمز جدید")]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
         public string NewPassword { get; set; }
 
-        [DataType(DataType.Password)]
         [Display(Name = "تایید رمز جدید")]
+        [DataType(DataType.Password)]
         [Compare("NewPassword", ErrorMessage = "رمز جدید و تایید رمز جدید مطابق نیست")]
+        [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
         public string ConfirmNewPassword { get; set; }
     }
 }

@@ -41,10 +41,10 @@
     </div>
 
 </div>
-<div class="panel panel-default">
 
-    <div class="panel-body table-body" style="overflow-x:auto;">
-        <table id="DateTable" class="table table-striped" style="width: 100%">
+<div class="panel panel-default">
+    <div class="panel-body table-body" style="overflow-x: auto;">
+        <table id="DateTable" class="table table-striped table-bordered" style="width: 100%">
             <thead>
                 <tr class="table-tr">
                     <th scope="col">#</th>
@@ -54,7 +54,7 @@
                     <th scope="col">@Html.DisplayNameFor(model => model.AccountSide)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
-                    @*<th scope="col">@Html.DisplayNameFor(model => model.ByCheck)</th>*@
+                    <th scope="col">@Html.DisplayNameFor(model => model.ByCheck)</th>
                     <th scope="col" data-orderable="false">کنترل</th>
                 </tr>
             </thead>
@@ -96,23 +96,23 @@
                             <span>@Html.DisplayFor(modelItem => item.ReceiptDate)</span>
                         </td>
 
-                        @*<td scope="row">
-                                <span>
-                                    @if (item.ByCheck.HasValue)
-                                    {
-                                        <a class="control btn btn-warning btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده" href="javascript:void(0)" onclick="Edit('@item.Guid')">مشاهده</a>
-                                    }
-                                    else
-                                    {
-                                        <span>@Messages.NotSet</span>
-                                    }
-                                </span>
-                            </td>*@
+                        <td scope="row">
+                            <span>
+                                @if (item.ByCheck.HasValue)
+                                {
+                                    <a class="control btn btn-info btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="ShowCheckInfo('@item.Guid')">مشاهده چک</a>
+                                }
+                                else
+                                {
+                                    <span>@Messages.NotSet</span>
+                                }
+                            </span>
+                        </td>
 
                         <td scope="row">
+                            <a class="control btn btn-primary btn-sm glyphicon glyphicon-refresh" data-toggle="tooltip" data-placement="auto" title="تغییر وضعیت" href="javascript:void(0)" onclick="ChangeState('@item.Guid')"></a>
                             @if (item.ByCheck.HasValue)
                             {
-                                <a class="control btn btn-primary btn-sm glyphicon glyphicon-list" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
                                 <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="@Url.Action("EditCheckTransaction", "Transactions", new { guid = item.Guid })"></a>
                             }
                             else
@@ -130,12 +130,21 @@
     </div>
 </div>
 
-
-<partial name="_Modal" />
-
 @section Modals {
 
     <script>
+
+        function ShowCheckInfo(guid) {
+            $.ajax({
+                url: "/Transactions/ShowCheckInfo/?guid=" + guid,
+                type: "Get",
+                data: {}
+            }).done(function (result) {
+                $("#myModal").modal("show");
+                $("#myModalLabel").html("اطلاعات چک");
+                $("#myModalBody").html(result);
+            });
+        }
 
         function ChangeState(guid) {
             $.ajax({

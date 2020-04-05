@@ -1,6 +1,7 @@
 ﻿body {
-    font-family: IRANYekanWeb(FaNum);
+    font-family: Iransans;
     background-color: whitesmoke;
+    color: whitesmoke;
 }
 
 hr {
@@ -38,6 +39,21 @@ hr {
     margin-right: 15px;
 }
 
+.table {
+    color: black;
+}
+
+.form-body {
+    color: black;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.navbar-nav > li > a {
+    padding-bottom: 10px;
+}
 
 /*********************************************** Navigation **********************************************/
 .navigation {
@@ -161,10 +177,11 @@ hr {
 .navHeader {
     height: 60px;
     background-color: #222d32;
-    padding-top: 13px;
+    padding-top: 18px;
     border-bottom: 3px solid #9d9d9d;
     padding-right: 30px;
     color: #9d9d9d;
+    font-weight: bolder;
 }
 
     .navHeader a {
@@ -248,6 +265,8 @@ hr {
     margin-left: 5px;
     margin-right: 5px;
     font-size: 16px;
+    position: relative;
+    top: -2px;
 }
 
 .navbar-nav > .user-menu > .dropdown-menu {
@@ -390,7 +409,41 @@ hr {
         background-color: #337ab7;
     }
 
+/*** UserProfile **/
+
+.userprofile-detiles {
+    margin-top: 10px;
+}
+
+.userprofile-detiles-col-3-main {
+    padding-left: 0px;
+}
+
+.userprofile-detiles-col-3 {
+    background-color: #374449;
+    line-height: 40px;
+    border-radius: 0px;
+    margin-bottom: 10px;
+}
+
+.userprofile-detiles-col-9 {
+    background-color: #374449;
+    line-height: 40px;
+    border-radius: 0px;
+    margin-bottom: 10px;
+}
+
+.userprofile-detiles-text {
+    padding: 0px 15px 0px 0px;
+}
+
+.userprofile-detiles-item {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 @media screen and (max-width:990px) {
+
     /*********************************************** Config ********************************************/
     .Main-Config {
         margin-top: 130px;
@@ -405,5 +458,32 @@ hr {
         width: calc(100% - 30px);
     }
 
+    /*** UserProfile **/
+
+    .userprofile {
+        margin-top: 0px;
+    }
+
+    .userprofile-main > aside {
+        border-left: 0px solid #9d9d9d;
+    }
+
+    .userprofile-section {
+        height: unset;
+    }
+
+    .userprofile-detiles-col-3 {
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .userprofile-detiles-col-9 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .userprofile-detiles-col-3-main {
+        padding-left: 15px;
+    }
 
 }

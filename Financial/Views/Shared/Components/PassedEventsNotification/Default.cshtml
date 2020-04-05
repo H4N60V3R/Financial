@@ -1,7 +1,7 @@
 ﻿@model int
 
-<li class="dropdown notifications-menu menu-item">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+<li class="notifications-menu menu-item">
+    <a href="@Url.Action("PassedEvents", "Reports")" aria-haspopup="true" aria-expanded="true" data-placement='auto' title='رویدادهای گذشته'>
         <i class="fa fa-bell nav-top-userInfo-icon" style="padding-right: 7px;"></i>
         <span class="label label-danger">@Model</span>
     </a>

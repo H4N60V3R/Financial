@@ -26,14 +26,14 @@
 
         <div class="row">
 
-            <div class="col-md-3  navHeader">
+            <div class="col-md-3 navHeader">
                 <img src="~/Content/Images/LogoTitel.png" style="height:45px;margin-top:-8px" />
             </div>
-            <nav class="col-md-9  navbar navbar-inverse " style="border-radius:0;">
 
+            <nav class="col-md-9 navbar navbar-inverse " style="border-radius:0;">
                 <partial name="_Nav" />
-
             </nav>
+
         </div>
 
     </header>
@@ -59,12 +59,11 @@
 
     <partial name="_Toaster" />
 
-
     @RenderSection("Scripts", false)
 
     @RenderSection("Modals", false)
 
-    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    @*<script src="~/Scripts/modernizr-2.8.3.js"></script>*@
 
 </body>
 </html>

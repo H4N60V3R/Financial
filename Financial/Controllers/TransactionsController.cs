@@ -472,5 +472,35 @@ namespace Financial.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet]
+        public IActionResult ShowCheckInfo(Guid guid)
+        {
+            if (guid == null)
+            {
+                return BadRequest();
+            }
+
+            var checkTransactionInfo = context.CheckTransactionInfo
+                    .Where(x => x.TransactionGuid == guid)
+                    .SingleOrDefault();
+
+            if (checkTransactionInfo == null)
+            {
+                return NotFound();
+            }
+
+            var transaction = context.Transaction
+                .Where(x => x.Guid == guid)
+                .SingleOrDefault();
+
+            ShowCheckInfoViewModel model = new ShowCheckInfoViewModel()
+            {
+                Serial = checkTransactionInfo.Serial,
+                IssueDate = checkTransactionInfo.IssueDate
+            };
+
+            return PartialView(model);
+        }
     }
 }
