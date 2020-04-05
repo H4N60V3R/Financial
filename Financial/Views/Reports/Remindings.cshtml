@@ -15,72 +15,74 @@
 
 </div>
 
-<div class="panel-body table-body">
-    <table id="DateTable" class="table table-striped" style="width: 100%">
-        <thead>
-            <tr class="table-tr">
-                <th scope="col">#</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.AccountNumber)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Type)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Cost)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.AccountSide)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
-                <th scope="col" data-orderable="false">کنترل</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="panel panel-default">
 
-            @{
-                int x = 0;
-            }
+    <div class="panel-body table-body" style="overflow-x:auto;">
+        <table id="DateTable" class="table table-striped" style="width: 100%">
+            <thead>
+                <tr class="table-tr">
+                    <th scope="col">#</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.AccountNumber)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Type)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Cost)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.AccountSide)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
+                    <th scope="col" data-orderable="false">کنترل</th>
+                </tr>
+            </thead>
+            <tbody>
 
-            @foreach (var item in Model)
-            {
-                x++;
+                @{
+                    int x = 0;
+                }
 
-            <tr>
+                @foreach (var item in Model)
+                {
+                    x++;
 
-                <td scope="row">@x</td>
+                    <tr>
 
-                <td scope="row">
-                    <span>@Html.DisplayFor(modelItem => item.AccountNumber)</span>
-                </td>
+                        <td scope="row">@x</td>
 
-                <td scope="row">
-                    <span>@Html.DisplayFor(modelItem => item.Type)</span>
-                </td>
+                        <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.AccountNumber)</span>
+                        </td>
 
-                <td scope="row">
-                    <span>@Html.DisplayFor(modelItem => item.Cost)</span>
-                </td>
+                        <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.Type)</span>
+                        </td>
 
-                <td scope="row">
-                    <span>@Html.DisplayFor(modelItem => item.AccountSide)</span>
-                </td>
+                        <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.Cost)</span>
+                        </td>
 
-                <td scope="row">
-                    <span>@Html.DisplayFor(modelItem => item.Description)</span>
-                </td>
+                        <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.AccountSide)</span>
+                        </td>
 
-                <td scope="row">
-                    <span>@Html.DisplayFor(modelItem => item.ReceiptDate)</span>
-                </td>
+                        <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.Description)</span>
+                        </td>
 
-                <td scope="row">
-                    @if (item.ByCheck.HasValue)
-                    {
-                        <a class="control btn btn-primary btn-sm glyphicon glyphicon-list" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
-                    }
-                </td>
+                        <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.ReceiptDate)</span>
+                        </td>
 
-            </tr>
-            }
+                        <td scope="row">
+                            @if (item.ByCheck.HasValue)
+                            {
+                                <a class="control btn btn-primary btn-sm glyphicon glyphicon-list" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
+                            }
+                        </td>
 
-        </tbody>
-    </table>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
 </div>
-
 <partial name="_Modal" />
 
 @section Modals {
