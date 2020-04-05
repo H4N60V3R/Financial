@@ -1,0 +1,151 @@
+﻿@model IEnumerable<TransactionViewModel>
+@using Financial.Common
+
+@{
+    ViewBag.Title = "تراکنش ها";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<div class="panel panel-body panel-default navigation">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+
+    <div class="dropdown pull-right" style="margin: 0px 5px;">
+
+        <a id="NavDropOption" href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true" data-placement='auto' title='افزودن'>
+            <i class="glyphicon glyphicon-option-vertical navigation-btn-icon"></i>
+        </a>
+
+        <ul id="menu" class="dropdown-menu" aria-labelledby="NavDropOption" style="margin-top: 8px;">
+
+            <li>
+                <a href="@Url.Action("CreateAccountTransaction", "Transactions")">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    حساب
+                </a>
+            </li>
+
+            <li>
+                <a href="@Url.Action("CreateCheckTransaction", "Transactions")">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    چک
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<div class="panel-body table-body">
+    <table id="DateTable" class="table table-striped" style="width: 100%">
+        <thead>
+            <tr class="table-tr">
+                <th scope="col">#</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.AccountNumber)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.Type)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.Cost)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.AccountSide)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
+                @*<th scope="col">@Html.DisplayNameFor(model => model.ByCheck)</th>*@
+                <th scope="col" data-orderable="false">کنترل</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                int x = 0;
+            }
+
+            @foreach (var item in Model)
+            {
+                x++;
+
+                <tr>
+
+                    <td scope="row">@x</td>
+
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.AccountNumber)</span>
+                    </td>
+
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.Type)</span>
+                    </td>
+
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.Cost)</span>
+                    </td>
+
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.AccountSide)</span>
+                    </td>
+
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.Description)</span>
+                    </td>
+
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.ReceiptDate)</span>
+                    </td>
+
+                    @*<td scope="row">
+                        <span>
+                            @if (item.ByCheck.HasValue)
+                            {
+                                <a class="control btn btn-warning btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده" href="javascript:void(0)" onclick="Edit('@item.Guid')">مشاهده</a>
+                            }
+                            else
+                            {
+                                <span>@Messages.NotSet</span>
+                            }
+                        </span>
+                    </td>*@
+
+                <td scope="row">
+                    @if (item.ByCheck.HasValue)
+                    {
+                        <a class="control btn btn-primary btn-sm glyphicon glyphicon-list" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
+                        <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="@Url.Action("EditCheckTransaction", "Transactions", new { guid = item.Guid })"></a>
+                    }
+                    else
+                    {
+                        <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="@Url.Action("EditAccountTransaction", "Transactions", new { guid = item.Guid })"></a>
+                    }
+                    <a class="control btn btn-danger btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto" title="حذف" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
+                </td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Modal" />
+
+@section Modals {
+
+    <script>
+
+        function Delete(guid) {
+            $.ajax({
+                url: "/Transactions/Delete/?guid=" + guid,
+                type: "Get",
+                data: {}
+            }).done(function (result) {
+                $("#myModal").modal("show");
+                $("#myModalLabel").html("حذف حساب");
+                $("#myModalBody").html(result);
+            });
+        }
+
+    </script>
+
+}

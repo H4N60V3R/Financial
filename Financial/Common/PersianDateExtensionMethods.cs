@@ -54,5 +54,24 @@ namespace Financial.Common
             return date.ToString(format, GetPersianCulture());
         }
 
+        /// <summary>
+        /// یک استرینگ تاریخ شمسی را به معادل میلادی تبدیل میکند
+        /// </summary>
+        /// <param name="persianDate">تاریخ شمسی</param>
+        /// <returns>تاریخ میلادی</returns>
+        public static DateTime ToGeorgianDateTime(this string persianDate)
+        {
+            int year = Convert.ToInt32(persianDate.Substring(0, 4));
+            int month = Convert.ToInt32(persianDate.Substring(5, 2));
+            int day = Convert.ToInt32(persianDate.Substring(8, 2));
+
+            int hour = Convert.ToInt32(persianDate.Substring(11, 2));
+            int minute = Convert.ToInt32(persianDate.Substring(14, 2));
+            int second = Convert.ToInt32(persianDate.Substring(17, 2));
+
+            DateTime georgianDateTime = new DateTime(year, month, day, hour, minute, second, new System.Globalization.PersianCalendar());
+            return georgianDateTime;
+        }
+
     }
 }

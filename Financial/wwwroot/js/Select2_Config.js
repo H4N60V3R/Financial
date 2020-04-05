@@ -4,5 +4,5 @@
     dir: "rtl",
     minimumResultsForSearch: 6,
     placeholder: "انتخاب کنید",
-    //allowClear: true
+    allowClear: true
 });

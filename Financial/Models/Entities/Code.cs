@@ -7,7 +7,8 @@ namespace Financial.Models.Entities
     {
         public Code()
         {
-            Check = new HashSet<Check>();
+            CheckTransactionInfo = new HashSet<CheckTransactionInfo>();
+            Transaction = new HashSet<Transaction>();
         }
 
 
@@ -16,6 +17,8 @@ namespace Financial.Models.Entities
         public Guid CodeGroupGuid { get; set; }
 
         public string Value { get; set; }
+
+        public string DisplayValue { get; set; }
 
         public DateTime CreationDate { get; set; }
 
@@ -26,6 +29,8 @@ namespace Financial.Models.Entities
 
         public virtual CodeGroup CodeGroup { get; set; }
 
-        public virtual ICollection<Check> Check { get; set; }
+        public virtual ICollection<CheckTransactionInfo> CheckTransactionInfo { get; set; }
+
+        public virtual ICollection<Transaction> Transaction { get; set; }
     }
 }

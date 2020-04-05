@@ -41,7 +41,7 @@ namespace Financial
                 options.Password.RequiredLength = 8;
             }).AddEntityFrameworkStores<FinancialContext>();
 
-            services.ConfigureApplicationCookie(options => options.LoginPath = "/User/Login");
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Users/Login");
 
             services.AddMvc(config =>
             {

@@ -15,7 +15,7 @@ namespace Financial.Models.Configurations
             entity.HasKey(e => e.Guid);
 
             entity.Property(e => e.Guid)
-                .ValueGeneratedNever();
+                .HasDefaultValueSql("(newid())");
 
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())");

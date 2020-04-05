@@ -15,10 +15,14 @@ namespace Financial.Models.Configurations
             entity.HasKey(e => e.Guid);
 
             entity.Property(e => e.Guid)
-                .ValueGeneratedNever();
+                .HasDefaultValueSql("(newid())");
 
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())");
+
+            entity.Property(e => e.DisplayValue)
+                .IsRequired()
+                .HasMaxLength(128);
 
             entity.Property(e => e.IsDelete)
                 .HasDefaultValueSql("((0))");

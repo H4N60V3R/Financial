@@ -8,25 +8,6 @@
         </a>
     </li>
 
-    <li data-toggle="collapse" data-target="#sub-users">
-
-        <a href="javascript:void(0)">
-            <i class="glyphicon glyphicon-book"></i>
-            مدیریت کاربران
-            <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
-        </a>
-
-        <ul class="collapse nav aside-sub-panel" id="sub-users">
-            <li>
-                <a href="@Url.Action("", "")">
-                    <i class="glyphicon glyphicon-book"></i>
-                    لیست کاربران
-                </a>
-            </li>
-        </ul>
-
-    </li>
-
     <li data-toggle="collapse" data-target="#sub-menu-site">
 
         <a href="javascript:void(0)">
@@ -46,7 +27,7 @@
 
     </li>
 
-    <li data-toggle="collapse" data-target="#sub-checks">
+    @*<li data-toggle="collapse" data-target="#sub-checks">
 
         <a href="javascript:void(0)">
             <i class="glyphicon glyphicon-book"></i>
@@ -63,7 +44,7 @@
             </li>
         </ul>
 
-    </li>
+    </li>*@
 
     <li data-toggle="collapse" data-target="#sub-transactions">
 
@@ -75,9 +56,9 @@
 
         <ul class="collapse nav aside-sub-panel" id="sub-transactions">
             <li>
-                <a href="@Url.Action("", "")">
+                <a href="@Url.Action("Index", "Transactions")">
                     <i class="glyphicon glyphicon-book"></i>
-                    تست
+                    لیست تراکنش ها
                 </a>
             </li>
         </ul>
@@ -94,20 +75,13 @@
 
         <ul class="collapse nav aside-sub-panel" id="sub-reports">
             <li>
-                <a href="@Url.Action("", "")">
+                <a href="@Url.Action("Remindings", "Reports")">
                     <i class="glyphicon glyphicon-book"></i>
-                    تست
+                    لیست یاداوری ها
                 </a>
             </li>
         </ul>
 
-    </li>
-
-    <li>
-        <a href="@Url.Action("Index", "Settings")">
-            <i class="glyphicon glyphicon-book"></i>
-            تنظیمات
-        </a>
     </li>
 
 </ul>

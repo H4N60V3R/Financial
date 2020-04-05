@@ -309,6 +309,12 @@ hr {
     border-bottom-right-radius: 0px;
 }
 
+.select2-container--bootstrap[dir="rtl"] .select2-selection--single .select2-selection__clear {
+    float: right !important;
+    margin-right: 0;
+    margin-left: 5px;
+}
+
 .selection {
     color: #9D9D9D;
 }
@@ -524,9 +530,34 @@ hr {
     margin-bottom: 20px;
 }
 
+/*********************************************** PersianDateTimePicker ********************************************/
+
+.PersianDateTimePicker {
+    border: solid 1px #ccc;
+    background: #222d32;
+    color: #ccc;
+}
+
+    .PersianDateTimePicker .table {
+        margin-bottom: initial;
+    }
+
+        .PersianDateTimePicker table[data-name="md-persiandatetimepicker-timepicker"],
+        .PersianDateTimePicker .table tfoot {
+            display: none;
+        }
+
+    .PersianDateTimePicker .bg-info {
+        background-color: darkslategrey;
+    }
+
+    .PersianDateTimePicker .dropdown-menu {
+        height: 250px;
+        overflow-y: scroll;
+        background-color: #337ab7;
+    }
 
 @media screen and (max-width:990px) {
-
     /*********************************************** Config ********************************************/
     .Main-Config {
         margin-top: 130px;

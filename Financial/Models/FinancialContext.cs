@@ -17,7 +17,7 @@ namespace Financial.Models
 
         public virtual DbSet<Account> Account { get; set; }
 
-        public virtual DbSet<Check> Check { get; set; }
+        public virtual DbSet<CheckTransactionInfo> CheckTransactionInfo { get; set; }
 
         public virtual DbSet<Code> Code { get; set; }
 
@@ -29,7 +29,7 @@ namespace Financial.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            //builder.Seed();
+            builder.Seed();
 
             base.OnModelCreating(builder);
         }

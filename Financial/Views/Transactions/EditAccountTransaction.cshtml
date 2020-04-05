@@ -1,0 +1,138 @@
+﻿@model EditAccountTransactionViewModel
+
+@{
+    ViewBag.Title = "ویرایش تراکنش";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+@section Styles {
+    <link href="~/Content/Plugins/jQuery.MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+}
+
+<div class="panel panel-body panel-default navigation">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="panel table-body">
+    <div class="panel-body">
+
+        <form asp-controller="Transactions" asp-action="EditAccountTransaction" method="post">
+
+            <input asp-for="Guid" type="hidden" />
+
+            <div class="modal-main">
+                <div class="row" style="margin: 0 -30px;">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label asp-for="AccountGuid" class="control-label"></label>
+                            <select asp-for="AccountGuid" asp-items="ViewBag.Accounts" class="form-control Select2_Normal">
+                                <option></option>
+                            </select>
+                            <span asp-validation-for="AccountGuid" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="TypeGuid" class="control-label"></label>
+                            <select asp-for="TypeGuid" asp-items="ViewBag.TransactionTypes" class="form-control Select2_Normal">
+                                <option></option>
+                            </select>
+                            <span asp-validation-for="TypeGuid" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Title" class="control-label"></label>
+                            <div class="input-group">
+                                <span class=" input-group-addon">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </span>
+                                <input asp-for="Title" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Cost" class="control-label"></label>
+                            <div class="input-group">
+                                <span class=" input-group-addon">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </span>
+                                <input asp-for="Cost" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Cost" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="AccountSide" class="control-label"></label>
+                            <div class="input-group">
+                                <span class=" input-group-addon">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </span>
+                                <input asp-for="AccountSide" class="form-control" />
+                            </div>
+                            <span asp-validation-for="AccountSide" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <div class="input-group">
+                                <span class=" input-group-addon">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </span>
+                                <input asp-for="Description" class="form-control" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label asp-for="ReceiptDate" class="control-label"></label>
+                            <div class="PersianDateTimePicker" data-englishnumber="true" data-mddatetimepicker="true" data-inline="true" data-isgregorian="false" data-targetselector="#ReceiptDate" data-enabletimepicker="true"></div>
+                            <input type="hidden" name="ReceiptDate" id="ReceiptDate" />
+                            <span asp-validation-for="ReceiptDate" class="text-danger"></span>
+                        </div>
+
+                        @*<div class="form-group material-switch-body">
+                        <label class="pull-left">وضعیت نمایش</label>
+                        <div class="material-switch pull-right">
+                            @Html.CheckBoxFor(model => model.Activeness, htmlAttributes: new { @class = "" })
+                            @Html.LabelFor(model => model.Activeness, htmlAttributes: new { @class = "text-hide", @style = "background-color: #5cb85c;" })
+                        </div>
+                    </div>*@
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="@Url.Action("Index", "Transactions")" class="btn btn-danger modal-btn-Dual pull-left">انصراف</a>
+                <button class="btn btn-success modal-btn-Dual pull-right" type="submit" name="btn-Delete">تایید</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/lib/jQuery.Select2/js/select2.js"></script>
+    <script src="~/lib/jQuery.Select2/js/i18n/fa.js"></script>
+    <script src="~/js/Select2_Config.js"></script>
+
+    <script src="~/lib/MdBootstrapPersianDateTimePicker/js/jalaali.js"></script>
+    <script src="~/lib/MdBootstrapPersianDateTimePicker/js/jquery.Bootstrap-PersianDateTimePicker.js"></script>
+    <script src="~/js/Bootstrap-PersianDateTimePicker_Config.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}

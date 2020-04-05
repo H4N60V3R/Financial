@@ -7,7 +7,6 @@ namespace Financial.Models.Entities
     {
         public Account()
         {
-            Check = new HashSet<Check>();
             Transaction = new HashSet<Transaction>();
         }
 
@@ -34,8 +33,6 @@ namespace Financial.Models.Entities
 
 
         public virtual ApplicationUser User { get; set; }
-
-        public virtual ICollection<Check> Check { get; set; }
 
         public virtual ICollection<Transaction> Transaction { get; set; }
     }
