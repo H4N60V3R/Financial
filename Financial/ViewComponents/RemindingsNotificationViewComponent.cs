@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Financial.ViewComponents
 {
-    public class NotificationViewComponent : ViewComponent
+    public class RemindingsNotificationViewComponent : ViewComponent
     {
         private readonly FinancialContext context;
 
-        public NotificationViewComponent(FinancialContext context)
+        public RemindingsNotificationViewComponent(FinancialContext context)
         {
             this.context = context;
         }

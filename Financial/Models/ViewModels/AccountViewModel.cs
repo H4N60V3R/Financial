@@ -28,7 +28,7 @@ namespace Financial.Models.ViewModels
         [Display(Name = "اعتبار (تومان)")]
         public long Credit { get; set; }
 
-        [Display(Name = "تاریخ ثبت")]
-        public string CreationDate { get; set; }
+        [Display(Name = "تاریخ آخرین ویرایش")]
+        public string ModificationDate { get; set; }
     }
 }

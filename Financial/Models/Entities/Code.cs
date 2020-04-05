@@ -7,8 +7,8 @@ namespace Financial.Models.Entities
     {
         public Code()
         {
-            CheckTransactionInfo = new HashSet<CheckTransactionInfo>();
-            Transaction = new HashSet<Transaction>();
+            TypeTransaction = new HashSet<Transaction>();
+            StateTransaction = new HashSet<Transaction>();
         }
 
 
@@ -29,8 +29,8 @@ namespace Financial.Models.Entities
 
         public virtual CodeGroup CodeGroup { get; set; }
 
-        public virtual ICollection<CheckTransactionInfo> CheckTransactionInfo { get; set; }
+        public virtual ICollection<Transaction> TypeTransaction { get; set; }
 
-        public virtual ICollection<Transaction> Transaction { get; set; }
+        public virtual ICollection<Transaction> StateTransaction { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace Financial.Controllers
                     AccountNumber = x.AccountNumber,
                     CardNumber = string.IsNullOrEmpty(x.CardNumber) ? Messages.NotSet : x.CardNumber,
                     Credit = x.Credit,
-                    CreationDate = PersianDateExtensionMethods.ToPeString(x.CreationDate, "yyyy/MM/dd HH:mm")
+                    ModificationDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 
                 }).ToList();
 

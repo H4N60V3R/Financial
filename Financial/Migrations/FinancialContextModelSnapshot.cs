@@ -177,13 +177,13 @@ namespace Financial.Migrations
                             AccessFailedCount = 0,
                             Address = "تهران - لواسان",
                             ConcurrencyStamp = "3485e6d6-6bb4-49ea-a522-8f810f10b9b5",
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             EmailConfirmed = false,
                             FirstName = "سید مهدی",
                             IsDelete = false,
                             LastName = "رودکی",
                             LockoutEnabled = true,
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             NationalCode = "0440675014",
                             NormalizedUserName = "H4N60V3R",
                             PasswordHash = "AQAAAAEAACcQAAAAEPYzk6lUm9l1Iq+mwvjUx7DtRDKN2uEw6bFp4ZJ+d4KfPH+APxsjZa4W8ln0rQlgPQ==",
@@ -211,16 +211,11 @@ namespace Financial.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<Guid>("StateCodeGuid")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("TransactionGuid")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Guid")
                         .HasName("PK_CheckTransactionInfo");
-
-                    b.HasIndex("StateCodeGuid");
 
                     b.HasIndex("TransactionGuid");
 
@@ -271,52 +266,52 @@ namespace Financial.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("c45846b9-c78b-41b4-aa27-3055b554248d"),
+                            Guid = new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"),
                             CodeGroupGuid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             DisplayValue = "بستانکار",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             Value = "Creditor"
                         },
                         new
                         {
-                            Guid = new Guid("88a77fb6-896a-4d74-96ed-9565d5a53ee1"),
+                            Guid = new Guid("749d242b-55f7-4361-bf1b-42c139411c49"),
                             CodeGroupGuid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             DisplayValue = "بدهکار",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             Value = "Debtor"
                         },
                         new
                         {
-                            Guid = new Guid("13fa198e-a566-4d08-b9eb-165b0be539dd"),
+                            Guid = new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             DisplayValue = "پاس شده",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             Value = "Passed"
                         },
                         new
                         {
-                            Guid = new Guid("1b635c1e-3b1f-4d3d-99c6-c586adc1d0d4"),
+                            Guid = new Guid("3d905312-ae57-498c-a733-f5cbaf114940"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             DisplayValue = "برگشت خورده",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             Value = "NotPassed"
                         },
                         new
                         {
-                            Guid = new Guid("eb876363-3caa-4ed9-8f16-2387e473416e"),
+                            Guid = new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             DisplayValue = "در انتظار وصول",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             Value = "Waiting"
                         });
                 });
@@ -356,18 +351,18 @@ namespace Financial.Migrations
                         new
                         {
                             Guid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             IsDelete = false,
                             Key = "TransactionState",
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635)
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882)
                         },
                         new
                         {
                             Guid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635),
+                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
                             IsDelete = false,
                             Key = "TransactionType",
-                            ModifiedDate = new DateTime(2020, 4, 4, 20, 12, 48, 648, DateTimeKind.Local).AddTicks(1635)
+                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882)
                         });
                 });
 
@@ -410,6 +405,9 @@ namespace Financial.Migrations
                     b.Property<DateTime>("ReceiptDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("StateCodeGuid")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(128)")
@@ -422,6 +420,8 @@ namespace Financial.Migrations
                         .HasName("PK_Transaction");
 
                     b.HasIndex("AccountGuid");
+
+                    b.HasIndex("StateCodeGuid");
 
                     b.HasIndex("TypeCodeGuid");
 
@@ -570,12 +570,6 @@ namespace Financial.Migrations
 
             modelBuilder.Entity("Financial.Models.Entities.CheckTransactionInfo", b =>
                 {
-                    b.HasOne("Financial.Models.Entities.Code", "Code")
-                        .WithMany("CheckTransactionInfo")
-                        .HasForeignKey("StateCodeGuid")
-                        .HasConstraintName("FK_CheckTransactionInfo_Code")
-                        .IsRequired();
-
                     b.HasOne("Financial.Models.Entities.Transaction", "Transaction")
                         .WithMany("CheckTransactionInfo")
                         .HasForeignKey("TransactionGuid")
@@ -599,10 +593,16 @@ namespace Financial.Migrations
                         .HasForeignKey("AccountGuid")
                         .HasConstraintName("FK_Transaction_Account");
 
-                    b.HasOne("Financial.Models.Entities.Code", "Code")
-                        .WithMany("Transaction")
+                    b.HasOne("Financial.Models.Entities.Code", "StateCode")
+                        .WithMany("StateTransaction")
+                        .HasForeignKey("StateCodeGuid")
+                        .HasConstraintName("FK_StateTransaction_StateCode")
+                        .IsRequired();
+
+                    b.HasOne("Financial.Models.Entities.Code", "TypeCode")
+                        .WithMany("TypeTransaction")
                         .HasForeignKey("TypeCodeGuid")
-                        .HasConstraintName("FK_Transaction_Code")
+                        .HasConstraintName("FK_TypeTransaction_TypeCode")
                         .IsRequired();
                 });
 

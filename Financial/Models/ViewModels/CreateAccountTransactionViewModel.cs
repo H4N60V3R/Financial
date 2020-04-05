@@ -15,6 +15,10 @@ namespace Financial.Models.ViewModels
         [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
         public Guid TypeGuid { get; set; }
 
+        [Display(Name = "وضعیت")]
+        [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
+        public Guid StateGuid { get; set; }
+
         [Display(Name = "عنوان")]
         [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
         public string Title { get; set; }

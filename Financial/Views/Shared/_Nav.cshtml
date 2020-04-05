@@ -1,31 +1,32 @@
 ﻿@inject SignInManager<ApplicationUser> signInManager;
+@inject UserManager<ApplicationUser> userManager;
 
 @{
     if (signInManager.IsSignedIn(User))
     {
+        string fullName = await new UsersRepository(userManager).GetUserFullName(User.Identity.Name);
+
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                @*@await Component.InvokeAsync("Notification")*@
-                <vc:notification></vc:notification>
-                <!-- User Account: style can be found in dropdown.less -->
-                <li class="dropdown user user-menu menu-item ">
+                <vc:remindings-notification></vc:remindings-notification>
+                <vc:passed-events-notification></vc:passed-events-notification>
+                <li class="dropdown user user-menu menu-item">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                        <i class="glyphicon glyphicon-user  nav-top-userInfo-icon"></i>
-                        <span class="hidden-xs nav-username">@User.Identity.Name</span>
+                        <i class="glyphicon glyphicon-user nav-top-userInfo-icon"></i>
+                        <span class="hidden-xs nav-username">@fullName</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- User image -->
                         <li class="user-header">
-                            <img src="~/Content/Images/abstract-user-flat-3.png" style="width:100px;height:100px;" class=" img-circle" alt="User Image">
+                            <img src="~/Images/person.png" width="85" class="img-circle" alt="User Image">
                             <p>
-                                @User.Identity.Name
+                                @fullName
                                 <br />
                                 <small>ادمین</small>
                             </p>
                         </li>
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="@Url.Action("Index", "Home")" class="btn btn-default btn-flat" style="width:65px;">تغییر رمز عبور</a>
+                                <a href="javascript::void(0)" onclick="ChangePassword()" class="btn btn-default btn-flat" @*style="width: 65px;"*@>تغییر رمز عبور</a>
                             </div>
                             <div class="pull-right">
                                 @*<a href="@Url.Action("Logout", "Account")" class="btn btn-default btn-flat" style="width:65px;">خروج</a>*@
@@ -53,3 +54,20 @@
         </div>*@
     }
 }
+
+<script>
+
+    function ChangePassword() {
+        $.ajax({
+            url: "/Users/ChangePassword",
+            type: "Get",
+            data: {}
+        }).done(function (result) {
+            console.log("test");
+            $("#myModal").modal("show");
+            $("#myModalLabel").html("تغییر رمز عبور");
+            $("#myModalBody").html(result);
+        });
+    }
+
+</script>

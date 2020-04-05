@@ -16,6 +16,8 @@ namespace Financial.Models.Entities
 
         public Guid TypeCodeGuid { get; set; }
 
+        public Guid StateCodeGuid { get; set; }
+
         public string Title { get; set; }
 
         public long Cost { get; set; }
@@ -35,7 +37,9 @@ namespace Financial.Models.Entities
 
         public virtual Account Account { get; set; }
 
-        public virtual Code Code { get; set; }
+        public virtual Code TypeCode { get; set; }
+
+        public virtual Code StateCode { get; set; }
 
         public virtual ICollection<CheckTransactionInfo> CheckTransactionInfo { get; set; }
     }

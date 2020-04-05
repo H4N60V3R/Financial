@@ -16,6 +16,9 @@ namespace Financial.Models.ViewModels
         [Display(Name = "نوع")]
         public string Type { get; set; }
 
+        [Display(Name = "وضعیت")]
+        public string State { get; set; }
+
         [Display(Name = "مبلغ (تومان)")]
         public long Cost { get; set; }
 

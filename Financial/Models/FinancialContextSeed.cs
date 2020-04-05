@@ -63,7 +63,7 @@ namespace Financial.Models
             modelBuilder.Entity<Code>().HasData(
                     new Code
                     {
-                        Guid = Guid.NewGuid(),
+                        Guid = Guid.Parse("d1605abf-8a46-4f2e-8e22-194298b9fd33"),
                         CodeGroupGuid = Guid.Parse("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
                         Value = "Creditor",
                         DisplayValue = "بستانکار",
@@ -73,7 +73,7 @@ namespace Financial.Models
                     },
                     new Code
                     {
-                        Guid = Guid.NewGuid(),
+                        Guid = Guid.Parse("749d242b-55f7-4361-bf1b-42c139411c49"),
                         CodeGroupGuid = Guid.Parse("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
                         Value = "Debtor",
                         DisplayValue = "بدهکار",
@@ -83,27 +83,27 @@ namespace Financial.Models
                     },
                     new Code
                     {
-                        Guid = Guid.NewGuid(),
+                        Guid = Guid.Parse("b508bd08-5534-4d26-9ed4-c36575c8d90a"),
                         CodeGroupGuid = Guid.Parse("b7a903f3-2c65-49ef-997b-03966578a4c0"),
                         Value = "Passed",
-                        DisplayValue = "پاس شده",
+                        DisplayValue = "وصول شده",
                         CreationDate = now,
                         ModifiedDate = now,
                         IsDelete = false
                     },
                     new Code
                     {
-                        Guid = Guid.NewGuid(),
+                        Guid = Guid.Parse("3d905312-ae57-498c-a733-f5cbaf114940"),
                         CodeGroupGuid = Guid.Parse("b7a903f3-2c65-49ef-997b-03966578a4c0"),
                         Value = "NotPassed",
-                        DisplayValue = "برگشت خورده",
+                        DisplayValue = "وصول نشده",
                         CreationDate = now,
                         ModifiedDate = now,
                         IsDelete = false
                     },
                     new Code
                     {
-                        Guid = Guid.NewGuid(),
+                        Guid = Guid.Parse("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"),
                         CodeGroupGuid = Guid.Parse("b7a903f3-2c65-49ef-997b-03966578a4c0"),
                         Value = "Waiting",
                         DisplayValue = "در انتظار وصول",

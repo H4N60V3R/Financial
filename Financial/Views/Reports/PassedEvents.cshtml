@@ -1,7 +1,7 @@
-﻿@model IEnumerable<AccountViewModel>
+﻿@model IEnumerable<TransactionViewModel>
 
 @{
-    ViewBag.Title = "حساب ها";
+    ViewBag.Title = "رویدادهای گذشته";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 
@@ -13,12 +13,6 @@
         </ol>
     </nav>
 
-    <div class="pull-right">
-        <a href="javascript:void(0)" onclick="Create()" data-toggle="tooltip" data-placement="auto" title="افزودن حساب">
-            <i class="glyphicon glyphicon-plus navigation-btn-icon"></i>
-        </a>
-    </div>
-
 </div>
 
 <div class="panel-body table-body">
@@ -26,13 +20,12 @@
         <thead>
             <tr class="table-tr">
                 <th scope="col">#</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.UserFullName)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.BankName)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.AccountName)</th>
                 <th scope="col">@Html.DisplayNameFor(model => model.AccountNumber)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.CardNumber)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Credit)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.ModificationDate)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.Type)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.Cost)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.AccountSide)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
                 <th scope="col" data-orderable="false">کنترل</th>
             </tr>
         </thead>
@@ -51,36 +44,34 @@
                     <td scope="row">@x</td>
 
                     <td scope="row">
-                        <span>@Html.DisplayFor(modelItem => item.UserFullName)</span>
-                    </td>
-
-                    <td scope="row">
-                        <span>@Html.DisplayFor(modelItem => item.BankName)</span>
-                    </td>
-
-                    <td scope="row">
-                        <span>@Html.DisplayFor(modelItem => item.AccountName)</span>
-                    </td>
-
-                    <td scope="row">
                         <span>@Html.DisplayFor(modelItem => item.AccountNumber)</span>
                     </td>
 
                     <td scope="row">
-                        <span>@Html.DisplayFor(modelItem => item.CardNumber)</span>
+                        <span>@Html.DisplayFor(modelItem => item.Type)</span>
                     </td>
 
                     <td scope="row">
-                        <span>@Html.DisplayFor(modelItem => item.Credit)</span>
+                        <span>@Html.DisplayFor(modelItem => item.Cost)</span>
                     </td>
 
                     <td scope="row">
-                        <span>@Html.DisplayFor(modelItem => item.ModificationDate)</span>
+                        <span>@Html.DisplayFor(modelItem => item.AccountSide)</span>
                     </td>
 
                     <td scope="row">
-                        <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="javascript:void(0)" onclick="Edit('@item.Guid')"></a>
-                        <a class="control btn btn-danger btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto" title="حذف" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
+                        <span>@Html.DisplayFor(modelItem => item.Description)</span>
+                    </td>
+
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.ReceiptDate)</span>
+                    </td>
+
+                    <td scope="row">
+                        @if (item.ByCheck.HasValue)
+                        {
+                            <a class="control btn btn-primary btn-sm glyphicon glyphicon-list" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
+                        }
                     </td>
 
                 </tr>
@@ -89,6 +80,8 @@
         </tbody>
     </table>
 </div>
+
+<partial name="_Modal" />
 
 @section Modals {
 

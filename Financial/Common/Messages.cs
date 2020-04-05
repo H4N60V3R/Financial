@@ -13,6 +13,16 @@ namespace Financial.Common
 
         #endregion
 
+        #region User
+
+        public static string LoginSuccessful = "خوش آمدید";
+        public static string LoginFailed = "نام کاربری یا رمز عبور شما اشتباه است";
+
+        public static string ChangePasswordSuccessful = "رمز عبور با موفقیت تغییر کرد";
+        public static string ChangePasswordFailed = "رمز عبور با موفقیت تغییر نکرد";
+
+        #endregion
+
         #region Account
 
         public static string CreateAccountSuccessful = "حساب جدید با موفقیت ثبت شد";

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Financial.Common;
 using Financial.Models.Entities;
+using Financial.Models.Enums;
 using Financial.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +28,11 @@ namespace Financial.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -45,59 +52,114 @@ namespace Financial.Controllers
                         return Redirect(returnUrl);
                     }
 
+                    TempData["ToasterState"] = ToasterState.Info;
+                    TempData["ToasterType"] = ToasterType.Message;
+                    TempData["ToasterMessage"] = Messages.LoginSuccessful;
+
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                TempData["ToasterState"] = ToasterState.Error;
+                TempData["ToasterType"] = ToasterType.Message;
+                TempData["ToasterMessage"] = Messages.LoginFailed;
+
+                return RedirectToAction("Login");
             }
 
-            return View(model);
+            return BadRequest();
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //[HttpGet]
+        //public IActionResult Register()
+        //{
+        //    return View();
+        //}
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Username,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    NationalCode = model.NationalCode,
-                    Address = model.Address
-                };
+        //[AllowAnonymous]
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser
+        //        {
+        //            UserName = model.Username,
+        //            FirstName = model.FirstName,
+        //            LastName = model.LastName,
+        //            NationalCode = model.NationalCode,
+        //            Address = model.Address
+        //        };
 
-                var result = await userManager.CreateAsync(user, model.Password);
+        //        var result = await userManager.CreateAsync(user, model.Password);
 
-                if (result.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
-                }
+        //        if (result.Succeeded)
+        //        {
+        //            await signInManager.SignInAsync(user, false);
+        //            return RedirectToAction("Index", "Home");
+        //        }
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
+        //        foreach (var error in result.Errors)
+        //        {
+        //            ModelState.AddModelError(string.Empty, error.Description);
+        //        }
+        //    }
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Login", "Users");
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.GetUserAsync(User);
+
+                if (user == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                var result = await userManager.ChangePasswordAsync(user,
+                    model.CurrentPassword, model.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    //foreach (var error in result.Errors)
+                    //{
+                    //    ModelState.AddModelError(string.Empty, error.Description);
+                    //}
+
+                    TempData["ToasterState"] = ToasterState.Error;
+                    TempData["ToasterType"] = ToasterType.Message;
+                    TempData["ToasterMessage"] = Messages.ChangePasswordFailed;
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                await signInManager.SignOutAsync();
+
+                TempData["ToasterState"] = ToasterState.Success;
+                TempData["ToasterType"] = ToasterType.Message;
+                TempData["ToasterMessage"] = Messages.ChangePasswordSuccessful;
+
+                return RedirectToAction("Login");
+            }
+
+            return BadRequest();
         }
     }
 }

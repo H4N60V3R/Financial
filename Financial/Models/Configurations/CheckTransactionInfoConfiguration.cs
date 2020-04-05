@@ -25,12 +25,6 @@ namespace Financial.Models.Configurations
                 .IsRequired()
                 .HasMaxLength(128);
 
-            entity.HasOne(d => d.Code)
-                .WithMany(p => p.CheckTransactionInfo)
-                .HasForeignKey(d => d.StateCodeGuid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CheckTransactionInfo_Code");
-
             entity.HasOne(d => d.Transaction)
                 .WithMany(p => p.CheckTransactionInfo)
                 .HasForeignKey(d => d.TransactionGuid)

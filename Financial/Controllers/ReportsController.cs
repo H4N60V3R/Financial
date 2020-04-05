@@ -28,7 +28,29 @@ namespace Financial.Controllers
                 {
                     Guid = x.Guid,
                     AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
-                    Type = x.Code.DisplayValue,
+                    Type = x.TypeCode.DisplayValue,
+                    Cost = x.Cost,
+                    AccountSide = x.AccountSide,
+                    Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,
+                    ByCheck = x.CheckTransactionInfo.SingleOrDefault().Guid,
+                    ReceiptDate = PersianDateExtensionMethods.ToPeString(x.ReceiptDate, "yyyy/MM/dd")
+
+                }).ToList();
+
+            return View(transactions);
+        }
+
+        [HttpGet]
+        public IActionResult PassedEvents()
+        {
+            var transactions = context.Transaction
+                .Where(x => !x.IsDelete && x.ReceiptDate < DateTime.Now && x.StateCodeGuid == Codes.WaitingState)
+                .OrderByDescending(x => x.ReceiptDate)
+                .Select(x => new TransactionViewModel
+                {
+                    Guid = x.Guid,
+                    AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
+                    Type = x.TypeCode.DisplayValue,
                     Cost = x.Cost,
                     AccountSide = x.AccountSide,
                     Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,

@@ -40,11 +40,17 @@ namespace Financial.Models.Configurations
                 .HasForeignKey(d => d.AccountGuid)
                 .HasConstraintName("FK_Transaction_Account");
 
-            entity.HasOne(d => d.Code)
-                .WithMany(p => p.Transaction)
+            entity.HasOne(d => d.TypeCode)
+                .WithMany(p => p.TypeTransaction)
                 .HasForeignKey(d => d.TypeCodeGuid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Transaction_Code");
+                .HasConstraintName("FK_TypeTransaction_TypeCode");
+
+            entity.HasOne(d => d.StateCode)
+                .WithMany(p => p.StateTransaction)
+                .HasForeignKey(d => d.StateCodeGuid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StateTransaction_StateCode");
         }
     }
 }
