@@ -1,7 +1,6 @@
 ﻿body {
     font-family: IRANYekanWeb(FaNum);
     background-color: whitesmoke;
-    color: whitesmoke;
 }
 
 hr {
@@ -43,7 +42,6 @@ hr {
 /*********************************************** Navigation **********************************************/
 .navigation {
     margin-bottom: 15px;
-    background-color: #222D32;
 }
 
 .navigation-title {
@@ -67,11 +65,11 @@ hr {
 }
 
     .breadcrumb > .active {
-        color: whitesmoke;
+        color: #333333;
     }
 
     .breadcrumb > li + li:before {
-        color: whitesmoke;
+        color: #333333;
     }
 
 .navigation nav {
@@ -82,172 +80,6 @@ hr {
 
 
 /*********************************************** General Style *************************************/
-.form-form {
-    margin-right: auto;
-    margin-left: auto;
-    background-color: #222D32;
-    box-shadow: 0.5px 0.5px 6px cornflowerblue;
-}
-
-.form-heading {
-    height: 50px;
-    margin-right: 15px;
-    margin-left: 15px;
-    margin-bottom: 0px;
-    padding-top: 10px;
-    background-color: #222D32;
-    border: #9D9D9D 2px solid;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top: 0;
-    font-size: large;
-}
-
-.form-body {
-    padding-left: 35px;
-    padding-right: 35px;
-}
-
-.form-footer {
-    background-color: #222D32;
-    border: none;
-    margin-bottom: 50px;
-}
-
-.table-btn-create {
-    margin-bottom: 10px;
-    width: 100%;
-    font-weight: bold;
-    color: whitesmoke;
-}
-
-
-.table-panel {
-    margin-right: auto;
-    margin-left: auto;
-    border: 0px;
-    box-shadow: 0.5px 0.5px 6px cornflowerblue;
-    /*#2c3b41*/
-}
-
-.table-heading {
-    background-color: #222D32;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    height: auto;
-    padding-top: 12px;
-    padding-bottom: 12px;
-}
-
-    .table-heading > span {
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-
-
-.table > thead > tr > th {
-    vertical-align: bottom;
-    background-color: #222D32;
-    border-bottom: 2px solid #9d9d9d;
-}
-
-.table > tbody > tr > th {
-    border-top: 0px;
-    background-color: #222D32;
-}
-
-.table-tr {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-.table > tbody > tr > td {
-    border-top: 0px;
-}
-
-.table > tbody > tr > td {
-    color: whitesmoke;
-}
-
-    .table > tbody > tr > td a {
-        color: whitesmoke;
-    }
-
-    .table > tbody > tr > td span {
-        color: whitesmoke;
-    }
-
-
-.table-striped > tbody > tr:nth-of-type(2n) {
-    background-color: #2b3337;
-}
-
-.table-striped > tbody > tr:nth-of-type(odd) {
-     background-color: initial; 
-}
-
-.table-body {
-    background-color: #374449;
-}
-
-.table-footer {
-    border-top-width: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    background-color: #222D32;
-}
-
-.table-footer-pagenumbers {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-    .table-footer-pagenumbers > li > a {
-        border: 0px;
-        background-color: #222D32;
-        font-size: 16px;
-    }
-
-.dataTables_length {
-    color: #9d9d9d;
-}
-
-.pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > a:active {
-    background-color: #222D32;
-    color: #9d9d9d;
-}
-
-.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover {
-    background-color: #222D32;
-    color: #9d9d9d;
-}
-
-.nav-tabs.nav-justified > li > a {
-    margin-left: 0;
-    border-radius: 0px;
-    border-bottom: 1px solid #222D32;
-    font-size: 18px;
-    color: #9d9d9d;
-}
-
-    .nav-tabs.nav-justified > li > a:hover,
-    .nav-tabs.nav-justified > li > a:focus {
-        border: none;
-        background-color: #222D32;
-        border-bottom: 1px solid #222D32;
-    }
-
-.nav-tabs.nav-justified > li.active > a,
-.nav-tabs.nav-justified > li.active > a:hover,
-.nav-tabs.nav-justified > li.active > a:focus {
-    border: none;
-    background-color: #222D32;
-    color: whitesmoke;
-    border-bottom: 1px solid #222D32;
-}
-
-
 .modal {
 }
 
@@ -332,6 +164,7 @@ hr {
     padding-top: 13px;
     border-bottom: 3px solid #9d9d9d;
     padding-right: 30px;
+    color: #9d9d9d;
 }
 
     .navHeader a {
