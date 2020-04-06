@@ -286,28 +286,28 @@ namespace Financial.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "ModifiedDate", "NationalCode", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "1e8b24df-cf91-4a8a-a3dd-89c37b8ee4f9", 0, "تهران - لواسان", "3485e6d6-6bb4-49ea-a522-8f810f10b9b5", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), null, false, "سید مهدی", "رودکی", true, null, new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "0440675014", null, "H4N60V3R", "AQAAAAEAACcQAAAAEPYzk6lUm9l1Iq+mwvjUx7DtRDKN2uEw6bFp4ZJ+d4KfPH+APxsjZa4W8ln0rQlgPQ==", null, false, "645UFGOLF7LIMLIQ6TVG7IUJ2SJ62CWM", false, "h4n60v3r" });
+                values: new object[] { "1e8b24df-cf91-4a8a-a3dd-89c37b8ee4f9", 0, "تهران - لواسان", "3485e6d6-6bb4-49ea-a522-8f810f10b9b5", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), null, false, "سید مهدی", "رودکی", true, null, new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "0440675014", null, "H4N60V3R", "AQAAAAEAACcQAAAAEPYzk6lUm9l1Iq+mwvjUx7DtRDKN2uEw6bFp4ZJ+d4KfPH+APxsjZa4W8ln0rQlgPQ==", null, false, "645UFGOLF7LIMLIQ6TVG7IUJ2SJ62CWM", false, "h4n60v3r" });
 
             migrationBuilder.InsertData(
                 table: "CodeGroup",
                 columns: new[] { "Guid", "CreationDate", "Key", "ModifiedDate" },
-                values: new object[] { new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "TransactionState", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882) });
+                values: new object[] { new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "TransactionState", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172) });
 
             migrationBuilder.InsertData(
                 table: "CodeGroup",
                 columns: new[] { "Guid", "CreationDate", "Key", "ModifiedDate" },
-                values: new object[] { new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "TransactionType", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882) });
+                values: new object[] { new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "TransactionType", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172) });
 
             migrationBuilder.InsertData(
                 table: "Code",
                 columns: new[] { "Guid", "CodeGroupGuid", "CreationDate", "DisplayValue", "ModifiedDate", "Value" },
                 values: new object[,]
                 {
-                    { new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "پاس شده", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "Passed" },
-                    { new Guid("3d905312-ae57-498c-a733-f5cbaf114940"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "برگشت خورده", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "NotPassed" },
-                    { new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "در انتظار وصول", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "Waiting" },
-                    { new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "بستانکار", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "Creditor" },
-                    { new Guid("749d242b-55f7-4361-bf1b-42c139411c49"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "بدهکار", new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882), "Debtor" }
+                    { new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "وصول شده", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Passed" },
+                    { new Guid("3d905312-ae57-498c-a733-f5cbaf114940"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "وصول نشده", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "NotPassed" },
+                    { new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "در انتظار وصول", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Waiting" },
+                    { new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "بستانکار", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Creditor" },
+                    { new Guid("749d242b-55f7-4361-bf1b-42c139411c49"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "بدهکار", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Debtor" }
                 });
 
             migrationBuilder.CreateIndex(

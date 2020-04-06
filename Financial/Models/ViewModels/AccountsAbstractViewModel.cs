@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Financial.Models.ViewModels
 {
-    public class ShowCheckInfoViewModel
+    public class AccountsAbstractViewModel
     {
-        public string Serial { get; set; }
+        public string AccountNumber { get; set; }
 
-        public DateTime IssueDate { get; set; }
+        public long Credit { get; set; }
     }
 }

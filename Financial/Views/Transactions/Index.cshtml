@@ -50,10 +50,12 @@
                     <th scope="col">#</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.AccountNumber)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Type)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.State)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Cost)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.AccountSide)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.ModifiedDate)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.ByCheck)</th>
                     <th scope="col" data-orderable="false">کنترل</th>
                 </tr>
@@ -68,61 +70,69 @@
                 {
                     x++;
 
-                    <tr>
+                <tr>
 
-                        <td scope="row">@x</td>
+                    <td scope="row">@x</td>
 
-                        <td scope="row">
-                            <span>@Html.DisplayFor(modelItem => item.AccountNumber)</span>
-                        </td>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.AccountNumber)</span>
+                    </td>
 
-                        <td scope="row">
-                            <span>@Html.DisplayFor(modelItem => item.Type)</span>
-                        </td>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.Type)</span>
+                    </td>
 
-                        <td scope="row">
-                            <span>@Html.DisplayFor(modelItem => item.Cost)</span>
-                        </td>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.State)</span>
+                    </td>
 
-                        <td scope="row">
-                            <span>@Html.DisplayFor(modelItem => item.AccountSide)</span>
-                        </td>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.Cost)</span>
+                    </td>
 
-                        <td scope="row">
-                            <span>@Html.DisplayFor(modelItem => item.Description)</span>
-                        </td>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.AccountSide)</span>
+                    </td>
 
-                        <td scope="row">
-                            <span>@Html.DisplayFor(modelItem => item.ReceiptDate)</span>
-                        </td>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.Description)</span>
+                    </td>
 
-                        <td scope="row">
-                            <span>
-                                @if (item.ByCheck.HasValue)
-                                {
-                                    <a class="control btn btn-info btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="ShowCheckInfo('@item.Guid')">مشاهده چک</a>
-                                }
-                                else
-                                {
-                                    <span>@Messages.NotSet</span>
-                                }
-                            </span>
-                        </td>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.ReceiptDate)</span>
+                    </td>
 
-                        <td scope="row">
-                            <a class="control btn btn-primary btn-sm glyphicon glyphicon-refresh" data-toggle="tooltip" data-placement="auto" title="تغییر وضعیت" href="javascript:void(0)" onclick="ChangeState('@item.Guid')"></a>
+                    <td scope="row">
+                        <span>@Html.DisplayFor(modelItem => item.ModifiedDate)</span>
+                    </td>
+
+                    <td scope="row">
+                        <span>
                             @if (item.ByCheck.HasValue)
                             {
-                                <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="@Url.Action("EditCheckTransaction", "Transactions", new { guid = item.Guid })"></a>
+                                <a class="control btn btn-success btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="ShowCheckInfo('@item.Guid')">مشاهده</a>
                             }
                             else
                             {
-                                <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="@Url.Action("EditAccountTransaction", "Transactions", new { guid = item.Guid })"></a>
+                                <span>@Messages.NotSet</span>
                             }
-                            <a class="control btn btn-danger btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto" title="حذف" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
-                        </td>
+                        </span>
+                    </td>
 
-                    </tr>
+                    <td scope="row">
+                        <a class="control btn btn-primary btn-sm glyphicon glyphicon-refresh" data-toggle="tooltip" data-placement="auto" title="تغییر وضعیت" href="javascript:void(0)" onclick="ChangeState('@item.Guid')"></a>
+                        @if (item.ByCheck.HasValue)
+                        {
+                            <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="@Url.Action("EditCheckTransaction", "Transactions", new { guid = item.Guid })"></a>
+                        }
+                        else
+                        {
+                            <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="@Url.Action("EditAccountTransaction", "Transactions", new { guid = item.Guid })"></a>
+                        }
+                        <a class="control btn btn-danger btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto" title="حذف" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
+                    </td>
+
+                </tr>
                 }
 
             </tbody>

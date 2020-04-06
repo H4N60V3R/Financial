@@ -49,6 +49,9 @@ namespace Financial.Common
         public static string DeleteTransactionSuccessful = "تراکنش مورد نظر با موفقیت حذف شد";
         public static string DeleteTransactionFailed = "تراکنش مورد نظر با موفقیت حذف نشد";
 
+        public static string ChangeTransactionStateSuccessful = "تغییر وضعیت تراکنش مورد نظر با موفقیت انجام شد";
+        public static string ChangeTransactionStateFailed = "تغییر وضعیت تراکنش مورد نظر با موفقیت انجام نشد";
+
         #endregion
     }
 }

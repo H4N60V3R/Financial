@@ -24,10 +24,12 @@
                     <th scope="col">#</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.AccountNumber)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Type)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.State)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Cost)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.AccountSide)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.ModifiedDate)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.ByCheck)</th>
                     <th scope="col" data-orderable="false">کنترل</th>
                 </tr>
@@ -55,6 +57,10 @@
                         </td>
 
                         <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.State)</span>
+                        </td>
+
+                        <td scope="row">
                             <span>@Html.DisplayFor(modelItem => item.Cost)</span>
                         </td>
 
@@ -71,9 +77,13 @@
                         </td>
 
                         <td scope="row">
+                            <span>@Html.DisplayFor(modelItem => item.ModifiedDate)</span>
+                        </td>
+
+                        <td scope="row">
                             @if (item.ByCheck.HasValue)
                             {
-                                <a class="control btn btn-info btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="ShowCheckInfo('@item.Guid')">مشاهده چک</a>
+                                <a class="control btn btn-success btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="ShowCheckInfo('@item.Guid')">مشاهده</a>
                             }
                             else
                             {

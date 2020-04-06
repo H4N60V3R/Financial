@@ -8,12 +8,27 @@ hr {
     border: 1px solid #222D32;
 }
 
+header {
+    box-shadow: -1px 2px 20px 0px #888888;
+}
+
+footer {
+    margin-top: 50px;
+    margin-bottom: 15px;
+    padding: 0px 15px;
+    line-height: 20px;
+    font-size: 12px;
+    color: black;
+    text-align: center;
+}
+
 /*********************************************** Config ********************************************/
 
 .Main-Config {
     margin-top: 70px;
     display: flex;
     flex-wrap: wrap;
+    min-height: 620px;
 }
 
 .aside-Config {
@@ -53,6 +68,28 @@ hr {
 
 .navbar-nav > li > a {
     padding-bottom: 10px;
+}
+
+.control {
+    margin: 2.5px 0;
+}
+
+.mds-bootstrap-persian-datetime-picker-container {
+    z-index: 1000 !important;
+}
+
+.heading {
+    color: black;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 0px 15px;
+    font-weight: bolder;
+}
+
+.sufix {
+    position: relative;
+    top: -5px;
+    font-size: 50%;
 }
 
 /*********************************************** Navigation **********************************************/
@@ -452,6 +489,7 @@ hr {
     .aside-Config {
         width: calc(100% - 30px);
         margin-left: 15px;
+        margin-bottom: 15px;
     }
 
     .section-Config {
@@ -486,4 +524,15 @@ hr {
         padding-left: 15px;
     }
 
+    .main-header .navbar-custom-menu, .main-header .navbar-right, .navbar-nav {
+        margin: initial;
+    }
+
+    .navbar-custom-menu > .navbar-nav > li {
+        display: inline-block;
+    }
+
+    footer {
+        font-size: 10px;
+    }
 }

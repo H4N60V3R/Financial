@@ -6,7 +6,7 @@
 }
 
 @section Styles {
-    <link href="~/Content/Plugins/jQuery.MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css" rel="stylesheet" />
+    <link href="~/lib/MdBootstrapPersianDateTimePickerMasterBs4/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
 }
 
 <div class="panel panel-body panel-default navigation">
@@ -26,6 +26,13 @@
                 <div class="row" style="margin: 0 -30px;">
 
                     <div class="col-md-6">
+
+                        <label asp-for="IssueDate" class="control-label"></label>
+                        <div id="date1"></div>
+                        <input type="hidden" name="IssueDate" id="IssueDate" class="form-control">
+                        <span asp-validation-for="IssueDate" class="text-danger"></span>
+
+                        <br />
 
                         <div class="form-group">
                             <label asp-for="AccountGuid" class="control-label"></label>
@@ -61,6 +68,17 @@
                             </div>
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label asp-for="ReceiptDate" class="control-label"></label>
+                        <div id="date2"></div>
+                        <input type="hidden" name="ReceiptDate" id="ReceiptDate" class="form-control">
+                        <span asp-validation-for="ReceiptDate" class="text-danger"></span>
+
+                        <br />
 
                         <div class="form-group">
                             <label asp-for="Cost" class="control-label"></label>
@@ -107,24 +125,6 @@
 
                     </div>
 
-                    <div class="col-md-6">
-
-                        <div class="form-group">
-                            <label asp-for="IssueDate" class="control-label"></label>
-                            <div class="PersianDateTimePicker" data-englishnumber="true" data-mddatetimepicker="true" data-inline="true" data-isgregorian="false" data-targetselector="#IssueDate" data-enabletimepicker="true"></div>
-                            <input type="hidden" name="IssueDate" id="IssueDate" />
-                            <span asp-validation-for="IssueDate" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label asp-for="ReceiptDate" class="control-label"></label>
-                            <div class="PersianDateTimePicker" data-englishnumber="true" data-mddatetimepicker="true" data-inline="true" data-isgregorian="false" data-targetselector="#ReceiptDate" data-enabletimepicker="true"></div>
-                            <input type="hidden" name="ReceiptDate" id="ReceiptDate" />
-                            <span asp-validation-for="ReceiptDate" class="text-danger"></span>
-                        </div>
-
-                    </div>
-
                 </div>
             </div>
 
@@ -144,9 +144,27 @@
     <script src="~/lib/jQuery.Select2/js/i18n/fa.js"></script>
     <script src="~/js/Select2_Config.js"></script>
 
-    <script src="~/lib/MdBootstrapPersianDateTimePicker/js/jalaali.js"></script>
-    <script src="~/lib/MdBootstrapPersianDateTimePicker/js/jquery.Bootstrap-PersianDateTimePicker.js"></script>
-    <script src="~/js/Bootstrap-PersianDateTimePicker_Config.js"></script>
+    <script src="~/lib/MdBootstrapPersianDateTimePickerMasterBs4/jquery.md.bootstrap.datetimepicker.js"></script>
+    <script>
+        $('#date1').MdPersianDateTimePicker({
+            targetTextSelector: '#IssueDate',
+            textFormat: 'yyyy-MM-dd HH:mm:ss',
+            inLine: true,
+            enableTimePicker: false,
+            englishNumber: true,
+            fromDate: true,
+            groupId: 'date1-2-range'
+        });
+        $('#date2').MdPersianDateTimePicker({
+            targetTextSelector: '#ReceiptDate',
+            textFormat: 'yyyy-MM-dd HH:mm:ss',
+            inLine: true,
+            enableTimePicker: false,
+            englishNumber: true,
+            toDate: true,
+            groupId: 'date1-2-range'
+        });
+    </script>
 
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

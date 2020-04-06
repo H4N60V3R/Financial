@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Financial.Migrations
 {
     [DbContext(typeof(FinancialContext))]
-    [Migration("20200405121020_InitialMigration")]
+    [Migration("20200406192933_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -179,13 +179,13 @@ namespace Financial.Migrations
                             AccessFailedCount = 0,
                             Address = "تهران - لواسان",
                             ConcurrencyStamp = "3485e6d6-6bb4-49ea-a522-8f810f10b9b5",
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             EmailConfirmed = false,
                             FirstName = "سید مهدی",
                             IsDelete = false,
                             LastName = "رودکی",
                             LockoutEnabled = true,
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             NationalCode = "0440675014",
                             NormalizedUserName = "H4N60V3R",
                             PasswordHash = "AQAAAAEAACcQAAAAEPYzk6lUm9l1Iq+mwvjUx7DtRDKN2uEw6bFp4ZJ+d4KfPH+APxsjZa4W8ln0rQlgPQ==",
@@ -270,50 +270,50 @@ namespace Financial.Migrations
                         {
                             Guid = new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"),
                             CodeGroupGuid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             DisplayValue = "بستانکار",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             Value = "Creditor"
                         },
                         new
                         {
                             Guid = new Guid("749d242b-55f7-4361-bf1b-42c139411c49"),
                             CodeGroupGuid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             DisplayValue = "بدهکار",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             Value = "Debtor"
                         },
                         new
                         {
                             Guid = new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
-                            DisplayValue = "پاس شده",
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            DisplayValue = "وصول شده",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             Value = "Passed"
                         },
                         new
                         {
                             Guid = new Guid("3d905312-ae57-498c-a733-f5cbaf114940"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
-                            DisplayValue = "برگشت خورده",
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            DisplayValue = "وصول نشده",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             Value = "NotPassed"
                         },
                         new
                         {
                             Guid = new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             DisplayValue = "در انتظار وصول",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             Value = "Waiting"
                         });
                 });
@@ -353,18 +353,18 @@ namespace Financial.Migrations
                         new
                         {
                             Guid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             IsDelete = false,
                             Key = "TransactionState",
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882)
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172)
                         },
                         new
                         {
                             Guid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882),
+                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             IsDelete = false,
                             Key = "TransactionType",
-                            ModifiedDate = new DateTime(2020, 4, 5, 16, 40, 19, 440, DateTimeKind.Local).AddTicks(5882)
+                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172)
                         });
                 });
 

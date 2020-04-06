@@ -31,6 +31,9 @@ namespace Financial.Models.ViewModels
         [Display(Name = "تاریخ وصول")]
         public string ReceiptDate { get; set; }
 
+        [Display(Name = "تاریخ آخرین ویرایش")]
+        public string ModifiedDate { get; set; }
+
         [Display(Name = "چک")]
         public Guid? ByCheck { get; set; }
     }

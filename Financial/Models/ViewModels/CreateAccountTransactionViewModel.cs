@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Financial.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +9,9 @@ namespace Financial.Models.ViewModels
 {
     public class CreateAccountTransactionViewModel
     {
+        private string receiptDate;
+        private readonly string now = PersianDateExtensionMethods.ToPeString(DateTime.Now, "yyyy-MM-dd HH:mm:ss");
+
         [Display(Name = "حساب")]
         public Guid? AccountGuid { get; set; }
 
@@ -36,6 +40,16 @@ namespace Financial.Models.ViewModels
 
         [Display(Name = "تاریخ وصول")]
         [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
-        public string ReceiptDate { get; set; }
+        public string ReceiptDate
+        {
+            get
+            {
+                return string.IsNullOrEmpty(receiptDate) ? now : receiptDate;
+            }
+            set
+            {
+                receiptDate = value;
+            }
+        }
     }
 }

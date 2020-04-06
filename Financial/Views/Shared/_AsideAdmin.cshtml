@@ -8,59 +8,44 @@
         </a>
     </li>
 
-    <li data-toggle="collapse" data-target="#sub-menu-site">
-
-        <a href="javascript:void(0)">
+    <li>
+        <a href="@Url.Action("Index", "Accounts")">
             <i class="glyphicon glyphicon-book"></i>
             مدیرت حساب ها
-            <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
         </a>
-
-        <ul class="collapse nav aside-sub-panel" id="sub-menu-site">
-            <li>
-                <a href="@Url.Action("Index", "Accounts")">
-                    <i class="glyphicon glyphicon-book"></i>
-                    لیست حساب ها
-                </a>
-            </li>
-        </ul>
-
     </li>
-
-    @*<li data-toggle="collapse" data-target="#sub-checks">
-
-        <a href="javascript:void(0)">
-            <i class="glyphicon glyphicon-book"></i>
-            مدیریت دسته چک ها
-            <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
-        </a>
-
-        <ul class="collapse nav aside-sub-panel" id="sub-checks">
-            <li>
-                <a href="@Url.Action("", "")">
-                    <i class="glyphicon glyphicon-book"></i>
-                    تست
-                </a>
-            </li>
-        </ul>
-
-    </li>*@
 
     <li data-toggle="collapse" data-target="#sub-transactions">
 
         <a href="javascript:void(0)">
             <i class="glyphicon glyphicon-book"></i>
-            تراکنش ها
+            مدیریت تراکنش ها
             <i class="glyphicon glyphicon-chevron-right pull-right gly-rotate-90"></i>
         </a>
 
         <ul class="collapse nav aside-sub-panel" id="sub-transactions">
+
             <li>
                 <a href="@Url.Action("Index", "Transactions")">
                     <i class="glyphicon glyphicon-book"></i>
                     لیست تراکنش ها
                 </a>
             </li>
+
+            <li>
+                <a href="@Url.Action("CreateAccountTransaction", "Transactions")">
+                    <i class="glyphicon glyphicon-book"></i>
+                    افزودن تراکنش حساب
+                </a>
+            </li>
+
+            <li>
+                <a href="@Url.Action("CreateCheckTransaction", "Transactions")">
+                    <i class="glyphicon glyphicon-book"></i>
+                    افزودن تراکنش چک
+                </a>
+            </li>
+
         </ul>
 
     </li>
