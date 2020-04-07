@@ -497,7 +497,6 @@ footer {
     }
 
     /*** UserProfile **/
-
     .userprofile {
         margin-top: 0px;
     }
@@ -534,5 +533,12 @@ footer {
 
     footer {
         font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .navHeader {
+        text-align: center;
+        padding: 15px;
     }
 }
