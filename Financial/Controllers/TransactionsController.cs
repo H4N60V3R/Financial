@@ -30,6 +30,7 @@ namespace Financial.Controllers
         {
             var transactions = context.Transaction
                 .Where(x => !x.IsDelete)
+                .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel()
                 {
                     Guid = x.Guid,

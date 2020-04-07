@@ -16,7 +16,7 @@ namespace Financial.Models.ViewModels
         [Display(Name = "نام بانک")]
         public string BankName { get; set; }
 
-        [Display(Name = "نام حساب")]
+        [Display(Name = "نوع حساب")]
         public string AccountName { get; set; }
 
         [Display(Name = "شماره حساب")]

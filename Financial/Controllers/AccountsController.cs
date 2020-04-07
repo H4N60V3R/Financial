@@ -29,6 +29,7 @@ namespace Financial.Controllers
         {
             var accounts = context.Account
                 .Where(x => !x.IsDelete)
+                .OrderByDescending(x => x.ModifiedDate)
                 .Select(x => new AccountViewModel
                 {
                     Guid = x.Guid,
