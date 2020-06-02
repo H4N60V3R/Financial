@@ -88,7 +88,7 @@
                                 <span class=" input-group-addon">
                                     <i class="glyphicon glyphicon-pencil"></i>
                                 </span>
-                                <input asp-for="Cost" class="form-control" />
+                                <input asp-for="Cost" class="form-control" type="text" data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false, 'prefix': '', 'placeholder': ''">
                             </div>
                             <span asp-validation-for="Cost" class="text-danger"></span>
                         </div>
@@ -170,6 +170,13 @@
         });
         $('#date1').MdPersianDateTimePicker('setDate', new Date('@Model.IssueDate'));
         $('#date2').MdPersianDateTimePicker('setDate', new Date('@Model.ReceiptDate'));
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize InputMask
+            $(":input").inputmask();
+        });
     </script>
 
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

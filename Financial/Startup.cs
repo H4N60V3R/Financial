@@ -38,7 +38,13 @@ namespace Financial
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 8;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 0;
+
             }).AddEntityFrameworkStores<FinancialContext>();
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Users/Login");

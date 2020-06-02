@@ -18,7 +18,7 @@ namespace Financial.Controllers
         private readonly UserManager<ApplicationUser> userManager;
 
         public AccountsController(FinancialContext context,
-                UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager)
         {
             this.context = context;
             this.userManager = userManager;
@@ -64,7 +64,7 @@ namespace Financial.Controllers
                     AccountName = model.AccountName,
                     AccountNumber = model.AccountNumber,
                     CardNumber = model.CardNumber,
-                    Credit = model.Credit ?? 0
+                    Credit = Convert.ToInt64(model.Credit)
                 };
 
                 context.Account.Add(account);
@@ -112,7 +112,7 @@ namespace Financial.Controllers
                 AccountName = account.AccountName,
                 AccountNumber = account.AccountNumber,
                 CardNumber = account.CardNumber,
-                Credit = account.Credit
+                Credit = account.Credit.ToString()
             };
 
             return PartialView(model);
@@ -136,7 +136,7 @@ namespace Financial.Controllers
                 account.AccountName = model.AccountName;
                 account.AccountNumber = model.AccountNumber;
                 account.CardNumber = model.CardNumber;
-                account.Credit = model.Credit ?? 0;
+                account.Credit = Convert.ToInt64(model.Credit);
                 account.ModifiedDate = DateTime.Now;
 
                 if (Convert.ToBoolean(context.SaveChanges() > 0))

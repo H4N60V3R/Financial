@@ -9,8 +9,8 @@ namespace Financial.Models.ViewModels
 {
     public class CreateCheckTransactionViewModel
     {
-        private string issueDate;
-        private string receiptDate;
+        private string issueDate, receiptDate;
+        private string cost;
         private readonly string now = PersianDateExtensionMethods.ToPeString(DateTime.Now, "yyyy-MM-dd HH:mm:ss");
 
         [Display(Name = "حساب")]
@@ -30,7 +30,17 @@ namespace Financial.Models.ViewModels
 
         [Display(Name = "مبلغ (تومان)")]
         [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
-        public long Cost { get; set; }
+        public string Cost
+        {
+            get
+            {
+                return cost.Replace(",", "");
+            }
+            set
+            {
+                cost = value;
+            }
+        }
 
         [Display(Name = "طرف حساب")]
         [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]

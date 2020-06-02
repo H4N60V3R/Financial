@@ -23,7 +23,6 @@ footer {
 }
 
 /*********************************************** Config ********************************************/
-
 .Main-Config {
     margin-top: 70px;
     display: flex;
@@ -269,8 +268,8 @@ footer {
     top: 9px;
     right: 7px;
     text-align: center;
-    font-size: 9px;
-    padding: 2px 3px;
+    font-size: 12.5px;
+    padding: 2px 3px 1px 3px;
     line-height: .9;
 }
 

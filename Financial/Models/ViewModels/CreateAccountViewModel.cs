@@ -8,6 +8,8 @@ namespace Financial.Models.ViewModels
 {
     public class CreateAccountViewModel
     {
+        private string credit;
+
         [Display(Name = "نام بانک")]
         public string BankName { get; set; }
 
@@ -22,6 +24,17 @@ namespace Financial.Models.ViewModels
         public string CardNumber { get; set; }
 
         [Display(Name = "اعتبار (تومان)")]
-        public long? Credit { get; set; }
+        [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
+        public string Credit
+        {
+            get
+            {
+                return credit.Replace(",", "");
+            }
+            set
+            {
+                credit = value;
+            }
+        }
     }
 }

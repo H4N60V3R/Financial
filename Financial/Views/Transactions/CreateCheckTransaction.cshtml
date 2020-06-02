@@ -86,7 +86,7 @@
                                 <span class=" input-group-addon">
                                     <i class="glyphicon glyphicon-pencil"></i>
                                 </span>
-                                <input asp-for="Cost" class="form-control" />
+                                <input asp-for="Cost" class="form-control" type="text" data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false, 'prefix': '', 'placeholder': ''">
                             </div>
                             <span asp-validation-for="Cost" class="text-danger"></span>
                         </div>
@@ -163,6 +163,13 @@
             englishNumber: true,
             toDate: true,
             groupId: 'date1-2-range'
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize InputMask
+            $(":input").inputmask();
         });
     </script>
 

@@ -16,10 +16,10 @@ namespace Financial.Models.Repositories
             this.context = context;
         }
 
-        public int GetAccountsCount()
+        public int GetAccountsCount(string userGuid)
         {
             var accounts = context.Account
-                .Where(x => !x.IsDelete)
+                .Where(x => x.UserGuid == userGuid && !x.IsDelete)
                 .ToList();
 
             return accounts.Count;
@@ -34,19 +34,19 @@ namespace Financial.Models.Repositories
             return transactions.Count;
         }
 
-        public long GetAccountsCredit()
+        public long GetAccountsCredit(string userGuid)
         {
             var accounts = context.Account
-                .Where(x => !x.IsDelete)
+                .Where(x => x.UserGuid == userGuid && !x.IsDelete)
                 .Sum(x => x.Credit);
 
             return accounts;
         }
 
-        public IEnumerable<AccountsAbstractViewModel> GetAccountsAbstract()
+        public IEnumerable<AccountsAbstractViewModel> GetAccountsAbstract(string userGuid)
         {
             var accounts = context.Account
-                .Where(x => !x.IsDelete)
+                .Where(x => x.UserGuid == userGuid && !x.IsDelete)
                 .OrderByDescending(x => x.CreationDate)
                 .Select(x => new AccountsAbstractViewModel 
                 {

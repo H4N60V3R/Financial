@@ -87,7 +87,7 @@
                     </td>
 
                     <td scope="row">
-                        <span>@Html.DisplayFor(modelItem => item.Cost)</span>
+                        <span class="cost" data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false, 'prefix': '', 'placeholder': ''">@Html.DisplayFor(modelItem => item.Cost)</span>
                     </td>
 
                     <td scope="row">
@@ -180,6 +180,13 @@
             });
         }
 
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize InputMask
+            $(".cost").inputmask();
+        });
     </script>
 
 }

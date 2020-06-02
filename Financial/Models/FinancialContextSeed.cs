@@ -66,7 +66,7 @@ namespace Financial.Models
                         Guid = Guid.Parse("d1605abf-8a46-4f2e-8e22-194298b9fd33"),
                         CodeGroupGuid = Guid.Parse("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
                         Value = "Creditor",
-                        DisplayValue = "بستانکار",
+                        DisplayValue = "دریافتی",
                         CreationDate = now,
                         ModifiedDate = now,
                         IsDelete = false
@@ -76,7 +76,7 @@ namespace Financial.Models
                         Guid = Guid.Parse("749d242b-55f7-4361-bf1b-42c139411c49"),
                         CodeGroupGuid = Guid.Parse("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
                         Value = "Debtor",
-                        DisplayValue = "بدهکار",
+                        DisplayValue = "پرداختی",
                         CreationDate = now,
                         ModifiedDate = now,
                         IsDelete = false

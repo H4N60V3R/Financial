@@ -22,7 +22,7 @@ namespace Financial.Controllers
         public IActionResult Remindings()
         {
             var transactions = context.Transaction
-                .Where(x => !x.IsDelete && x.ReceiptDate > DateTime.Now && x.ReceiptDate < DateTime.Now.AddDays(1) && x.StateCodeGuid == Codes.WaitingState)
+                .Where(x => !x.IsDelete && x.ReceiptDate > DateTime.Now && x.ReceiptDate < DateTime.Now.AddDays(10) && x.StateCodeGuid == Codes.WaitingState)
                 .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel
                 {

@@ -54,7 +54,7 @@ namespace Financial.Controllers
         {
             CodesRepository codeRepository = new CodesRepository(context);
 
-            ViewBag.Accounts = new AccountsRepository(context).GetAccounts();
+            ViewBag.Accounts = new AccountsRepository(context).GetAccounts(userManager.GetUserId(User));
             ViewBag.TransactionTypes = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionType);
             ViewBag.TransactionStates = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionState);
 
@@ -67,13 +67,15 @@ namespace Financial.Controllers
         {
             if (ModelState.IsValid)
             {
+                long cost = Convert.ToInt64(model.Cost);
+
                 Transaction transaction = new Transaction
                 {
                     AccountGuid = model.AccountGuid,
                     TypeCodeGuid = model.TypeGuid,
                     StateCodeGuid = model.StateGuid,
                     Title = model.Title,
-                    Cost = model.Cost,
+                    Cost = cost,
                     AccountSide = model.AccountSide,
                     Description = model.Description,
                     ReceiptDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate)
@@ -85,7 +87,7 @@ namespace Financial.Controllers
                         .Where(x => x.Guid == model.AccountGuid)
                         .SingleOrDefault();
 
-                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + model.Cost : account.Credit - model.Cost;
+                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
                     account.ModifiedDate = DateTime.Now;
                 }
 
@@ -115,7 +117,7 @@ namespace Financial.Controllers
         {
             CodesRepository codeRepository = new CodesRepository(context);
 
-            ViewBag.Accounts = new AccountsRepository(context).GetAccounts();
+            ViewBag.Accounts = new AccountsRepository(context).GetAccounts(userManager.GetUserId(User));
             ViewBag.TransactionTypes = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionType);
             ViewBag.TransactionStates = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionState);
 
@@ -128,13 +130,15 @@ namespace Financial.Controllers
         {
             if (ModelState.IsValid)
             {
+                long cost = Convert.ToInt64(model.Cost);
+
                 Transaction transaction = new Transaction
                 {
                     AccountGuid = model.AccountGuid,
                     TypeCodeGuid = model.TypeGuid,
                     StateCodeGuid = model.StateGuid,
                     Title = model.Title,
-                    Cost = model.Cost,
+                    Cost = cost,
                     AccountSide = model.AccountSide,
                     Description = model.Description,
                     ReceiptDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate)
@@ -154,7 +158,7 @@ namespace Financial.Controllers
                         .Where(x => x.Guid == model.AccountGuid)
                         .SingleOrDefault();
 
-                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + model.Cost : account.Credit - model.Cost;
+                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
                     account.ModifiedDate = DateTime.Now;
                 }
 
@@ -204,7 +208,7 @@ namespace Financial.Controllers
                 TypeGuid = transaction.TypeCodeGuid,
                 StateGuid = transaction.StateCodeGuid,
                 Title = transaction.Title,
-                Cost = transaction.Cost,
+                Cost = transaction.Cost.ToString(),
                 AccountSide = transaction.AccountSide,
                 Description = transaction.Description,
                 ReceiptDate = transaction.ReceiptDate.ToString()
@@ -212,7 +216,7 @@ namespace Financial.Controllers
 
             CodesRepository codeRepository = new CodesRepository(context);
 
-            ViewBag.Accounts = new AccountsRepository(context).GetAccounts();
+            ViewBag.Accounts = new AccountsRepository(context).GetAccounts(userManager.GetUserId(User));
             ViewBag.TransactionTypes = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionType);
             ViewBag.TransactionStates = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionState);
 
@@ -243,9 +247,11 @@ namespace Financial.Controllers
                     account.ModifiedDate = DateTime.Now;
                 }
 
+                long cost = Convert.ToInt64(model.Cost);
+
                 if (model.AccountGuid.HasValue && model.StateGuid == Codes.PassedState)
                 {
-                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + model.Cost : account.Credit - model.Cost;
+                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
                     account.ModifiedDate = DateTime.Now;
                 }
 
@@ -253,7 +259,7 @@ namespace Financial.Controllers
                 transaction.TypeCodeGuid = model.TypeGuid;
                 transaction.StateCodeGuid = model.StateGuid;
                 transaction.Title = model.Title;
-                transaction.Cost = model.Cost;
+                transaction.Cost = cost;
                 transaction.AccountSide = model.AccountSide;
                 transaction.Description = model.Description;
                 transaction.ReceiptDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate);
@@ -306,7 +312,7 @@ namespace Financial.Controllers
                 TypeGuid = transaction.TypeCodeGuid,
                 StateGuid = transaction.StateCodeGuid,
                 Title = transaction.Title,
-                Cost = transaction.Cost,
+                Cost = transaction.Cost.ToString(),
                 AccountSide = transaction.AccountSide,
                 Serial = checkTransactionInfo.Serial,
                 Description = transaction.Description,
@@ -316,7 +322,7 @@ namespace Financial.Controllers
 
             CodesRepository codeRepository = new CodesRepository(context);
 
-            ViewBag.Accounts = new AccountsRepository(context).GetAccounts();
+            ViewBag.Accounts = new AccountsRepository(context).GetAccounts(userManager.GetUserId(User));
             ViewBag.TransactionTypes = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionType);
             ViewBag.TransactionStates = codeRepository.GetCodesByCodeGroupGuid(CodeGroups.TransactionState);
 
@@ -351,9 +357,11 @@ namespace Financial.Controllers
                     account.ModifiedDate = DateTime.Now;
                 }
 
+                long cost = Convert.ToInt64(model.Cost);
+
                 if (model.AccountGuid.HasValue && model.StateGuid == Codes.PassedState)
                 {
-                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + model.Cost : account.Credit - model.Cost;
+                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
                     account.ModifiedDate = DateTime.Now;
                 }
 
@@ -361,7 +369,7 @@ namespace Financial.Controllers
                 transaction.TypeCodeGuid = model.TypeGuid;
                 transaction.StateCodeGuid = model.StateGuid;
                 transaction.Title = model.Title;
-                transaction.Cost = model.Cost;
+                transaction.Cost = cost;
                 transaction.AccountSide = model.AccountSide;
                 checkTransactionInfo.Serial = model.Serial;
                 transaction.Description = model.Description;

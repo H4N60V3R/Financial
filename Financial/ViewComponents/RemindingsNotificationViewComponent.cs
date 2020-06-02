@@ -1,4 +1,5 @@
-﻿using Financial.Models;
+﻿using Financial.Common;
+using Financial.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Financial.ViewComponents
         public IViewComponentResult Invoke()
         {
             var transactions = context.Transaction
-                .Where(x => !x.IsDelete && x.ReceiptDate > DateTime.Now && x.ReceiptDate < DateTime.Now.AddDays(1))
+                .Where(x => !x.IsDelete && x.ReceiptDate > DateTime.Now && x.ReceiptDate < DateTime.Now.AddDays(10) && x.StateCodeGuid == Codes.WaitingState)
                 .ToList();
 
             return View(transactions.Count);

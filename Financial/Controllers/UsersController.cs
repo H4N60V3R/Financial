@@ -69,44 +69,44 @@ namespace Financial.Controllers
             return BadRequest();
         }
 
-        //[AllowAnonymous]
-        //[HttpGet]
-        //public IActionResult Register()
-        //{
-        //    return View();
-        //}
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-        //[AllowAnonymous]
-        //[HttpPost]
-        //public async Task<IActionResult> Register(RegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser
-        //        {
-        //            UserName = model.Username,
-        //            FirstName = model.FirstName,
-        //            LastName = model.LastName,
-        //            NationalCode = model.NationalCode,
-        //            Address = model.Address
-        //        };
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Username,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    NationalCode = model.NationalCode,
+                    Address = model.Address
+                };
 
-        //        var result = await userManager.CreateAsync(user, model.Password);
+                var result = await userManager.CreateAsync(user, model.Password);
 
-        //        if (result.Succeeded)
-        //        {
-        //            await signInManager.SignInAsync(user, false);
-        //            return RedirectToAction("Index", "Home");
-        //        }
+                if (result.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, false);
+                    return RedirectToAction("Index", "Home");
+                }
 
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError(string.Empty, error.Description);
-        //        }
-        //    }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Logout()

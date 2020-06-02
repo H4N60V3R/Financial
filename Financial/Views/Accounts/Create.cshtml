@@ -43,7 +43,7 @@
                 <label asp-for="Credit" class="control-label"></label>
                 <div class="input-group">
                     <span class=" input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                    <input asp-for="Credit" class="form-control" />
+                    <input asp-for="Credit" class="form-control" value="0" type="text" data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false, 'prefix': '', 'placeholder': ''">
                 </div>
                 <span asp-validation-for="Credit" class="text-danger"></span>
             </div>
@@ -58,3 +58,10 @@
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Initialize InputMask
+        $(":input").inputmask();
+    });
+</script>
