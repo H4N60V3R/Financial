@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "تقویم";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<div class="panel panel-body panel-default navigation">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body" style="overflow-x: auto; color: #000000">
+        <a href="#" onclick="Test()">content</a>
+        <div id='calendar'></div>
+    </div>
+</div>
+
+@section Styles {
+
+    <link href="~/lib/fullcalendar-4.4.2/packages/core/main.css" rel="stylesheet" />
+    <link href="~/lib/fullcalendar-4.4.2/packages/daygrid/main.css" rel="stylesheet" />
+    <link href="~/lib/fullcalendar-4.4.2/packages/timegrid/main.css" rel="stylesheet" />
+    <link href="~/lib/fullcalendar-4.4.2/packages/list/main.css" rel="stylesheet" />
+
+}
+
+@section Scripts {
+
+    <script src="~/lib/fullcalendar-4.4.2/packages/core/main.js"></script>
+    <script src="~/lib/fullcalendar-4.4.2/packages/core/locales-all.js"></script>
+    <script src="~/lib/fullcalendar-4.4.2/packages/interaction/main.js"></script>
+    <script src="~/lib/fullcalendar-4.4.2/packages/daygrid/main.js"></script>
+    <script src="~/lib/fullcalendar-4.4.2/packages/timegrid/main.js"></script>
+    <script src="~/lib/fullcalendar-4.4.2/packages/list/main.js"></script>
+
+    <script>
+
+        function Test() {
+            $.ajax({
+                url: "/Calendar/Test",
+                type: "POST",
+                data: {}
+            }).done(function (result) {
+                alert("Qoli");
+            });
+        }
+
+    </script>
+
+    @*<script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+                header: {
+                    left: 'next,prev today',
+                    center: 'title',
+                    right: 'dayGridMonth,listMonth'
+                },
+                locale: 'fa',
+                dir: 'rtl',
+                weekNumbers: false,
+                navLinks: true,
+                selectable: true,
+                select: function (arg) {
+                    var title = prompt('توضیحات:');
+                    if (title) {
+
+                        $.post('@Url.Action("Test", "Calendar")',
+                            {
+                                t: title,
+                                start: arg.start,
+                                end: arg.end
+                            }).done(function (data) {
+                                alert("Data Loaded: " + data);
+                            });
+
+                        console.log(arg);
+                        console.log(title);
+                        console.log(arg.start);
+                        console.log(arg.end);
+                        console.log(arg.allDay);
+                        calendar.addEvent({
+                            title: title,
+                            start: arg.start,
+                            end: arg.end,
+                            allDay: arg.allDay
+                        })
+                    }
+                    calendar.unselect()
+                },
+                windowResize: function (view) {
+                    //reSize(calendar);
+                },
+                editable: false,
+                eventLimit: false,
+                events: [
+                    {
+                        title: 'سلام',
+                        start: '2020-06-04',
+                    },
+                    {
+                        title: 'چطوری؟',
+                        start: '2020-06-02',
+                        end: '2020-06-03'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2020-05-09T16:00:00'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2020-05-16T16:00:00'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2020-05-11',
+                        end: '2020-05-15'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2020-05-12T10:30:00',
+                        end: '2020-05-12T12:30:00'
+                    },
+                    {
+                        title: 'Lunch',
+                        start: '2020-05-12T12:00:00'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2020-05-12T14:30:00'
+                    },
+                    {
+                        title: 'Happy Hour',
+                        start: '2020-05-12T17:30:00'
+                    },
+                    {
+                        title: 'Dinner',
+                        start: '2020-05-12T20:00:00'
+                    },
+                    {
+                        title: 'Birthday Party',
+                        start: '2020-05-13T07:00:00'
+                    },
+                    {
+                        title: 'Click for Google',
+                        url: 'http://google.com/',
+                        start: '2020-05-28'
+                    }
+                ]
+            });
+
+            calendar.render();
+
+            //reSize(calendar);
+        });
+
+        function reSize(calendar) {
+            if (window.innerWidth <= 767) {
+                //calendar.changeView('listWeek');
+                //var buttons = document.getElementsByClassName('fc-right')[0];
+                //buttons.style.display = 'none';
+            } else {
+                //calendar.changeView('dayGridMonth');
+                //var buttons = document.getElementsByClassName('fc-right')[0];
+                //buttons.style.display = 'block';
+            }
+        }
+
+    </script>*@
+
+}

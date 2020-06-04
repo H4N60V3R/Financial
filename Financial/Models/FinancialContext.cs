@@ -17,6 +17,8 @@ namespace Financial.Models
 
         public virtual DbSet<Account> Account { get; set; }
 
+        public virtual DbSet<Calendar> Calendar { get; set; }
+
         public virtual DbSet<CheckTransactionInfo> CheckTransactionInfo { get; set; }
 
         public virtual DbSet<Code> Code { get; set; }
