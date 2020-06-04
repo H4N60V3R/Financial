@@ -53,5 +53,12 @@ namespace Financial.Common
         public static string ChangeTransactionStateFailed = "تغییر وضعیت تراکنش مورد نظر با موفقیت انجام نشد";
 
         #endregion
+
+        #region Calendar
+
+        public static string CreateEventSuccessful = "رویداد جدید با موفقیت ثبت شد";
+        public static string CreateEventFailed = "رویداد جدید با موفقیت ثبت نشد";
+
+        #endregion
     }
 }

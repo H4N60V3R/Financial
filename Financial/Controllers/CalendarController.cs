@@ -2,15 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Financial.Common;
 using Financial.Models;
 using Financial.Models.Entities;
+using Financial.Models.Enums;
+using Financial.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Financial.Controllers
 {
     public class CalendarController : Controller
     {
         private readonly FinancialContext _context;
+        private readonly Dictionary<string, string> _monthNumber = new Dictionary<string, string>()
+        { 
+            { "Jan", "01" },
+            { "Feb", "02" },
+            { "Mar", "03" },
+            { "Apr", "04" },
+            { "May", "05" },
+            { "Jun", "06" },
+            { "Jul", "07" },
+            { "Aug", "08" },
+            { "Sep", "09" },
+            { "Oct", "10" },
+            { "Nov", "11" },
+            { "Dec", "12" },
+        };
 
         public CalendarController(FinancialContext context)
         {
@@ -22,26 +41,93 @@ namespace Financial.Controllers
             return View();
         }
 
-        [HttpPost]
-        public JsonResult Test(string test)
+        public async Task<JsonResult> GetEvents(string start, string end)
         {
-            //if (title == null &&
-            //    start == null &&
-            //    end == null)
-            //    return BadRequest();
+            List<EventsViewModel> events = await _context.Calendar
+                .Select(x => new EventsViewModel()
+                {
+                    Title = x.Title,
+                    Start = x.Start,
+                    End = x.End
+                }).ToListAsync();
 
-            //Calendar calendar = new Calendar()
-            //{
-            //    Title = title,
-            //    Start = Convert.ToDateTime(start),
-            //    End = Convert.ToDateTime(end)
-            //};
+            return Json(events);
+        }
 
-            //_context.Calendar.Add(calendar);
+        public IActionResult CreateEvent(string start, string end)
+        {
+            TempData["start"] = start;
+            TempData["end"] = end;
 
-            //await _context.SaveChangesAsync();
+            return PartialView();
+        }
 
-            return Json(true);
+        [HttpPost]
+        public async Task<IActionResult> CreateEvent(CreateEventViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                string start = TempData["start"].ToString();
+                string end = TempData["end"].ToString();
+
+                if ((start == null || start == string.Empty) &&
+                    (end == null || end == string.Empty))
+                    return BadRequest();
+
+                string startMonthName = start.Substring(4, 3);
+                _monthNumber.TryGetValue(startMonthName, out string startMonthNum);
+
+                string endMonthName = end.Substring(4, 3);
+                _monthNumber.TryGetValue(endMonthName, out string endMonthNum);
+
+                if (startMonthNum == null || endMonthNum == null)
+                    BadRequest();
+
+                string startDay = start.Substring(8, 2);
+                string startYear = start.Substring(11, 4);
+                string startDate = startYear + '-' + startMonthNum + '-' + startDay;
+
+                string endDay = end.Substring(8, 2);
+                string endYear = end.Substring(11, 4);
+                string endDate = endYear + '-' + endMonthNum + '-' + endDay;
+
+                Calendar calendar = new Calendar()
+                {
+                    Title = model.EventTitle,
+                    Start = startDate,
+                    End = endDate
+                };
+
+                _context.Calendar.Add(calendar);
+
+                int res = await _context.SaveChangesAsync();
+
+                if (Convert.ToBoolean(res))
+                {
+                    TempData["ToasterState"] = ToasterState.Success;
+                    TempData["ToasterType"] = ToasterType.Message;
+                    TempData["ToasterMessage"] = Messages.CreateEventSuccessful;
+                }
+                else
+                {
+                    TempData["ToasterState"] = ToasterState.Error;
+                    TempData["ToasterType"] = ToasterType.Message;
+                    TempData["ToasterMessage"] = Messages.CreateEventFailed;
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                TempData["ToasterState"] = ToasterState.Error;
+                TempData["ToasterType"] = ToasterType.Message;
+                TempData["ToasterMessage"] = Messages.CreateEventFailed;
+
+                return RedirectToAction("Index");
+            }
         }
     }
 }

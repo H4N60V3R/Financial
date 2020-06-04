@@ -17,8 +17,12 @@ namespace Financial.Models.Entities
         [Required]
         public string Title { get; set; }
 
-        public DateTime Start { get; set; }
+        [Required]
+        [StringLength(128)]
+        public string Start { get; set; }
 
-        public DateTime End { get; set; }
+        [Required]
+        [StringLength(128)]
+        public string End { get; set; }
     }
 }

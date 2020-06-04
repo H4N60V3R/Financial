@@ -16,7 +16,6 @@
 
 <div class="panel panel-default">
     <div class="panel-body" style="overflow-x: auto; color: #000000">
-        <a href="#" onclick="Test()">content</a>
         <div id='calendar'></div>
     </div>
 </div>
@@ -41,20 +40,6 @@
 
     <script>
 
-        function Test() {
-            $.ajax({
-                url: "/Calendar/Test",
-                type: "POST",
-                data: {}
-            }).done(function (result) {
-                alert("Qoli");
-            });
-        }
-
-    </script>
-
-    @*<script>
-
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
 
@@ -71,7 +56,17 @@
                 navLinks: true,
                 selectable: true,
                 select: function (arg) {
-                    var title = prompt('توضیحات:');
+
+                    $.ajax({
+                        url: "Calendar/CreateEvent?start=" + arg.start + "&end=" + arg.end,
+                        type: "GET",
+                        }).done(function (result) {
+                            $("#myModal").modal("show");
+                            $("#myModalLabel").html("افزودن رویداد");
+                            $("#myModalBody").html(result);
+                        });
+
+                    @*var title = prompt('توضیحات:');
                     if (title) {
 
                         $.post('@Url.Action("Test", "Calendar")',
@@ -95,69 +90,14 @@
                             allDay: arg.allDay
                         })
                     }
-                    calendar.unselect()
+                    calendar.unselect()*@
                 },
                 windowResize: function (view) {
                     //reSize(calendar);
                 },
                 editable: false,
                 eventLimit: false,
-                events: [
-                    {
-                        title: 'سلام',
-                        start: '2020-06-04',
-                    },
-                    {
-                        title: 'چطوری؟',
-                        start: '2020-06-02',
-                        end: '2020-06-03'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2020-05-09T16:00:00'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2020-05-16T16:00:00'
-                    },
-                    {
-                        title: 'Conference',
-                        start: '2020-05-11',
-                        end: '2020-05-15'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2020-05-12T10:30:00',
-                        end: '2020-05-12T12:30:00'
-                    },
-                    {
-                        title: 'Lunch',
-                        start: '2020-05-12T12:00:00'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2020-05-12T14:30:00'
-                    },
-                    {
-                        title: 'Happy Hour',
-                        start: '2020-05-12T17:30:00'
-                    },
-                    {
-                        title: 'Dinner',
-                        start: '2020-05-12T20:00:00'
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: '2020-05-13T07:00:00'
-                    },
-                    {
-                        title: 'Click for Google',
-                        url: 'http://google.com/',
-                        start: '2020-05-28'
-                    }
-                ]
+                events: 'Calendar/GetEvents'
             });
 
             calendar.render();
@@ -177,6 +117,6 @@
             }
         }
 
-    </script>*@
+    </script>
 
 }
