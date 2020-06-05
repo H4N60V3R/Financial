@@ -48,7 +48,7 @@
                 header: {
                     left: 'next,prev today',
                     center: 'title',
-                    right: 'dayGridMonth,listMonth'
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay, listMonth'
                 },
                 locale: 'fa',
                 dir: 'rtl',
@@ -56,64 +56,75 @@
                 navLinks: true,
                 selectable: true,
                 select: function (arg) {
-
                     $.ajax({
-                        url: "Calendar/CreateEvent?start=" + arg.start + "&end=" + arg.end,
-                        type: "GET",
-                        }).done(function (result) {
-                            $("#myModal").modal("show");
-                            $("#myModalLabel").html("افزودن رویداد");
-                            $("#myModalBody").html(result);
-                        });
-
-                    @*var title = prompt('توضیحات:');
-                    if (title) {
-
-                        $.post('@Url.Action("Test", "Calendar")',
-                            {
-                                t: title,
-                                start: arg.start,
-                                end: arg.end
-                            }).done(function (data) {
-                                alert("Data Loaded: " + data);
-                            });
-
-                        console.log(arg);
-                        console.log(title);
-                        console.log(arg.start);
-                        console.log(arg.end);
-                        console.log(arg.allDay);
-                        calendar.addEvent({
-                            title: title,
-                            start: arg.start,
-                            end: arg.end,
-                            allDay: arg.allDay
-                        })
-                    }
-                    calendar.unselect()*@
+                        url: 'Calendar/CreateEvent?start=' + arg.start + '&end=' + arg.end,
+                        type: 'GET',
+                    }).done(function (result) {
+                        $('#myModal').modal('show');
+                        $('#myModalLabel').html('افزودن رویداد');
+                        $('#myModalBody').html(result);
+                    });
                 },
                 windowResize: function (view) {
-                    //reSize(calendar);
+                    adjustSize(calendar);
                 },
                 editable: false,
                 eventLimit: false,
-                events: 'Calendar/GetEvents'
+                events: 'Calendar/GetEvents',
+                eventColor: '#222d32',
+                eventBackgroundColor: '#222d32',
+                eventBorderColor: '#222d32',
+                eventRender: function (info) {
+                    info.el.title = 'جهت حذف دو بار کلیک کنید';
+                    info.el.style.transition = 'all 0.1s';
+                    info.el.style.padding = '2.5px';
+                    info.el.addEventListener('dblclick', function () {
+                        $.ajax({
+                            url: 'Calendar/DeleteEvent?eventGuid=' + info.event.id,
+                            type: 'GET',
+                        }).done(function (result) {
+                            $('#myModal').modal('show');
+                            $('#myModalLabel').html('حذف رویداد');
+                            $('#myModalBody').html(result);
+                        });
+                    });
+                },
+                eventMouseEnter: function (info) {
+                    if (calendar.view.type != 'listMonth') {
+                        info.el.style.backgroundColor = 'red';
+                        info.el.style.borderColor = 'red';
+                    }
+                },
+                eventMouseLeave: function (info) {
+                    if (calendar.view.type != 'listMonth') {
+                        info.el.style.backgroundColor = '#222d32';
+                        info.el.style.borderColor = '#222d32';
+                    }
+                },
+                viewSkeletonRender: function (info) {
+                    console.log(info);
+                }
             });
 
             calendar.render();
 
-            //reSize(calendar);
+            adjustSize(calendar);
         });
 
-        function reSize(calendar) {
+        function adjustSize(calendar) {
             if (window.innerWidth <= 767) {
-                //calendar.changeView('listWeek');
-                //var buttons = document.getElementsByClassName('fc-right')[0];
-                //buttons.style.display = 'none';
+                calendar.setOption('header', {
+                    left: 'next,prev today',
+                    center: null,
+                    right: 'title'
+                });
+                calendar.changeView('dayGridDay');
             } else {
-                //calendar.changeView('dayGridMonth');
-                //var buttons = document.getElementsByClassName('fc-right')[0];
-                //buttons.style.display = 'block';
+                calendar.setOption('header', {
+                    left: 'next,prev today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay, listMonth'
+                });
             }
         }
 

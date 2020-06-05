@@ -46,9 +46,11 @@ namespace Financial.Controllers
             List<EventsViewModel> events = await _context.Calendar
                 .Select(x => new EventsViewModel()
                 {
+                    Id = x.CalendarGuid.ToString(),
                     Title = x.Title,
                     Start = x.Start,
                     End = x.End
+
                 }).ToListAsync();
 
             return Json(events);
@@ -125,6 +127,69 @@ namespace Financial.Controllers
                 TempData["ToasterState"] = ToasterState.Error;
                 TempData["ToasterType"] = ToasterType.Message;
                 TempData["ToasterMessage"] = Messages.CreateEventFailed;
+
+                return RedirectToAction("Index");
+            }
+        }
+
+        public async Task<IActionResult> DeleteEvent(Guid eventGuid)
+        {
+            if (eventGuid == null)
+                return BadRequest();
+
+            Calendar calendar = await _context.Calendar
+                .SingleOrDefaultAsync(x => x.CalendarGuid == eventGuid);
+
+            if (calendar == null)
+                return NotFound();
+
+            DeleteViewModel model = new DeleteViewModel()
+            {
+                Guid = calendar.CalendarGuid,
+                Message = Messages.DeleteEventText
+            };
+
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteEvent(DeleteViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                Calendar calendar = await _context.Calendar
+                    .SingleOrDefaultAsync(x => x.CalendarGuid == model.Guid);
+
+                if (calendar == null)
+                    NotFound();
+
+                _context.Calendar.Remove(calendar);
+
+                int res = await _context.SaveChangesAsync();
+
+                if (Convert.ToBoolean(res))
+                {
+                    TempData["ToasterState"] = ToasterState.Success;
+                    TempData["ToasterType"] = ToasterType.Message;
+                    TempData["ToasterMessage"] = Messages.DeleteEventSuccessful;
+                }
+                else
+                {
+                    TempData["ToasterState"] = ToasterState.Error;
+                    TempData["ToasterType"] = ToasterType.Message;
+                    TempData["ToasterMessage"] = Messages.DeleteEventFailed;
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                TempData["ToasterState"] = ToasterState.Error;
+                TempData["ToasterType"] = ToasterType.Message;
+                TempData["ToasterMessage"] = Messages.DeleteEventFailed;
 
                 return RedirectToAction("Index");
             }

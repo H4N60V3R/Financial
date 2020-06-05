@@ -479,27 +479,8 @@ footer {
 }
 
 /*********************************************** Full Calendar ********************************************/
-
 .fc-toolbar h2 {
     font-size: 16px !important;
-}
-
-.fc-button-primary,
-.fc-event, .fc-event-dot,
-.fc-event {
-    background-color: #222d32 !important;
-}
-
-.fc-button-primary:hover {
-    background-color: #253544 !important;
-}
-
-.fc-event {
-    border: none !important;
-}
-
-.fc-row .fc-content-skeleton {
-    padding-bottom: 0px !important;
 }
 
 .fc-day:hover,
@@ -508,20 +489,13 @@ footer {
     cursor: pointer;
 }
 
+.fc-row .fc-content-skeleton {
+    padding-bottom: 0px !important;
+}
+
 .fc-day-grid-event .fc-content {
     white-space: inherit !important;
-    padding: 2.5px !important;
-    line-height: 18px !important;
-}
-
-.fc-rtl .fc-list-heading-main,
-.fc-rtl .fc-dayGrid-view .fc-day-top .fc-day-number,
-.fc-rtl .fc-list-heading-alt {
-    color: #222d32 !important;
-}
-
-.fc-unthemed .fc-list-item:hover td {
-    background-color: transparent !important;
+    line-height: 20px !important;
 }
 
 @media screen and (max-width:990px) {
@@ -582,7 +556,6 @@ footer {
 
 @media screen and (max-width: 767px) {
     /*********************************************** Full Calendar ********************************************/
-
     .fc-toolbar h2 {
         font-size: 15px !important;
     }
@@ -595,12 +568,7 @@ footer {
     }
 
     /*********************************************** Full Calendar ********************************************/
-
     .fc-toolbar {
         flex-direction: column-reverse !important;
-    }
-
-    .fc-center {
-        padding: 16px 0 !important;
     }
 }

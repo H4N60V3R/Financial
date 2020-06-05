@@ -59,6 +59,10 @@ namespace Financial.Common
         public static string CreateEventSuccessful = "رویداد جدید با موفقیت ثبت شد";
         public static string CreateEventFailed = "رویداد جدید با موفقیت ثبت نشد";
 
+        public static string DeleteEventText = "آیا از حذف رویداد مورد نظر اطمینان دارید؟";
+        public static string DeleteEventSuccessful = "رویداد مورد نظر با موفقیت حذف شد";
+        public static string DeleteEventFailed = "رویداد مورد نظر با موفقیت حذف نشد";
+
         #endregion
     }
 }
