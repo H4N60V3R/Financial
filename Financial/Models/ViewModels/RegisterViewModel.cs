@@ -29,11 +29,9 @@ namespace Financial.Models.ViewModels
         [Display(Name = "Last name")]
         public string LastName { get; set; }
 
-        [Required]
         [Display(Name = "National code")]
         public string NationalCode { get; set; }
 
-        [Required]
         [Display(Name = "Address")]
         public string Address { get; set; }
     }

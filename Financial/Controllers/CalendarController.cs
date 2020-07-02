@@ -7,6 +7,7 @@ using Financial.Models;
 using Financial.Models.Entities;
 using Financial.Models.Enums;
 using Financial.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,21 +16,21 @@ namespace Financial.Controllers
     public class CalendarController : Controller
     {
         private readonly FinancialContext _context;
-        private readonly Dictionary<string, string> _monthNumber = new Dictionary<string, string>()
-        { 
-            { "Jan", "01" },
-            { "Feb", "02" },
-            { "Mar", "03" },
-            { "Apr", "04" },
-            { "May", "05" },
-            { "Jun", "06" },
-            { "Jul", "07" },
-            { "Aug", "08" },
-            { "Sep", "09" },
-            { "Oct", "10" },
-            { "Nov", "11" },
-            { "Dec", "12" },
-        };
+        //private readonly Dictionary<string, string> _monthNumber = new Dictionary<string, string>()
+        //{ 
+        //    { "Jan", "01" },
+        //    { "Feb", "02" },
+        //    { "Mar", "03" },
+        //    { "Apr", "04" },
+        //    { "May", "05" },
+        //    { "Jun", "06" },
+        //    { "Jul", "07" },
+        //    { "Aug", "08" },
+        //    { "Sep", "09" },
+        //    { "Oct", "10" },
+        //    { "Nov", "11" },
+        //    { "Dec", "12" },
+        //};
 
         public CalendarController(FinancialContext context)
         {
@@ -41,158 +42,280 @@ namespace Financial.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<JsonResult> GetEvents(string start, string end)
         {
-            List<EventsViewModel> events = await _context.Calendar
-                .Select(x => new EventsViewModel()
-                {
-                    Id = x.CalendarGuid.ToString(),
-                    Title = x.Title,
-                    Start = x.Start,
-                    End = x.End
-
-                }).ToListAsync();
-
-            return Json(events);
-        }
-
-        public IActionResult CreateEvent(string start, string end)
-        {
-            TempData["start"] = start;
-            TempData["end"] = end;
-
-            return PartialView();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateEvent(CreateEventViewModel model)
-        {
             try
             {
-                if (!ModelState.IsValid)
-                    return BadRequest();
+                if (string.IsNullOrEmpty(start) || string.IsNullOrEmpty(end))
+                    return Json(false);
 
-                string start = TempData["start"].ToString();
-                string end = TempData["end"].ToString();
+                int startYear = Convert.ToInt32(start.Substring(0, 4));
+                int startMonth = Convert.ToInt32(start.Substring(5, 2));
+                int startDay = Convert.ToInt32(start.Substring(8, 2));
 
-                if ((start == null || start == string.Empty) &&
-                    (end == null || end == string.Empty))
-                    return BadRequest();
+                DateTime startDate = new DateTime(startYear, startMonth, startDay).AddDays(1);
 
-                string startMonthName = start.Substring(4, 3);
-                _monthNumber.TryGetValue(startMonthName, out string startMonthNum);
+                int endYear = Convert.ToInt32(end.Substring(0, 4));
+                int endMonth = Convert.ToInt32(end.Substring(5, 2));
+                int endDay = Convert.ToInt32(end.Substring(8, 2));
 
-                string endMonthName = end.Substring(4, 3);
-                _monthNumber.TryGetValue(endMonthName, out string endMonthNum);
+                DateTime endDate = new DateTime(endYear, endMonth, endDay).AddDays(1);
 
-                if (startMonthNum == null || endMonthNum == null)
-                    BadRequest();
+                List<Transaction> transactions = await _context.Transaction
+                    .Where(x => !x.IsDelete && x.StateCodeGuid == Codes.PassedState && x.ReceiptDate >= startDate & x.ReceiptDate < endDate)
+                    .ToListAsync();
 
-                string startDay = start.Substring(8, 2);
-                string startYear = start.Substring(11, 4);
-                string startDate = startYear + '-' + startMonthNum + '-' + startDay;
+                List<DateTime> dates = new List<DateTime>();
+                List<EventsViewModel> events = new List<EventsViewModel>();
 
-                string endDay = end.Substring(8, 2);
-                string endYear = end.Substring(11, 4);
-                string endDate = endYear + '-' + endMonthNum + '-' + endDay;
-
-                Calendar calendar = new Calendar()
+                foreach (var transaction in transactions)
                 {
-                    Title = model.EventTitle,
-                    Start = startDate,
-                    End = endDate
-                };
+                    List<Transaction> dateTransactions = transactions
+                        .Where(x => !dates.Contains(x.ReceiptDate.Date) && x.ReceiptDate.Date == transaction.ReceiptDate.Date)
+                        .OrderByDescending(x => x.ReceiptDate)
+                        .ToList();
 
-                _context.Calendar.Add(calendar);
+                    if (dateTransactions.Count <= 0)
+                        continue;
 
-                int res = await _context.SaveChangesAsync();
+                    EventsViewModel credit = new EventsViewModel()
+                    {
+                        Title = "موجودی: " + dateTransactions.First().Credit.ToString("#,0") + " تومان",
+                        Start = transaction.ReceiptDate.ToString("yyyy-MM-dd")
+                    };
 
-                if (Convert.ToBoolean(res))
-                {
-                    TempData["ToasterState"] = ToasterState.Success;
-                    TempData["ToasterType"] = ToasterType.Message;
-                    TempData["ToasterMessage"] = Messages.CreateEventSuccessful;
+                    EventsViewModel creditor = new EventsViewModel()
+                    {
+                        Title = "دریافتی: " + dateTransactions.Where(x => x.TypeCodeGuid == Codes.CreditorType).Sum(x => x.Cost).ToString("#,0") + " تومان",
+                        Start = transaction.ReceiptDate.ToString("yyyy-MM-dd")
+                    };
+
+                    EventsViewModel debtor = new EventsViewModel()
+                    {
+                        Title = "پرداختی: " + dateTransactions.Where(x => x.TypeCodeGuid == Codes.DebtorType).Sum(x => x.Cost).ToString("#,0") + " تومان",
+                        Start = transaction.ReceiptDate.ToString("yyyy-MM-dd")
+                    };
+
+                    events.AddRange(new List<EventsViewModel> { credit, creditor, debtor });
+
+                    dates.Add(transaction.ReceiptDate.Date);
                 }
-                else
-                {
-                    TempData["ToasterState"] = ToasterState.Error;
-                    TempData["ToasterType"] = ToasterType.Message;
-                    TempData["ToasterMessage"] = Messages.CreateEventFailed;
-                }
 
-                return RedirectToAction("Index");
+                return Json(events);
             }
             catch (Exception)
             {
-                TempData["ToasterState"] = ToasterState.Error;
-                TempData["ToasterType"] = ToasterType.Message;
-                TempData["ToasterMessage"] = Messages.CreateEventFailed;
-
-                return RedirectToAction("Index");
+                return Json(false);
             }
         }
 
-        public async Task<IActionResult> DeleteEvent(Guid eventGuid)
-        {
-            if (eventGuid == null)
-                return BadRequest();
-
-            Calendar calendar = await _context.Calendar
-                .SingleOrDefaultAsync(x => x.CalendarGuid == eventGuid);
-
-            if (calendar == null)
-                return NotFound();
-
-            DeleteViewModel model = new DeleteViewModel()
-            {
-                Guid = calendar.CalendarGuid,
-                Message = Messages.DeleteEventText
-            };
-
-            return PartialView(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DeleteEvent(DeleteViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> ShowCreditorDetails(string start)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (string.IsNullOrEmpty(start))
                     return BadRequest();
 
-                Calendar calendar = await _context.Calendar
-                    .SingleOrDefaultAsync(x => x.CalendarGuid == model.Guid);
+                int startYear = Convert.ToInt32(start.Substring(0, 4));
+                int startMonth = Convert.ToInt32(start.Substring(5, 2));
+                int startDay = Convert.ToInt32(start.Substring(8, 2));
 
-                if (calendar == null)
-                    NotFound();
+                DateTime startDate = new DateTime(startYear, startMonth, startDay).AddDays(1);
 
-                _context.Calendar.Remove(calendar);
+                List<CalendarEventDetailsViewModel> transactions = await _context.Transaction
+                    .Where(x => !x.IsDelete && x.TypeCodeGuid == Codes.CreditorType && x.StateCodeGuid == Codes.PassedState && x.ReceiptDate >= startDate & x.ReceiptDate < startDate.AddDays(1))
+                    .GroupBy(x => x.IsCheckTransaction)
+                    .OrderBy(x => x.Key)
+                    .Select(x => new CalendarEventDetailsViewModel()
+                    {
+                        TrasnactionType = x.Key ? "چک" : "حساب",
+                        CostSum = x.Sum(x => x.Cost).ToString("#,0") + " تومان",
 
-                int res = await _context.SaveChangesAsync();
+                    }).ToListAsync();
 
-                if (Convert.ToBoolean(res))
-                {
-                    TempData["ToasterState"] = ToasterState.Success;
-                    TempData["ToasterType"] = ToasterType.Message;
-                    TempData["ToasterMessage"] = Messages.DeleteEventSuccessful;
-                }
-                else
-                {
-                    TempData["ToasterState"] = ToasterState.Error;
-                    TempData["ToasterType"] = ToasterType.Message;
-                    TempData["ToasterMessage"] = Messages.DeleteEventFailed;
-                }
-
-                return RedirectToAction("Index");
+                return PartialView(transactions);
             }
             catch (Exception)
             {
-                TempData["ToasterState"] = ToasterState.Error;
-                TempData["ToasterType"] = ToasterType.Message;
-                TempData["ToasterMessage"] = Messages.DeleteEventFailed;
-
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowDebtorDetails(string start)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(start))
+                    return BadRequest();
+
+                int startYear = Convert.ToInt32(start.Substring(0, 4));
+                int startMonth = Convert.ToInt32(start.Substring(5, 2));
+                int startDay = Convert.ToInt32(start.Substring(8, 2));
+
+                DateTime startDate = new DateTime(startYear, startMonth, startDay).AddDays(1);
+
+                List<CalendarEventDetailsViewModel> transactions = await _context.Transaction
+                    .Where(x => !x.IsDelete && x.TypeCodeGuid == Codes.DebtorType && x.StateCodeGuid == Codes.PassedState && x.ReceiptDate >= startDate & x.ReceiptDate < startDate.AddDays(1))
+                    .GroupBy(x => x.IsCheckTransaction)
+                    .OrderBy(x => x.Key)
+                    .Select(x => new CalendarEventDetailsViewModel()
+                    {
+                        TrasnactionType = x.Key ? "چک" : "حساب",
+                        CostSum = x.Sum(x => x.Cost).ToString("#,0") + " تومان",
+
+                    }).ToListAsync();
+
+                return PartialView(transactions);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        //[HttpGet]
+        //public IActionResult CreateEvent(string start, string end)
+        //{
+        //    TempData["start"] = start;
+        //    TempData["end"] = end;
+
+        //    return PartialView();
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> CreateEvent(CreateEventViewModel model)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //            return BadRequest();
+
+        //        string start = TempData["start"].ToString();
+        //        string end = TempData["end"].ToString();
+
+        //        if ((start == null || start == string.Empty) &&
+        //            (end == null || end == string.Empty))
+        //            return BadRequest();
+
+        //        string startMonthName = start.Substring(4, 3);
+        //        _monthNumber.TryGetValue(startMonthName, out string startMonthNum);
+
+        //        string endMonthName = end.Substring(4, 3);
+        //        _monthNumber.TryGetValue(endMonthName, out string endMonthNum);
+
+        //        if (startMonthNum == null || endMonthNum == null)
+        //            BadRequest();
+
+        //        string startDay = start.Substring(8, 2);
+        //        string startYear = start.Substring(11, 4);
+        //        string startDate = startYear + '-' + startMonthNum + '-' + startDay;
+
+        //        string endDay = end.Substring(8, 2);
+        //        string endYear = end.Substring(11, 4);
+        //        string endDate = endYear + '-' + endMonthNum + '-' + endDay;
+
+        //        Calendar calendar = new Calendar()
+        //        {
+        //            Title = model.EventTitle,
+        //            Start = startDate,
+        //            End = endDate
+        //        };
+
+        //        _context.Calendar.Add(calendar);
+
+        //        int res = await _context.SaveChangesAsync();
+
+        //        if (Convert.ToBoolean(res))
+        //        {
+        //            TempData["ToasterState"] = ToasterState.Success;
+        //            TempData["ToasterType"] = ToasterType.Message;
+        //            TempData["ToasterMessage"] = Messages.CreateEventSuccessful;
+        //        }
+        //        else
+        //        {
+        //            TempData["ToasterState"] = ToasterState.Error;
+        //            TempData["ToasterType"] = ToasterType.Message;
+        //            TempData["ToasterMessage"] = Messages.CreateEventFailed;
+        //        }
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch (Exception)
+        //    {
+        //        TempData["ToasterState"] = ToasterState.Error;
+        //        TempData["ToasterType"] = ToasterType.Message;
+        //        TempData["ToasterMessage"] = Messages.CreateEventFailed;
+
+        //        return RedirectToAction("Index");
+        //    }
+        //}
+
+        //[HttpGet]
+        //public async Task<IActionResult> DeleteEvent(Guid eventGuid)
+        //{
+        //    if (eventGuid == null)
+        //        return BadRequest();
+
+        //    Calendar calendar = await _context.Calendar
+        //        .SingleOrDefaultAsync(x => x.CalendarGuid == eventGuid);
+
+        //    if (calendar == null)
+        //        return NotFound();
+
+        //    DeleteViewModel model = new DeleteViewModel()
+        //    {
+        //        AccountGuid = calendar.CalendarGuid,
+        //        Message = Messages.DeleteEventText
+        //    };
+
+        //    return PartialView(model);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> DeleteEvent(DeleteViewModel model)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //            return BadRequest();
+
+        //        Calendar calendar = await _context.Calendar
+        //            .SingleOrDefaultAsync(x => x.CalendarGuid == model.AccountGuid);
+
+        //        if (calendar == null)
+        //            NotFound();
+
+        //        _context.Calendar.Remove(calendar);
+
+        //        int res = await _context.SaveChangesAsync();
+
+        //        if (Convert.ToBoolean(res))
+        //        {
+        //            TempData["ToasterState"] = ToasterState.Success;
+        //            TempData["ToasterType"] = ToasterType.Message;
+        //            TempData["ToasterMessage"] = Messages.DeleteEventSuccessful;
+        //        }
+        //        else
+        //        {
+        //            TempData["ToasterState"] = ToasterState.Error;
+        //            TempData["ToasterType"] = ToasterType.Message;
+        //            TempData["ToasterMessage"] = Messages.DeleteEventFailed;
+        //        }
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch (Exception)
+        //    {
+        //        TempData["ToasterState"] = ToasterState.Error;
+        //        TempData["ToasterType"] = ToasterType.Message;
+        //        TempData["ToasterMessage"] = Messages.DeleteEventFailed;
+
+        //        return RedirectToAction("Index");
+        //    }
+        //}
     }
 }

@@ -23,7 +23,7 @@ namespace Financial.Models.Repositories
 
             foreach (var code in codes)
             {
-                list.Add(new SelectListItem() { Value = code.Guid.ToString(), Text = code.DisplayValue });
+                list.Add(new SelectListItem() { Value = code.CodeGuid.ToString(), Text = code.DisplayValue });
             }
 
             return list.AsEnumerable();

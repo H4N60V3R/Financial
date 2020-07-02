@@ -41,6 +41,7 @@ namespace Financial.Common
 
         public static string CreateTransactionSuccessful = "تراکنش جدید با موفقیت ثبت شد";
         public static string CreateTransactionFailed = "تراکنش جدید با موفقیت ثبت نشد";
+        public static string CreateTransactionFailedAccountNotValid = "حساب مورد نظر یافت نشد";
 
         public static string EditTransactionSuccessful = "تراکنش مورد نظر با موفقیت ویرایش شد";
         public static string EditTransactionFailed = "تراکنش مورد نظر با موفقیت ویرایش نشد";

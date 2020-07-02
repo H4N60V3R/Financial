@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Financial.Models.ViewModels
 {
-    public class CheckTransitionInfoViewModel
+    public class CheckTransitionViewModel
     {
         [Display(Name = "سریال")]
         public string Serial { get; set; }

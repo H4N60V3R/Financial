@@ -12,38 +12,20 @@ namespace Financial.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<Account> entity)
         {
-            entity.HasKey(e => e.Guid);
-
-            entity.Property(e => e.Guid)
+            entity.Property(e => e.AccountGuid)
                 .HasDefaultValueSql("(newid())");
-
-            entity.Property(e => e.AccountName)
-                .HasMaxLength(128);
-
-            entity.Property(e => e.AccountNumber)
-                .IsRequired()
-                .HasMaxLength(128);
-
-            entity.Property(e => e.BankName)
-                .HasMaxLength(128);
-
-            entity.Property(e => e.CardNumber)
-                .HasMaxLength(128);
 
             entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())");
 
             entity.Property(e => e.Credit)
-                .HasDefaultValueSql("((0))");
+               .HasDefaultValueSql("((0))");
 
             entity.Property(e => e.IsDelete)
                 .HasDefaultValueSql("((0))");
 
             entity.Property(e => e.ModifiedDate)
                 .HasDefaultValueSql("(getdate())");
-
-            entity.Property(e => e.UserGuid)
-                .IsRequired();
 
             entity.HasOne(d => d.User)
                 .WithMany(p => p.Account)

@@ -26,14 +26,14 @@ namespace Financial.Controllers
                 .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel
                 {
-                    Guid = x.Guid,
+                    TransactionGuid = x.TransactionGuid,
                     AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
                     Type = x.TypeCode.DisplayValue,
                     State = x.StateCode.DisplayValue,
                     Cost = x.Cost,
                     AccountSide = x.AccountSide,
                     Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,
-                    ByCheck = x.CheckTransactionInfo.SingleOrDefault().Guid,
+                    IsCheckTransaction = x.IsCheckTransaction,
                     ReceiptDate = PersianDateExtensionMethods.ToPeString(x.ReceiptDate, "yyyy/MM/dd"),
                     ModifiedDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 
@@ -50,14 +50,14 @@ namespace Financial.Controllers
                 .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel
                 {
-                    Guid = x.Guid,
+                    TransactionGuid = x.TransactionGuid,
                     AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
                     Type = x.TypeCode.DisplayValue,
                     State = x.StateCode.DisplayValue,
                     Cost = x.Cost,
                     AccountSide = x.AccountSide,
                     Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,
-                    ByCheck = x.CheckTransactionInfo.SingleOrDefault().Guid,
+                    IsCheckTransaction = x.IsCheckTransaction,
                     ReceiptDate = PersianDateExtensionMethods.ToPeString(x.ReceiptDate, "yyyy/MM/dd"),
                     ModifiedDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 
@@ -74,14 +74,14 @@ namespace Financial.Controllers
                 .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel
                 {
-                    Guid = x.Guid,
+                    TransactionGuid = x.TransactionGuid,
                     AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
                     Type = x.TypeCode.DisplayValue,
                     State = x.StateCode.DisplayValue,
                     Cost = x.Cost,
                     AccountSide = x.AccountSide,
                     Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,
-                    ByCheck = x.CheckTransactionInfo.SingleOrDefault().Guid,
+                    IsCheckTransaction = x.IsCheckTransaction,
                     ReceiptDate = PersianDateExtensionMethods.ToPeString(x.ReceiptDate, "yyyy/MM/dd"),
                     ModifiedDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 
@@ -98,14 +98,14 @@ namespace Financial.Controllers
                 .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel
                 {
-                    Guid = x.Guid,
+                    TransactionGuid = x.TransactionGuid,
                     AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
                     Type = x.TypeCode.DisplayValue,
                     State = x.StateCode.DisplayValue,
                     Cost = x.Cost,
                     AccountSide = x.AccountSide,
                     Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,
-                    ByCheck = x.CheckTransactionInfo.SingleOrDefault().Guid,
+                    IsCheckTransaction = x.IsCheckTransaction,
                     ReceiptDate = PersianDateExtensionMethods.ToPeString(x.ReceiptDate, "yyyy/MM/dd"),
                     ModifiedDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 
@@ -122,14 +122,14 @@ namespace Financial.Controllers
                 .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel
                 {
-                    Guid = x.Guid,
+                    TransactionGuid = x.TransactionGuid,
                     AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
                     Type = x.TypeCode.DisplayValue,
                     State = x.StateCode.DisplayValue,
                     Cost = x.Cost,
                     AccountSide = x.AccountSide,
                     Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,
-                    ByCheck = x.CheckTransactionInfo.SingleOrDefault().Guid,
+                    IsCheckTransaction = x.IsCheckTransaction,
                     ReceiptDate = PersianDateExtensionMethods.ToPeString(x.ReceiptDate, "yyyy/MM/dd"),
                     ModifiedDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 

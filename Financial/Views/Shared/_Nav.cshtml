@@ -26,7 +26,7 @@
                         </li>
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="javascript::void(0)" onclick="ChangePassword()" class="btn btn-default btn-flat" @*style="width: 65px;"*@>تغییر رمز عبور</a>
+                                <a href="@Url.Action("Index", "Dashboard")" class="btn btn-default btn-flat" @*style="width: 65px;"*@>پنل کاربری</a>
                             </div>
                             <div class="pull-right">
                                 @*<a href="@Url.Action("Logout", "Account")" class="btn btn-default btn-flat" style="width:65px;">خروج</a>*@
@@ -42,32 +42,15 @@
     }
     else
     {
-        @*<div class="navbar-custom-menu">
+        <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-                <li class="btn navbar-btn nav-item-out-login ">
-                    <a href="@Url.Action("PortalLogin", "Account")" class="nav-item-out-login-a" style="padding:6px 0px 0px 0px;">
-                        <i class="glyphicon glyphicon-education nav-item-out-login-a-i-login "></i>
-                        <span class="hidden-xs " style="font-size:13px;">پرتال دانشجویان</span>
+                <li class="dropdown user user-menu menu-item">
+                    <a href="@Url.Action("Login", "Users")" class="">
+                        <i class="glyphicon glyphicon-user nav-top-userInfo-icon"></i>
+                        <span class="hidden-xs nav-username">ورود</span>
                     </a>
                 </li>
             </ul>
-        </div>*@
+        </div>
     }
 }
-
-<script>
-
-    function ChangePassword() {
-        $.ajax({
-            url: "/Users/ChangePassword",
-            type: "Get",
-            data: {}
-        }).done(function (result) {
-            console.log("test");
-            $("#myModal").modal("show");
-            $("#myModalLabel").html("تغییر رمز عبور");
-            $("#myModalBody").html(result);
-        });
-    }
-
-</script>

@@ -32,14 +32,14 @@ namespace Financial.Controllers
                 .OrderByDescending(x => x.ModifiedDate)
                 .Select(x => new AccountViewModel
                 {
-                    Guid = x.Guid,
+                    AccountGuid = x.AccountGuid,
                     UserFullName = x.User.FirstName + " " + x.User.LastName,
                     BankName = string.IsNullOrEmpty(x.BankName) ? Messages.NotSet : x.BankName,
                     AccountName = string.IsNullOrEmpty(x.AccountName) ? Messages.NotSet : x.AccountName,
                     AccountNumber = x.AccountNumber,
                     CardNumber = string.IsNullOrEmpty(x.CardNumber) ? Messages.NotSet : x.CardNumber,
                     Credit = x.Credit,
-                    ModificationDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
+                    ModifiedDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 
                 }).ToList();
 
@@ -89,15 +89,15 @@ namespace Financial.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid guid)
+        public IActionResult Edit(Guid accountGuid)
         {
-            if (guid == null)
+            if (accountGuid == null)
             {
                 return BadRequest();
             }
 
             var account = context.Account
-                .Where(x => x.Guid == guid)
+                .Where(x => x.AccountGuid == accountGuid)
                 .SingleOrDefault();
 
             if (account == null)
@@ -107,7 +107,7 @@ namespace Financial.Controllers
 
             EditAccountViewModel model = new EditAccountViewModel()
             {
-                Guid = account.Guid,
+                AccountGuid = account.AccountGuid,
                 BankName = account.BankName,
                 AccountName = account.AccountName,
                 AccountNumber = account.AccountNumber,
@@ -124,7 +124,7 @@ namespace Financial.Controllers
             if (ModelState.IsValid)
             {
                 var account = context.Account
-                    .Where(x => x.Guid == model.Guid)
+                    .Where(x => x.AccountGuid == model.AccountGuid)
                     .SingleOrDefault();
 
                 if (account == null)
@@ -159,15 +159,15 @@ namespace Financial.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid guid)
+        public IActionResult Delete(Guid accountGuid)
         {
-            if (guid == null)
+            if (accountGuid == null)
             {
                 return BadRequest();
             }
 
             var account = context.Account
-                .Where(x => x.Guid == guid)
+                .Where(x => x.AccountGuid == accountGuid)
                 .SingleOrDefault();
 
             if (account == null)
@@ -177,7 +177,7 @@ namespace Financial.Controllers
 
             DeleteViewModel model = new DeleteViewModel()
             {
-                Guid = account.Guid,
+                Guid = account.AccountGuid,
                 Message = Messages.DeleteAccountText
             };
 
@@ -190,7 +190,7 @@ namespace Financial.Controllers
             if (ModelState.IsValid)
             {
                 var account = context.Account
-                    .Where(x => x.Guid == model.Guid)
+                    .Where(x => x.AccountGuid == model.Guid)
                     .SingleOrDefault();
 
                 if (account == null)

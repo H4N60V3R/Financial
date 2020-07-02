@@ -31,6 +31,8 @@
 
 @section Scripts {
 
+    <script src="~/js/axios.min.js"></script>
+
     <script src="~/lib/fullcalendar-4.4.2/packages/core/main.js"></script>
     <script src="~/lib/fullcalendar-4.4.2/packages/core/locales-all.js"></script>
     <script src="~/lib/fullcalendar-4.4.2/packages/interaction/main.js"></script>
@@ -56,28 +58,49 @@
                 navLinks: true,
                 selectable: true,
                 select: function (arg) {
-                    $.ajax({
-                        url: 'Calendar/CreateEvent?start=' + arg.start + '&end=' + arg.end,
-                        type: 'GET',
-                    }).done(function (result) {
+                    axios.get('Calendar/CreateEvent', {
+                        params: {
+                            start: arg.start,
+                            end: arg.end
+                        }
+                    }).then(function (response) {
                         $('#myModal').modal('show');
                         $('#myModalLabel').html('افزودن رویداد');
-                        $('#myModalBody').html(result);
-                    });
+                        $('#myModalBody').html(response.data);
+                    }).catch(function (error) {
+                        console.log(error);
+                    })
                 },
                 windowResize: function (view) {
                     adjustSize(calendar);
                 },
                 editable: false,
                 eventLimit: false,
-                events: 'Calendar/GetEvents',
+                datesRender: function (info) {
+                    axios.get('Calendar/GetEvents', {
+                        params: {
+                            start: info.view.currentStart,
+                            end: info.view.currentEnd
+                        }
+                    }).then(function (response) {
+                        var eventSources = calendar.getEventSources();
+                        if (eventSources.length > 0) {
+                            eventSources.forEach(function (eventSource) {
+                                eventSource.remove();
+                            });
+                        }
+                        calendar.addEventSource(response.data);
+                    }).catch(function (error) {
+                        console.log(error);
+                    })
+                },
                 eventColor: '#222d32',
                 eventBackgroundColor: '#222d32',
                 eventBorderColor: '#222d32',
                 eventRender: function (info) {
                     info.el.title = 'جهت حذف دو بار کلیک کنید';
                     info.el.style.transition = 'all 0.1s';
-                    info.el.style.padding = '2.5px';
+                    info.el.style.padding = '5px';
                     info.el.addEventListener('dblclick', function () {
                         $.ajax({
                             url: 'Calendar/DeleteEvent?eventGuid=' + info.event.id,
@@ -100,9 +123,6 @@
                         info.el.style.backgroundColor = '#222d32';
                         info.el.style.borderColor = '#222d32';
                     }
-                },
-                viewSkeletonRender: function (info) {
-                    console.log(info);
                 }
             });
 

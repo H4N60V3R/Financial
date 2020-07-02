@@ -33,7 +33,7 @@
                     <th scope="col">@Html.DisplayNameFor(model => model.AccountNumber)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.CardNumber)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.Credit)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.ModificationDate)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.ModifiedDate)</th>
                     <th scope="col" data-orderable="false">کنترل</th>
                 </tr>
             </thead>
@@ -76,12 +76,12 @@
                         </td>
 
                         <td scope="row">
-                            <span>@Html.DisplayFor(modelItem => item.ModificationDate)</span>
+                            <span>@Html.DisplayFor(modelItem => item.ModifiedDate)</span>
                         </td>
 
                         <td scope="row">
-                            <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="javascript:void(0)" onclick="Edit('@item.Guid')"></a>
-                            <a class="control btn btn-danger btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto" title="حذف" href="javascript:void(0)" onclick="Delete('@item.Guid')"></a>
+                            <a class="control btn btn-warning btn-sm glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="auto" title="ویرایش" href="javascript:void(0)" onclick="Edit('@item.AccountGuid')"></a>
+                            <a class="control btn btn-danger btn-sm glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="auto" title="حذف" href="javascript:void(0)" onclick="Delete('@item.AccountGuid')"></a>
                         </td>
 
                     </tr>
@@ -108,9 +108,9 @@
             });
         }
 
-        function Edit(guid) {
+        function Edit(accountGuid) {
             $.ajax({
-                url: "/Accounts/Edit/?guid=" + guid,
+                url: "/Accounts/Edit/?accountGuid=" + accountGuid,
                 type: "Get",
                 data: {}
             }).done(function (result) {
@@ -120,9 +120,9 @@
             });
         }
 
-        function Delete(guid) {
+        function Delete(accountGuid) {
             $.ajax({
-                url: "/Accounts/Delete/?guid=" + guid,
+                url: "/Accounts/Delete/?accountGuid=" + accountGuid,
                 type: "Get",
                 data: {}
             }).done(function (result) {

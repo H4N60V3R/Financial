@@ -12,18 +12,14 @@ namespace Financial.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<Transaction> entity)
         {
-            entity.HasKey(e => e.Guid)
-                .HasName("PK_Transaction");
+            entity.Property(e => e.Credit)
+                .HasDefaultValueSql("((0))");
 
-            entity.Property(e => e.Guid)
+            entity.Property(e => e.TransactionGuid)
                 .HasDefaultValueSql("(newid())");
 
-            entity.Property(e => e.AccountSide)
-                 .IsRequired()
-                 .HasMaxLength(128);
-
-            entity.Property(e => e.CreationDate)
-                .HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.IsCheckTransaction)
+                .HasDefaultValueSql("((0))");
 
             entity.Property(e => e.IsDelete)
                 .HasDefaultValueSql("((0))");
@@ -31,26 +27,22 @@ namespace Financial.Models.Configurations
             entity.Property(e => e.ModifiedDate)
                 .HasDefaultValueSql("(getdate())");
 
-            entity.Property(e => e.Title)
-                .IsRequired()
-                .HasMaxLength(128);
-
             entity.HasOne(d => d.Account)
                 .WithMany(p => p.Transaction)
                 .HasForeignKey(d => d.AccountGuid)
                 .HasConstraintName("FK_Transaction_Account");
 
-            entity.HasOne(d => d.TypeCode)
-                .WithMany(p => p.TypeTransaction)
-                .HasForeignKey(d => d.TypeCodeGuid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TypeTransaction_TypeCode");
-
             entity.HasOne(d => d.StateCode)
-                .WithMany(p => p.StateTransaction)
+                .WithMany(p => p.TransactionStateCode)
                 .HasForeignKey(d => d.StateCodeGuid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_StateTransaction_StateCode");
+
+            entity.HasOne(d => d.TypeCode)
+                .WithMany(p => p.TransactionTypeCode)
+                .HasForeignKey(d => d.TypeCodeGuid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TypeTransaction_TypeCode");
         }
     }
 }

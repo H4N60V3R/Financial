@@ -1,36 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Financial.Models.Entities
 {
-    public class Code
+    public partial class Code
     {
         public Code()
         {
-            TypeTransaction = new HashSet<Transaction>();
-            StateTransaction = new HashSet<Transaction>();
+            TransactionStateCode = new HashSet<Transaction>();
+            TransactionTypeCode = new HashSet<Transaction>();
         }
 
 
-        public Guid Guid { get; set; }
+        [Key]
+        public Guid CodeGuid { get; set; }
 
         public Guid CodeGroupGuid { get; set; }
 
+        [Required]
+        [StringLength(128)]
         public string Value { get; set; }
 
+        [Required]
+        [StringLength(128)]
         public string DisplayValue { get; set; }
-
-        public DateTime CreationDate { get; set; }
 
         public DateTime ModifiedDate { get; set; }
 
         public bool IsDelete { get; set; }
 
 
+        [ForeignKey(nameof(CodeGroupGuid))]
+        [InverseProperty(nameof(Entities.CodeGroup.Code))]
         public virtual CodeGroup CodeGroup { get; set; }
 
-        public virtual ICollection<Transaction> TypeTransaction { get; set; }
+        [InverseProperty(nameof(Transaction.StateCode))]
+        public virtual ICollection<Transaction> TransactionStateCode { get; set; }
 
-        public virtual ICollection<Transaction> StateTransaction { get; set; }
+        [InverseProperty(nameof(Transaction.TypeCode))]
+        public virtual ICollection<Transaction> TransactionTypeCode { get; set; }
     }
 }

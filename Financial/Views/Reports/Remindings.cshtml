@@ -30,7 +30,7 @@
                     <th scope="col">@Html.DisplayNameFor(model => model.Description)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.ReceiptDate)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.ModifiedDate)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.ByCheck)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.IsCheckTransaction)</th>
                     <th scope="col" data-orderable="false">کنترل</th>
                 </tr>
             </thead>
@@ -81,9 +81,9 @@
                         </td>
 
                         <td scope="row">
-                            @if (item.ByCheck.HasValue)
+                            @if (item.IsCheckTransaction)
                             {
-                                <a class="control btn btn-success btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="ShowCheckInfo('@item.Guid')">مشاهده</a>
+                                <a class="control btn btn-success btn-sm" data-toggle="tooltip" data-placement="auto" title="مشاهده چک" href="javascript:void(0)" onclick="ShowCheckInfo('@item.TransactionGuid')">مشاهده</a>
                             }
                             else
                             {
@@ -92,7 +92,7 @@
                         </td>
 
                         <td scope="row">
-                            <a class="control btn btn-primary btn-sm glyphicon glyphicon-refresh" data-toggle="tooltip" data-placement="auto" title="تغییر وضعیت" href="javascript:void(0)" onclick="ChangeState('@item.Guid')"></a>
+                            <a class="control btn btn-primary btn-sm glyphicon glyphicon-refresh" data-toggle="tooltip" data-placement="auto" title="تغییر وضعیت" href="javascript:void(0)" onclick="ChangeState('@item.TransactionGuid')"></a>
                         </td>
 
                     </tr>
@@ -107,9 +107,9 @@
 
     <script>
 
-        function ShowCheckInfo(guid) {
+        function ShowCheckInfo(transactionGuid) {
             $.ajax({
-                url: "/Transactions/ShowCheckInfo/?guid=" + guid,
+                url: "/Transactions/ShowCheckInfo/?transactionGuid=" + transactionGuid,
                 type: "Get",
                 data: {}
             }).done(function (result) {
@@ -119,9 +119,9 @@
             });
         }
 
-        function ChangeState(guid) {
+        function ChangeState(transactionGuid) {
             $.ajax({
-                url: "/Transactions/ChangeState/?guid=" + guid,
+                url: "/Transactions/ChangeState/?transactionGuid=" + transactionGuid,
                 type: "Get",
                 data: {}
             }).done(function (result) {

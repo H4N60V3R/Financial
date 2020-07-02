@@ -12,25 +12,14 @@ namespace Financial.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> entity)
         {
-            entity.Property(e => e.CreationDate)
-                .HasDefaultValueSql("(getdate())");
-
-            entity.Property(e => e.FirstName)
-                .IsRequired()
-                .HasMaxLength(128);
-
             entity.Property(e => e.IsDelete)
                 .HasDefaultValueSql("((0))");
 
-            entity.Property(e => e.LastName)
-                .IsRequired()
-                .HasMaxLength(128);
+            entity.Property(e => e.RegisteredDate)
+                .HasDefaultValueSql("(getdate())");
 
             entity.Property(e => e.ModifiedDate)
                 .HasDefaultValueSql("(getdate())");
-
-            entity.Property(e => e.NationalCode)
-                .HasMaxLength(128);
         }
     }
 }

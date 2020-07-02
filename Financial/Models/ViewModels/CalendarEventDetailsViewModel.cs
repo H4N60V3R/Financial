@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Financial.Models.ViewModels
 {
-    public class EditAccountViewModel : CreateAccountViewModel
+    public class CalendarEventDetailsViewModel
     {
-        public Guid AccountGuid { get; set; }
+        public string TrasnactionType { get; set; }
+
+        public string CostSum { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace Financial
 
             services.AddDbContext<FinancialContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("ServerConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {

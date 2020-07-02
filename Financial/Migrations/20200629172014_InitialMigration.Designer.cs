@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Financial.Migrations
 {
     [DbContext(typeof(FinancialContext))]
-    [Migration("20200406192933_InitialMigration")]
+    [Migration("20200629172014_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace Financial.Migrations
 
             modelBuilder.Entity("Financial.Models.Entities.Account", b =>
                 {
-                    b.Property<Guid>("Guid")
+                    b.Property<Guid>("AccountGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
@@ -69,11 +69,23 @@ namespace Financial.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Guid");
+                    b.HasKey("AccountGuid");
 
                     b.HasIndex("UserGuid");
 
                     b.ToTable("Account");
+
+                    b.HasData(
+                        new
+                        {
+                            AccountGuid = new Guid("a8a1632c-5a7f-4bd7-a9ac-d10a6375ade0"),
+                            AccountNumber = "1",
+                            CreationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Credit = 0L,
+                            IsDelete = false,
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserGuid = "a0c060fb-eb1f-4132-a14f-afc2ecccd728"
+                        });
                 });
 
             modelBuilder.Entity("Financial.Models.Entities.ApplicationUser", b =>
@@ -90,11 +102,6 @@ namespace Financial.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
@@ -150,6 +157,11 @@ namespace Financial.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("RegisteredDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -175,30 +187,28 @@ namespace Financial.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1e8b24df-cf91-4a8a-a3dd-89c37b8ee4f9",
+                            Id = "a0c060fb-eb1f-4132-a14f-afc2ecccd728",
                             AccessFailedCount = 0,
-                            Address = "تهران - لواسان",
-                            ConcurrencyStamp = "3485e6d6-6bb4-49ea-a522-8f810f10b9b5",
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            ConcurrencyStamp = "7201a16a-333c-474d-950b-5f8fb0ac92e2",
                             EmailConfirmed = false,
-                            FirstName = "سید مهدی",
+                            FirstName = "علی",
                             IsDelete = false,
-                            LastName = "رودکی",
+                            LastName = "تهرانچی",
                             LockoutEnabled = true,
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
-                            NationalCode = "0440675014",
-                            NormalizedUserName = "H4N60V3R",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPYzk6lUm9l1Iq+mwvjUx7DtRDKN2uEw6bFp4ZJ+d4KfPH+APxsjZa4W8ln0rQlgPQ==",
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            NormalizedUserName = "1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGduCXP6wkO8iRG5duhbeZ1thUWVoNsyiCZoNXuOc7HpfUDfAtB0BxVUMWColWDdxw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "645UFGOLF7LIMLIQ6TVG7IUJ2SJ62CWM",
+                            RegisteredDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "52NWE56246TSEHNP6BTSLIYRCO24AXPH",
                             TwoFactorEnabled = false,
-                            UserName = "h4n60v3r"
+                            UserName = "1"
                         });
                 });
 
-            modelBuilder.Entity("Financial.Models.Entities.CheckTransactionInfo", b =>
+            modelBuilder.Entity("Financial.Models.Entities.CheckTransaction", b =>
                 {
-                    b.Property<Guid>("Guid")
+                    b.Property<Guid>("CheckTransactionGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
@@ -209,35 +219,28 @@ namespace Financial.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("Serial")
-                        .IsRequired()
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<Guid>("TransactionGuid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Guid")
-                        .HasName("PK_CheckTransactionInfo");
+                    b.HasKey("CheckTransactionGuid");
 
                     b.HasIndex("TransactionGuid");
 
-                    b.ToTable("CheckTransactionInfo");
+                    b.ToTable("CheckTransaction");
                 });
 
             modelBuilder.Entity("Financial.Models.Entities.Code", b =>
                 {
-                    b.Property<Guid>("Guid")
+                    b.Property<Guid>("CodeGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
 
                     b.Property<Guid>("CodeGroupGuid")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("DisplayValue")
                         .IsRequired()
@@ -259,7 +262,7 @@ namespace Financial.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.HasKey("Guid");
+                    b.HasKey("CodeGuid");
 
                     b.HasIndex("CodeGroupGuid");
 
@@ -268,67 +271,57 @@ namespace Financial.Migrations
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"),
+                            CodeGuid = new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"),
                             CodeGroupGuid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
-                            DisplayValue = "بستانکار",
+                            DisplayValue = "دریافتی",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "Creditor"
                         },
                         new
                         {
-                            Guid = new Guid("749d242b-55f7-4361-bf1b-42c139411c49"),
+                            CodeGuid = new Guid("749d242b-55f7-4361-bf1b-42c139411c49"),
                             CodeGroupGuid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
-                            DisplayValue = "بدهکار",
+                            DisplayValue = "پرداختی",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "Debtor"
                         },
                         new
                         {
-                            Guid = new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"),
+                            CodeGuid = new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             DisplayValue = "وصول شده",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "Passed"
                         },
                         new
                         {
-                            Guid = new Guid("3d905312-ae57-498c-a733-f5cbaf114940"),
+                            CodeGuid = new Guid("3d905312-ae57-498c-a733-f5cbaf114940"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             DisplayValue = "وصول نشده",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "NotPassed"
                         },
                         new
                         {
-                            Guid = new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"),
+                            CodeGuid = new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"),
                             CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
                             DisplayValue = "در انتظار وصول",
                             IsDelete = false,
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "Waiting"
                         });
                 });
 
             modelBuilder.Entity("Financial.Models.Entities.CodeGroup", b =>
                 {
-                    b.Property<Guid>("Guid")
+                    b.Property<Guid>("CodeGroupGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
-
-                    b.Property<DateTime>("CreationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool>("IsDelete")
                         .ValueGeneratedOnAdd()
@@ -345,32 +338,30 @@ namespace Financial.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.HasKey("Guid");
+                    b.HasKey("CodeGroupGuid");
 
                     b.ToTable("CodeGroup");
 
                     b.HasData(
                         new
                         {
-                            Guid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            CodeGroupGuid = new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"),
                             IsDelete = false,
                             Key = "TransactionState",
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172)
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            Guid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
-                            CreationDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172),
+                            CodeGroupGuid = new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"),
                             IsDelete = false,
                             Key = "TransactionType",
-                            ModifiedDate = new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172)
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
             modelBuilder.Entity("Financial.Models.Entities.Transaction", b =>
                 {
-                    b.Property<Guid>("Guid")
+                    b.Property<Guid>("TransactionGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
@@ -379,20 +370,24 @@ namespace Financial.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccountSide")
-                        .IsRequired()
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<long>("Cost")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreationDate")
+                    b.Property<long>("Credit")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCheckTransaction")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool>("IsDelete")
                         .ValueGeneratedOnAdd()
@@ -411,15 +406,13 @@ namespace Financial.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
 
                     b.Property<Guid>("TypeCodeGuid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Guid")
-                        .HasName("PK_Transaction");
+                    b.HasKey("TransactionGuid");
 
                     b.HasIndex("AccountGuid");
 
@@ -570,12 +563,13 @@ namespace Financial.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Financial.Models.Entities.CheckTransactionInfo", b =>
+            modelBuilder.Entity("Financial.Models.Entities.CheckTransaction", b =>
                 {
                     b.HasOne("Financial.Models.Entities.Transaction", "Transaction")
-                        .WithMany("CheckTransactionInfo")
+                        .WithMany("CheckTransaction")
                         .HasForeignKey("TransactionGuid")
-                        .HasConstraintName("FK_CheckTransactionInfo_Transaction")
+                        .HasConstraintName("FK_CheckTransaction_Transaction")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -596,13 +590,13 @@ namespace Financial.Migrations
                         .HasConstraintName("FK_Transaction_Account");
 
                     b.HasOne("Financial.Models.Entities.Code", "StateCode")
-                        .WithMany("StateTransaction")
+                        .WithMany("TransactionStateCode")
                         .HasForeignKey("StateCodeGuid")
                         .HasConstraintName("FK_StateTransaction_StateCode")
                         .IsRequired();
 
                     b.HasOne("Financial.Models.Entities.Code", "TypeCode")
-                        .WithMany("TypeTransaction")
+                        .WithMany("TransactionTypeCode")
                         .HasForeignKey("TypeCodeGuid")
                         .HasConstraintName("FK_TypeTransaction_TypeCode")
                         .IsRequired();

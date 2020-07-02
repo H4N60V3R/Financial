@@ -483,12 +483,6 @@ footer {
     font-size: 16px !important;
 }
 
-.fc-day:hover,
-.fc-day-top,
-.fc-content-skeleton table tbody tr td:not(.fc-event-container) {
-    cursor: pointer;
-}
-
 .fc-row .fc-content-skeleton {
     padding-bottom: 0px !important;
 }

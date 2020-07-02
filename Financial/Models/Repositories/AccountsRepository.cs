@@ -11,7 +11,6 @@ namespace Financial.Models.Repositories
     public class AccountsRepository
     {
         private readonly FinancialContext context;
-        private readonly UserManager<ApplicationUser> userManager;
 
         public AccountsRepository(FinancialContext context)
         {
@@ -30,7 +29,7 @@ namespace Financial.Models.Repositories
             {
                 list.Add(new SelectListItem()
                 {
-                    Value = account.Guid.ToString(), Text = account.AccountNumber
+                    Value = account.AccountGuid.ToString(), Text = account.AccountNumber
                 });
             }
 

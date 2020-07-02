@@ -8,7 +8,7 @@ namespace Financial.Models.ViewModels
 {
     public class TransactionViewModel
     {
-        public Guid Guid { get; set; }
+        public Guid TransactionGuid { get; set; }
 
         [Display(Name = "شماره حساب")]
         public string AccountNumber { get; set; }
@@ -21,6 +21,9 @@ namespace Financial.Models.ViewModels
 
         [Display(Name = "مبلغ (تومان)")]
         public long Cost { get; set; }
+
+        [Display(Name = "اعتبار (تومان)")]
+        public long Credit { get; set; }
 
         [Display(Name = "طرف حساب")]
         public string AccountSide { get; set; }
@@ -35,6 +38,6 @@ namespace Financial.Models.ViewModels
         public string ModifiedDate { get; set; }
 
         [Display(Name = "چک")]
-        public Guid? ByCheck { get; set; }
+        public bool IsCheckTransaction { get; set; }
     }
 }

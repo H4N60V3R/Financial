@@ -44,7 +44,7 @@ namespace Financial.Migrations
                     LastName = table.Column<string>(maxLength: 128, nullable: false),
                     NationalCode = table.Column<string>(maxLength: 128, nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    RegisteredDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
@@ -57,15 +57,14 @@ namespace Financial.Migrations
                 name: "CodeGroup",
                 columns: table => new
                 {
-                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    CodeGroupGuid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
                     Key = table.Column<string>(maxLength: 128, nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CodeGroup", x => x.Guid);
+                    table.PrimaryKey("PK_CodeGroup", x => x.CodeGroupGuid);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +92,7 @@ namespace Financial.Migrations
                 name: "Account",
                 columns: table => new
                 {
-                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    AccountGuid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
                     UserGuid = table.Column<string>(nullable: false),
                     BankName = table.Column<string>(maxLength: 128, nullable: true),
                     AccountName = table.Column<string>(maxLength: 128, nullable: true),
@@ -106,7 +105,7 @@ namespace Financial.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Account", x => x.Guid);
+                    table.PrimaryKey("PK_Account", x => x.AccountGuid);
                     table.ForeignKey(
                         name: "FK_Account_User",
                         column: x => x.UserGuid,
@@ -204,22 +203,21 @@ namespace Financial.Migrations
                 name: "Code",
                 columns: table => new
                 {
-                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    CodeGuid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
                     CodeGroupGuid = table.Column<Guid>(nullable: false),
                     Value = table.Column<string>(maxLength: 128, nullable: false),
                     DisplayValue = table.Column<string>(maxLength: 128, nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Code", x => x.Guid);
+                    table.PrimaryKey("PK_Code", x => x.CodeGuid);
                     table.ForeignKey(
                         name: "FK_Code_CodeGroup",
                         column: x => x.CodeGroupGuid,
                         principalTable: "CodeGroup",
-                        principalColumn: "Guid",
+                        principalColumn: "CodeGroupGuid",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -227,87 +225,93 @@ namespace Financial.Migrations
                 name: "Transaction",
                 columns: table => new
                 {
-                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    TransactionGuid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
                     AccountGuid = table.Column<Guid>(nullable: true),
                     TypeCodeGuid = table.Column<Guid>(nullable: false),
                     StateCodeGuid = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(maxLength: 128, nullable: false),
+                    Title = table.Column<string>(maxLength: 512, nullable: true),
                     Cost = table.Column<long>(nullable: false),
-                    AccountSide = table.Column<string>(maxLength: 128, nullable: false),
+                    Credit = table.Column<long>(nullable: false, defaultValueSql: "((0))"),
+                    AccountSide = table.Column<string>(maxLength: 128, nullable: true),
                     Description = table.Column<string>(nullable: true),
                     ReceiptDate = table.Column<DateTime>(nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ModifiedDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    IsCheckTransaction = table.Column<bool>(nullable: false, defaultValueSql: "((0))"),
                     IsDelete = table.Column<bool>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transaction", x => x.Guid);
+                    table.PrimaryKey("PK_Transaction", x => x.TransactionGuid);
                     table.ForeignKey(
                         name: "FK_Transaction_Account",
                         column: x => x.AccountGuid,
                         principalTable: "Account",
-                        principalColumn: "Guid",
+                        principalColumn: "AccountGuid",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StateTransaction_StateCode",
                         column: x => x.StateCodeGuid,
                         principalTable: "Code",
-                        principalColumn: "Guid",
+                        principalColumn: "CodeGuid",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TypeTransaction_TypeCode",
                         column: x => x.TypeCodeGuid,
                         principalTable: "Code",
-                        principalColumn: "Guid",
+                        principalColumn: "CodeGuid",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CheckTransactionInfo",
+                name: "CheckTransaction",
                 columns: table => new
                 {
-                    Guid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
+                    CheckTransactionGuid = table.Column<Guid>(nullable: false, defaultValueSql: "(newid())"),
                     TransactionGuid = table.Column<Guid>(nullable: false),
-                    Serial = table.Column<string>(maxLength: 128, nullable: false),
+                    Serial = table.Column<string>(maxLength: 128, nullable: true),
                     IssueDate = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CheckTransactionInfo", x => x.Guid);
+                    table.PrimaryKey("PK_CheckTransaction", x => x.CheckTransactionGuid);
                     table.ForeignKey(
-                        name: "FK_CheckTransactionInfo_Transaction",
+                        name: "FK_CheckTransaction_Transaction",
                         column: x => x.TransactionGuid,
                         principalTable: "Transaction",
-                        principalColumn: "Guid",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "TransactionGuid",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "CreationDate", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "ModifiedDate", "NationalCode", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "1e8b24df-cf91-4a8a-a3dd-89c37b8ee4f9", 0, "تهران - لواسان", "3485e6d6-6bb4-49ea-a522-8f810f10b9b5", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), null, false, "سید مهدی", "رودکی", true, null, new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "0440675014", null, "H4N60V3R", "AQAAAAEAACcQAAAAEPYzk6lUm9l1Iq+mwvjUx7DtRDKN2uEw6bFp4ZJ+d4KfPH+APxsjZa4W8ln0rQlgPQ==", null, false, "645UFGOLF7LIMLIQ6TVG7IUJ2SJ62CWM", false, "h4n60v3r" });
+                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NationalCode", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "a0c060fb-eb1f-4132-a14f-afc2ecccd728", 0, null, "7201a16a-333c-474d-950b-5f8fb0ac92e2", null, false, "علی", "تهرانچی", true, null, null, null, "1", "AQAAAAEAACcQAAAAEGduCXP6wkO8iRG5duhbeZ1thUWVoNsyiCZoNXuOc7HpfUDfAtB0BxVUMWColWDdxw==", null, false, "52NWE56246TSEHNP6BTSLIYRCO24AXPH", false, "1" });
 
             migrationBuilder.InsertData(
                 table: "CodeGroup",
-                columns: new[] { "Guid", "CreationDate", "Key", "ModifiedDate" },
-                values: new object[] { new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "TransactionState", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172) });
+                columns: new[] { "CodeGroupGuid", "Key" },
+                values: new object[] { new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), "TransactionState" });
 
             migrationBuilder.InsertData(
                 table: "CodeGroup",
-                columns: new[] { "Guid", "CreationDate", "Key", "ModifiedDate" },
-                values: new object[] { new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "TransactionType", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172) });
+                columns: new[] { "CodeGroupGuid", "Key" },
+                values: new object[] { new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), "TransactionType" });
+
+            migrationBuilder.InsertData(
+                table: "Account",
+                columns: new[] { "AccountGuid", "AccountName", "AccountNumber", "BankName", "CardNumber", "UserGuid" },
+                values: new object[] { new Guid("a8a1632c-5a7f-4bd7-a9ac-d10a6375ade0"), null, "1", null, null, "a0c060fb-eb1f-4132-a14f-afc2ecccd728" });
 
             migrationBuilder.InsertData(
                 table: "Code",
-                columns: new[] { "Guid", "CodeGroupGuid", "CreationDate", "DisplayValue", "ModifiedDate", "Value" },
+                columns: new[] { "CodeGuid", "CodeGroupGuid", "DisplayValue", "Value" },
                 values: new object[,]
                 {
-                    { new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "وصول شده", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Passed" },
-                    { new Guid("3d905312-ae57-498c-a733-f5cbaf114940"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "وصول نشده", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "NotPassed" },
-                    { new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "در انتظار وصول", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Waiting" },
-                    { new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "بستانکار", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Creditor" },
-                    { new Guid("749d242b-55f7-4361-bf1b-42c139411c49"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "بدهکار", new DateTime(2020, 4, 6, 23, 59, 32, 801, DateTimeKind.Local).AddTicks(7172), "Debtor" }
+                    { new Guid("b508bd08-5534-4d26-9ed4-c36575c8d90a"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), "وصول شده", "Passed" },
+                    { new Guid("3d905312-ae57-498c-a733-f5cbaf114940"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), "وصول نشده", "NotPassed" },
+                    { new Guid("fe92b8f8-f206-4273-8ca8-f1ecf70a8197"), new Guid("b7a903f3-2c65-49ef-997b-03966578a4c0"), "در انتظار وصول", "Waiting" },
+                    { new Guid("d1605abf-8a46-4f2e-8e22-194298b9fd33"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), "دریافتی", "Creditor" },
+                    { new Guid("749d242b-55f7-4361-bf1b-42c139411c49"), new Guid("8d9375da-33d4-41f0-b589-d91c96af8eb5"), "پرداختی", "Debtor" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -355,8 +359,8 @@ namespace Financial.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CheckTransactionInfo_TransactionGuid",
-                table: "CheckTransactionInfo",
+                name: "IX_CheckTransaction_TransactionGuid",
+                table: "CheckTransaction",
                 column: "TransactionGuid");
 
             migrationBuilder.CreateIndex(
@@ -398,7 +402,7 @@ namespace Financial.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CheckTransactionInfo");
+                name: "CheckTransaction");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

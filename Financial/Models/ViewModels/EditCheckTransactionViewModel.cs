@@ -7,6 +7,6 @@ namespace Financial.Models.ViewModels
 {
     public class EditCheckTransactionViewModel : CreateCheckTransactionViewModel
     {
-        public Guid Guid { get; set; }
+        public Guid TransactionGuid { get; set; }
     }
 }

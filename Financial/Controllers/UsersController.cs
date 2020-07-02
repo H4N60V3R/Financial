@@ -30,7 +30,7 @@ namespace Financial.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             return View();
@@ -56,7 +56,7 @@ namespace Financial.Controllers
                     TempData["ToasterType"] = ToasterType.Message;
                     TempData["ToasterMessage"] = Messages.LoginSuccessful;
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard");
                 }
 
                 TempData["ToasterState"] = ToasterState.Error;
@@ -69,50 +69,50 @@ namespace Financial.Controllers
             return BadRequest();
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //[HttpGet]
+        //public IActionResult Register()
+        //{
+        //    return View();
+        //}
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Username,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    NationalCode = model.NationalCode,
-                    Address = model.Address
-                };
+        //[AllowAnonymous]
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser
+        //        {
+        //            UserName = model.Username,
+        //            FirstName = model.FirstName,
+        //            LastName = model.LastName,
+        //            NationalCode = model.NationalCode,
+        //            Address = model.Address
+        //        };
 
-                var result = await userManager.CreateAsync(user, model.Password);
+        //        var result = await userManager.CreateAsync(user, model.Password);
 
-                if (result.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
-                }
+        //        if (result.Succeeded)
+        //        {
+        //            await signInManager.SignInAsync(user, false);
+        //            return RedirectToAction("Index", "Dashboard");
+        //        }
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-            }
+        //        foreach (var error in result.Errors)
+        //        {
+        //            ModelState.AddModelError(string.Empty, error.Description);
+        //        }
+        //    }
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -147,7 +147,7 @@ namespace Financial.Controllers
                     TempData["ToasterType"] = ToasterType.Message;
                     TempData["ToasterMessage"] = Messages.ChangePasswordFailed;
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard");
                 }
 
                 await signInManager.SignOutAsync();

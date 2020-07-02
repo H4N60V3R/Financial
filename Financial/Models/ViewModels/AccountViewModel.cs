@@ -8,7 +8,7 @@ namespace Financial.Models.ViewModels
 {
     public class AccountViewModel
     {
-        public Guid Guid { get; set; }
+        public Guid AccountGuid { get; set; }
 
         [Display(Name = "صاحب حساب")]
         public string UserFullName { get; set; }
@@ -29,6 +29,6 @@ namespace Financial.Models.ViewModels
         public long Credit { get; set; }
 
         [Display(Name = "تاریخ آخرین ویرایش")]
-        public string ModificationDate { get; set; }
+        public string ModifiedDate { get; set; }
     }
 }

@@ -2,23 +2,9 @@
 
     <li>
         <img src="~/Images/calc.png" alt="Logo" class="img-responsive img-rounded img-logo" style="height: 200px;">
-        <a href="@Url.Action("Index", "Home")">
+        <a href="@Url.Action("Index", "Dashboard")">
             <i class="glyphicon glyphicon-dashboard"></i>
             داشبورد
-        </a>
-    </li>
-
-    <li>
-        <a href="@Url.Action("Index", "Calendar")">
-            <i class="glyphicon glyphicon-calendar"></i>
-            تقویم
-        </a>
-    </li>
-
-    <li>
-        <a href="@Url.Action("Index", "Accounts")">
-            <i class="glyphicon glyphicon-book"></i>
-            مدیرت حساب ها
         </a>
     </li>
 
@@ -106,4 +92,28 @@
 
     </li>
 
+    <li>
+        <a href="javascript::void(0)" onclick="ChangePassword()">
+            <i class="glyphicon glyphicon-dashboard"></i>
+            تغییر رمز عبور
+        </a>
+    </li>
+
 </ul>
+
+<script>
+
+    function ChangePassword() {
+        $.ajax({
+            url: "/Users/ChangePassword",
+            type: "Get",
+            data: {}
+        }).done(function (result) {
+            console.log("test");
+            $("#myModal").modal("show");
+            $("#myModalLabel").html("تغییر رمز عبور");
+            $("#myModalBody").html(result);
+        });
+    }
+
+</script>

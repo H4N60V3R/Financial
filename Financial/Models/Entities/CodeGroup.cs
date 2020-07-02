@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Financial.Models.Entities
 {
-    public class CodeGroup
+    public partial class CodeGroup
     {
         public CodeGroup()
         {
             Code = new HashSet<Code>();
         }
 
-        public Guid Guid { get; set; }
 
+        [Key]
+        public Guid CodeGroupGuid { get; set; }
+
+        [Required]
+        [StringLength(128)]
         public string Key { get; set; }
-
-        public DateTime CreationDate { get; set; }
 
         public DateTime ModifiedDate { get; set; }
 
         public bool IsDelete { get; set; }
 
 
+        [InverseProperty("CodeGroup")]
         public virtual ICollection<Code> Code { get; set; }
     }
 }

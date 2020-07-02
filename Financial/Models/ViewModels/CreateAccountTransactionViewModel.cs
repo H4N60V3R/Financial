@@ -24,7 +24,6 @@ namespace Financial.Models.ViewModels
         public Guid StateGuid { get; set; }
 
         [Display(Name = "عنوان")]
-        [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
         public string Title { get; set; }
 
         [Display(Name = "مبلغ (تومان)")]
@@ -42,7 +41,6 @@ namespace Financial.Models.ViewModels
         }
 
         [Display(Name = "طرف حساب")]
-        [Required(ErrorMessage = "لطفا مقداری را وارد نمایید")]
         public string AccountSide { get; set; }
 
         [Display(Name = "توضیحات")]

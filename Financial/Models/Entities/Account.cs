@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Financial.Models.Entities
 {
-    public class Account
+    public partial class Account
     {
         public Account()
         {
@@ -11,16 +13,23 @@ namespace Financial.Models.Entities
         }
 
 
-        public Guid Guid { get; set; }
+        [Key]
+        public Guid AccountGuid { get; set; }
 
+        [Required]
         public string UserGuid { get; set; }
 
+        [StringLength(128)]
         public string BankName { get; set; }
 
+        [StringLength(128)]
         public string AccountName { get; set; }
 
+        [Required]
+        [StringLength(128)]
         public string AccountNumber { get; set; }
 
+        [StringLength(128)]
         public string CardNumber { get; set; }
 
         public long Credit { get; set; }
@@ -32,8 +41,11 @@ namespace Financial.Models.Entities
         public bool IsDelete { get; set; }
 
 
+        [ForeignKey(nameof(UserGuid))]
+        [InverseProperty(nameof(ApplicationUser.Account))]
         public virtual ApplicationUser User { get; set; }
 
+        [InverseProperty("Account")]
         public virtual ICollection<Transaction> Transaction { get; set; }
     }
 }

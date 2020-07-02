@@ -2,7 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>e74add0d-ba9c-4c37-b3e6-5b20e0e81360</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Modelss\**" />
+    <Content Remove="Modelss\**" />
+    <EmbeddedResource Remove="Modelss\**" />
+    <None Remove="Modelss\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Migrations\20200401140438_ExtendIdentityUser.cs" />

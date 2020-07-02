@@ -12,27 +12,14 @@ namespace Financial.Models.Configurations
     {
         public void Configure(EntityTypeBuilder<Code> entity)
         {
-            entity.HasKey(e => e.Guid);
-
-            entity.Property(e => e.Guid)
+            entity.Property(e => e.CodeGuid)
                 .HasDefaultValueSql("(newid())");
-
-            entity.Property(e => e.CreationDate)
-                .HasDefaultValueSql("(getdate())");
-
-            entity.Property(e => e.DisplayValue)
-                .IsRequired()
-                .HasMaxLength(128);
 
             entity.Property(e => e.IsDelete)
                 .HasDefaultValueSql("((0))");
 
             entity.Property(e => e.ModifiedDate)
                 .HasDefaultValueSql("(getdate())");
-
-            entity.Property(e => e.Value)
-                .IsRequired()
-                .HasMaxLength(128);
 
             entity.HasOne(d => d.CodeGroup)
                 .WithMany(p => p.Code)

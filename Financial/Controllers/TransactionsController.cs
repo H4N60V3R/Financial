@@ -33,14 +33,15 @@ namespace Financial.Controllers
                 .OrderByDescending(x => x.ReceiptDate)
                 .Select(x => new TransactionViewModel()
                 {
-                    Guid = x.Guid,
+                    TransactionGuid = x.TransactionGuid,
                     AccountNumber = string.IsNullOrEmpty(x.Account.AccountNumber) ? Messages.NotSet : x.Account.AccountNumber,
                     Type = x.TypeCode.DisplayValue,
                     State = x.StateCode.DisplayValue,
                     Cost = x.Cost,
-                    AccountSide = x.AccountSide,
+                    Credit = x.Credit,
+                    AccountSide = string.IsNullOrEmpty(x.AccountSide) ? Messages.NotSet : x.AccountSide,
                     Description = string.IsNullOrEmpty(x.Description) ? Messages.NotSet : x.Description,
-                    ByCheck = x.CheckTransactionInfo.SingleOrDefault().Guid,
+                    IsCheckTransaction = x.IsCheckTransaction,
                     ReceiptDate = PersianDateExtensionMethods.ToPeString(x.ReceiptDate, "yyyy/MM/dd"),
                     ModifiedDate = PersianDateExtensionMethods.ToPeString(x.ModifiedDate, "yyyy/MM/dd HH:mm")
 
@@ -61,12 +62,12 @@ namespace Financial.Controllers
             return View();
         }
 
-
         [HttpPost]
         public IActionResult CreateAccountTransaction(CreateAccountTransactionViewModel model)
         {
             if (ModelState.IsValid)
             {
+                model.AccountGuid = Constants.DefaultAccountGuid;
                 long cost = Convert.ToInt64(model.Cost);
 
                 Transaction transaction = new Transaction
@@ -81,14 +82,68 @@ namespace Financial.Controllers
                     ReceiptDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate)
                 };
 
-                if (model.AccountGuid.HasValue && model.StateGuid == Codes.PassedState)
+                if (model.AccountGuid.HasValue)
                 {
-                    var account = context.Account
-                        .Where(x => x.Guid == model.AccountGuid)
-                        .SingleOrDefault();
+                    if (model.StateGuid == Codes.PassedState)
+                    {
+                        var account = context.Account
+                            .Where(x => x.AccountGuid == model.AccountGuid)
+                            .SingleOrDefault();
 
-                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
-                    account.ModifiedDate = DateTime.Now;
+                        if (account == null)
+                        {
+                            TempData["ToasterState"] = ToasterState.Error;
+                            TempData["ToasterType"] = ToasterType.Message;
+                            TempData["ToasterMessage"] = Messages.CreateTransactionFailedAccountNotValid;
+
+                            return RedirectToAction("Index");
+                        }
+
+                        account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
+                        account.ModifiedDate = DateTime.Now;
+
+                        var transactionBefore = context.Transaction
+                            .Where(x => !x.IsDelete && x.ReceiptDate < PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate))
+                            .OrderByDescending(x => x.ReceiptDate)
+                            .FirstOrDefault();
+
+                        if (transactionBefore == null)
+                        {
+                            transaction.Credit = model.TypeGuid == Codes.CreditorType ? transaction.Credit + cost : transaction.Credit - cost;
+                        }
+                        else
+                        {
+                            transaction.Credit = model.TypeGuid == Codes.CreditorType ? transactionBefore.Credit + cost : transactionBefore.Credit - cost;
+                        }
+
+                        var transactionsAfter = context.Transaction
+                            .Where(x => !x.IsDelete && x.ReceiptDate > PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate))
+                            .OrderBy(x => x.ReceiptDate)
+                            .ToList();
+
+                        if (transactionsAfter.Count > 0)
+                        {
+                            transactionsAfter[0].Credit = transactionsAfter[0].StateCodeGuid == Codes.PassedState ?
+                                (transactionsAfter[0].TypeCodeGuid == Codes.CreditorType ? transaction.Credit + transactionsAfter[0].Cost : transaction.Credit - transactionsAfter[0].Cost) :
+                                (transactionsAfter[0].Credit = transaction.Credit);
+
+                            for (int i = 1; i < transactionsAfter.Count; i++)
+                            {
+                                transactionsAfter[i].Credit = transactionsAfter[i].StateCodeGuid == Codes.PassedState ?
+                                    (transactionsAfter[i].TypeCodeGuid == Codes.CreditorType ? transactionsAfter[i - 1].Credit + transactionsAfter[i].Cost : transactionsAfter[i - 1].Credit - transactionsAfter[i].Cost) :
+                                    (transactionsAfter[i].Credit = transactionsAfter[i - 1].Credit);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var transactionBefore = context.Transaction
+                            .Where(x => !x.IsDelete && x.ReceiptDate < PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate))
+                            .OrderByDescending(x => x.ReceiptDate)
+                            .FirstOrDefault();
+
+                        transaction.Credit = transactionBefore == null ? 0 : transactionBefore.Credit;
+                    }
                 }
 
                 context.Transaction.Add(transaction);
@@ -130,6 +185,7 @@ namespace Financial.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.AccountGuid = Constants.DefaultAccountGuid;
                 long cost = Convert.ToInt64(model.Cost);
 
                 Transaction transaction = new Transaction
@@ -141,29 +197,84 @@ namespace Financial.Controllers
                     Cost = cost,
                     AccountSide = model.AccountSide,
                     Description = model.Description,
+                    IsCheckTransaction = true,
                     ReceiptDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate)
                 };
 
-                CheckTransactionInfo checkTransactionInfo = new CheckTransactionInfo
+                CheckTransaction checkTransaction = new CheckTransaction
                 {
                     Serial = model.Serial,
                     IssueDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.IssueDate)
                 };
 
-                checkTransactionInfo.Transaction = transaction;
+                checkTransaction.Transaction = transaction;
 
-                if (model.AccountGuid.HasValue && model.StateGuid == Codes.PassedState)
+                if (model.AccountGuid.HasValue)
                 {
-                    var account = context.Account
-                        .Where(x => x.Guid == model.AccountGuid)
-                        .SingleOrDefault();
+                    if (model.StateGuid == Codes.PassedState)
+                    {
+                        var account = context.Account
+                            .Where(x => x.AccountGuid == model.AccountGuid)
+                            .SingleOrDefault();
 
-                    account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
-                    account.ModifiedDate = DateTime.Now;
+                        if (account == null)
+                        {
+                            TempData["ToasterState"] = ToasterState.Error;
+                            TempData["ToasterType"] = ToasterType.Message;
+                            TempData["ToasterMessage"] = Messages.CreateTransactionFailedAccountNotValid;
+
+                            return RedirectToAction("Index");
+                        }
+
+                        account.Credit = model.TypeGuid == Codes.CreditorType ? account.Credit + cost : account.Credit - cost;
+                        account.ModifiedDate = DateTime.Now;
+
+                        var transactionBefore = context.Transaction
+                            .Where(x => !x.IsDelete && x.ReceiptDate < PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate))
+                            .OrderByDescending(x => x.ReceiptDate)
+                            .FirstOrDefault();
+
+                        if (transactionBefore == null)
+                        {
+                            transaction.Credit = model.TypeGuid == Codes.CreditorType ? transaction.Credit + cost : transaction.Credit - cost;
+                        }
+                        else
+                        {
+                            transaction.Credit = model.TypeGuid == Codes.CreditorType ? transactionBefore.Credit + cost : transactionBefore.Credit - cost;
+                        }
+
+                        var transactionsAfter = context.Transaction
+                            .Where(x => !x.IsDelete && x.ReceiptDate > PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate))
+                            .OrderBy(x => x.ReceiptDate)
+                            .ToList();
+
+                        if (transactionsAfter.Count > 0)
+                        {
+                            transactionsAfter[0].Credit = transactionsAfter[0].StateCodeGuid == Codes.PassedState ?
+                                (transactionsAfter[0].TypeCodeGuid == Codes.CreditorType ? transaction.Credit + transactionsAfter[0].Cost : transaction.Credit - transactionsAfter[0].Cost) :
+                                (transactionsAfter[0].Credit = transaction.Credit);
+
+                            for (int i = 1; i < transactionsAfter.Count; i++)
+                            {
+                                transactionsAfter[i].Credit = transactionsAfter[i].StateCodeGuid == Codes.PassedState ?
+                                    (transactionsAfter[i].TypeCodeGuid == Codes.CreditorType ? transactionsAfter[i - 1].Credit + transactionsAfter[i].Cost : transactionsAfter[i - 1].Credit - transactionsAfter[i].Cost) :
+                                    (transactionsAfter[i].Credit = transactionsAfter[i - 1].Credit);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var transactionBefore = context.Transaction
+                            .Where(x => !x.IsDelete && x.ReceiptDate < PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate))
+                            .OrderByDescending(x => x.ReceiptDate)
+                            .FirstOrDefault();
+
+                        transaction.Credit = transactionBefore == null ? 0 : transactionBefore.Credit;
+                    }
                 }
 
                 context.Transaction.Add(transaction);
-                context.CheckTransactionInfo.Add(checkTransactionInfo);
+                context.CheckTransaction.Add(checkTransaction);
 
                 if (Convert.ToBoolean(context.SaveChanges() > 0))
                 {
@@ -185,15 +296,15 @@ namespace Financial.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditAccountTransaction(Guid guid)
+        public IActionResult EditAccountTransaction(Guid transactionGuid)
         {
-            if (guid == null)
+            if (transactionGuid == null)
             {
                 return BadRequest();
             }
 
             var transaction = context.Transaction
-                .Where(x => x.Guid == guid)
+                .Where(x => x.TransactionGuid == transactionGuid)
                 .SingleOrDefault();
 
             if (transaction == null)
@@ -203,7 +314,7 @@ namespace Financial.Controllers
 
             EditAccountTransactionViewModel model = new EditAccountTransactionViewModel()
             {
-                Guid = transaction.Guid,
+                TransactionGuid = transaction.TransactionGuid,
                 AccountGuid = transaction.AccountGuid,
                 TypeGuid = transaction.TypeCodeGuid,
                 StateGuid = transaction.StateCodeGuid,
@@ -229,7 +340,7 @@ namespace Financial.Controllers
             if (ModelState.IsValid)
             {
                 var transaction = context.Transaction
-                    .Where(x => x.Guid == model.Guid)
+                    .Where(x => x.TransactionGuid == model.TransactionGuid)
                     .SingleOrDefault();
 
                 if (transaction == null)
@@ -238,8 +349,17 @@ namespace Financial.Controllers
                 }
 
                 var account = context.Account
-                    .Where(x => x.Guid == transaction.AccountGuid)
+                    .Where(x => x.AccountGuid == transaction.AccountGuid)
                     .SingleOrDefault();
+
+                if (account == null)
+                {
+                    TempData["ToasterState"] = ToasterState.Error;
+                    TempData["ToasterType"] = ToasterType.Message;
+                    TempData["ToasterMessage"] = Messages.CreateTransactionFailedAccountNotValid;
+
+                    return RedirectToAction("Index");
+                }
 
                 if (transaction.AccountGuid.HasValue && transaction.StateCodeGuid == Codes.PassedState)
                 {
@@ -247,7 +367,9 @@ namespace Financial.Controllers
                     account.ModifiedDate = DateTime.Now;
                 }
 
+                model.AccountGuid = Constants.DefaultAccountGuid;
                 long cost = Convert.ToInt64(model.Cost);
+                DateTime transactionOldReceiptDate = transaction.ReceiptDate;
 
                 if (model.AccountGuid.HasValue && model.StateGuid == Codes.PassedState)
                 {
@@ -264,6 +386,38 @@ namespace Financial.Controllers
                 transaction.Description = model.Description;
                 transaction.ReceiptDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate);
                 transaction.ModifiedDate = DateTime.Now;
+
+                DateTime dateToUpdateFrom = transactionOldReceiptDate < transaction.ReceiptDate ? transactionOldReceiptDate : transaction.ReceiptDate;
+
+                var transactionBefore = context.Transaction
+                    .Where(x => !x.IsDelete && x.ReceiptDate < dateToUpdateFrom)
+                    .OrderByDescending(x => x.ReceiptDate)
+                    .FirstOrDefault();
+
+                long transactionBeforeCredit = transactionBefore == null ? 0 : transactionBefore.Credit;
+
+                var transactionsAfter = context.Transaction
+                    .Where(x => !x.IsDelete && x.ReceiptDate > dateToUpdateFrom && x.TransactionGuid != transaction.TransactionGuid)
+                    .OrderBy(x => x.ReceiptDate)
+                    .ToList();
+
+                transactionsAfter.Add(transaction);
+                transactionsAfter = transactionsAfter.OrderBy(x => x.ReceiptDate)
+                    .ToList();
+
+                if (transactionsAfter.Count > 0)
+                {
+                    transactionsAfter[0].Credit = transactionsAfter[0].StateCodeGuid == Codes.PassedState ?
+                        (transactionsAfter[0].TypeCodeGuid == Codes.CreditorType ? transactionBeforeCredit + transactionsAfter[0].Cost : transactionBeforeCredit - transactionsAfter[0].Cost) :
+                        (transactionsAfter[0].Credit = transactionBeforeCredit);
+
+                    for (int i = 1; i < transactionsAfter.Count; i++)
+                    {
+                        transactionsAfter[i].Credit = transactionsAfter[i].StateCodeGuid == Codes.PassedState ?
+                            (transactionsAfter[i].TypeCodeGuid == Codes.CreditorType ? transactionsAfter[i - 1].Credit + transactionsAfter[i].Cost : transactionsAfter[i - 1].Credit - transactionsAfter[i].Cost) :
+                            (transactionsAfter[i].Credit = transactionsAfter[i - 1].Credit);
+                    }
+                }
 
                 if (Convert.ToBoolean(context.SaveChanges() > 0))
                 {
@@ -285,38 +439,38 @@ namespace Financial.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditCheckTransaction(Guid guid)
+        public IActionResult EditCheckTransaction(Guid transactionGuid)
         {
-            if (guid == null)
+            if (transactionGuid == null)
             {
                 return BadRequest();
             }
 
-            var checkTransactionInfo = context.CheckTransactionInfo
-                .Where(x => x.TransactionGuid == guid)
+            var checkTransaction = context.CheckTransaction
+                .Where(x => x.TransactionGuid == transactionGuid)
                 .SingleOrDefault();
 
-            if (checkTransactionInfo == null)
+            if (checkTransaction == null)
             {
                 return NotFound();
             }
 
             var transaction = context.Transaction
-                .Where(x => x.Guid == guid)
+                .Where(x => x.TransactionGuid == transactionGuid)
                 .SingleOrDefault();
 
             EditCheckTransactionViewModel model = new EditCheckTransactionViewModel()
             {
-                Guid = transaction.Guid,
+                TransactionGuid = transaction.TransactionGuid,
                 AccountGuid = transaction.AccountGuid,
                 TypeGuid = transaction.TypeCodeGuid,
                 StateGuid = transaction.StateCodeGuid,
                 Title = transaction.Title,
                 Cost = transaction.Cost.ToString(),
                 AccountSide = transaction.AccountSide,
-                Serial = checkTransactionInfo.Serial,
+                Serial = checkTransaction.Serial,
                 Description = transaction.Description,
-                IssueDate = checkTransactionInfo.IssueDate.ToString(),
+                IssueDate = checkTransaction.IssueDate.ToString(),
                 ReceiptDate = transaction.ReceiptDate.ToString()
             };
 
@@ -334,21 +488,21 @@ namespace Financial.Controllers
         {
             if (ModelState.IsValid)
             {
-                var checkTransactionInfo = context.CheckTransactionInfo
-                    .Where(x => x.TransactionGuid == model.Guid)
+                var checkTransaction = context.CheckTransaction
+                    .Where(x => x.TransactionGuid == model.TransactionGuid)
                     .SingleOrDefault();
 
-                if (checkTransactionInfo == null)
+                if (checkTransaction == null)
                 {
                     return NotFound();
                 }
 
                 var transaction = context.Transaction
-                    .Where(x => x.Guid == model.Guid)
+                    .Where(x => x.TransactionGuid == model.TransactionGuid)
                     .SingleOrDefault();
 
                 var account = context.Account
-                    .Where(x => x.Guid == transaction.AccountGuid)
+                    .Where(x => x.AccountGuid == transaction.AccountGuid)
                     .SingleOrDefault();
 
                 if (transaction.AccountGuid.HasValue && transaction.StateCodeGuid == Codes.PassedState)
@@ -357,7 +511,9 @@ namespace Financial.Controllers
                     account.ModifiedDate = DateTime.Now;
                 }
 
+                model.AccountGuid = Constants.DefaultAccountGuid;
                 long cost = Convert.ToInt64(model.Cost);
+                DateTime transactionOldReceiptDate = transaction.ReceiptDate;
 
                 if (model.AccountGuid.HasValue && model.StateGuid == Codes.PassedState)
                 {
@@ -371,11 +527,43 @@ namespace Financial.Controllers
                 transaction.Title = model.Title;
                 transaction.Cost = cost;
                 transaction.AccountSide = model.AccountSide;
-                checkTransactionInfo.Serial = model.Serial;
+                checkTransaction.Serial = model.Serial;
                 transaction.Description = model.Description;
-                checkTransactionInfo.IssueDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.IssueDate);
+                checkTransaction.IssueDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.IssueDate);
                 transaction.ReceiptDate = PersianDateExtensionMethods.ToGeorgianDateTime(model.ReceiptDate);
                 transaction.ModifiedDate = DateTime.Now;
+
+                DateTime dateToUpdateFrom = transactionOldReceiptDate < transaction.ReceiptDate ? transactionOldReceiptDate : transaction.ReceiptDate;
+
+                var transactionBefore = context.Transaction
+                    .Where(x => !x.IsDelete && x.ReceiptDate < dateToUpdateFrom)
+                    .OrderByDescending(x => x.ReceiptDate)
+                    .FirstOrDefault();
+
+                long transactionBeforeCredit = transactionBefore == null ? 0 : transactionBefore.Credit;
+
+                var transactionsAfter = context.Transaction
+                    .Where(x => !x.IsDelete && x.ReceiptDate > dateToUpdateFrom && x.TransactionGuid != transaction.TransactionGuid)
+                    .OrderBy(x => x.ReceiptDate)
+                    .ToList();
+
+                transactionsAfter.Add(transaction);
+                transactionsAfter = transactionsAfter.OrderBy(x => x.ReceiptDate)
+                    .ToList();
+
+                if (transactionsAfter.Count > 0)
+                {
+                    transactionsAfter[0].Credit = transactionsAfter[0].StateCodeGuid == Codes.PassedState ?
+                        (transactionsAfter[0].TypeCodeGuid == Codes.CreditorType ? transactionBeforeCredit + transactionsAfter[0].Cost : transactionBeforeCredit - transactionsAfter[0].Cost) :
+                        (transactionsAfter[0].Credit = transactionBeforeCredit);
+
+                    for (int i = 1; i < transactionsAfter.Count; i++)
+                    {
+                        transactionsAfter[i].Credit = transactionsAfter[i].StateCodeGuid == Codes.PassedState ?
+                            (transactionsAfter[i].TypeCodeGuid == Codes.CreditorType ? transactionsAfter[i - 1].Credit + transactionsAfter[i].Cost : transactionsAfter[i - 1].Credit - transactionsAfter[i].Cost) :
+                            (transactionsAfter[i].Credit = transactionsAfter[i - 1].Credit);
+                    }
+                }
 
                 if (Convert.ToBoolean(context.SaveChanges() > 0))
                 {
@@ -397,15 +585,15 @@ namespace Financial.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid guid)
+        public IActionResult Delete(Guid transactionGuid)
         {
-            if (guid == null)
+            if (transactionGuid == null)
             {
                 return BadRequest();
             }
 
             var transaction = context.Transaction
-                .Where(x => x.Guid == guid)
+                .Where(x => x.TransactionGuid == transactionGuid)
                 .SingleOrDefault();
 
             if (transaction == null)
@@ -415,7 +603,7 @@ namespace Financial.Controllers
 
             DeleteViewModel model = new DeleteViewModel()
             {
-                Guid = transaction.Guid,
+                Guid = transaction.TransactionGuid,
                 Message = Messages.DeleteTransactionText
             };
 
@@ -428,7 +616,7 @@ namespace Financial.Controllers
             if (ModelState.IsValid)
             {
                 var transaction = context.Transaction
-                    .Where(x => x.Guid == model.Guid)
+                    .Where(x => x.TransactionGuid == model.Guid)
                     .SingleOrDefault();
 
                 if (transaction == null)
@@ -436,20 +624,53 @@ namespace Financial.Controllers
                     NotFound();
                 }
 
-                if (transaction.AccountGuid.HasValue)
+                if (transaction.AccountGuid.HasValue && transaction.StateCodeGuid == Codes.PassedState)
                 {
                     var account = context.Account
-                        .Where(x => x.Guid == transaction.AccountGuid)
+                        .Where(x => x.AccountGuid == transaction.AccountGuid)
                         .SingleOrDefault();
 
-                    if (transaction.StateCodeGuid == Codes.PassedState)
+                    if (account == null)
                     {
-                        account.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? account.Credit - transaction.Cost : account.Credit + transaction.Cost;
-                        account.ModifiedDate = DateTime.Now;
+                        TempData["ToasterState"] = ToasterState.Error;
+                        TempData["ToasterType"] = ToasterType.Message;
+                        TempData["ToasterMessage"] = Messages.CreateTransactionFailedAccountNotValid;
+
+                        return RedirectToAction("Index");
+                    }
+
+                    account.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? account.Credit - transaction.Cost : account.Credit + transaction.Cost;
+                    account.ModifiedDate = DateTime.Now;
+
+                    var transactionBefore = context.Transaction
+                        .Where(x => !x.IsDelete && x.ReceiptDate < transaction.ReceiptDate)
+                        .OrderByDescending(x => x.ReceiptDate)
+                        .FirstOrDefault();
+
+                    long transactionBeforeCredit = transactionBefore == null ? 0 : transactionBefore.Credit;
+
+                    var transactionsAfter = context.Transaction
+                        .Where(x => !x.IsDelete && x.ReceiptDate > transaction.ReceiptDate)
+                        .OrderBy(x => x.ReceiptDate)
+                        .ToList();
+
+                    if (transactionsAfter.Count > 0)
+                    {
+                        transactionsAfter[0].Credit = transactionsAfter[0].StateCodeGuid == Codes.PassedState ?
+                                (transactionsAfter[0].TypeCodeGuid == Codes.CreditorType ? transactionBeforeCredit + transactionsAfter[0].Cost : transactionBeforeCredit - transactionsAfter[0].Cost) :
+                                (transactionsAfter[0].Credit = transactionBeforeCredit);
+
+                        for (int i = 1; i < transactionsAfter.Count; i++)
+                        {
+                            transactionsAfter[i].Credit = transactionsAfter[i].StateCodeGuid == Codes.PassedState ?
+                                (transactionsAfter[i].TypeCodeGuid == Codes.CreditorType ? transactionsAfter[i - 1].Credit + transactionsAfter[i].Cost : transactionsAfter[i - 1].Credit - transactionsAfter[i].Cost) :
+                                (transactionsAfter[i].Credit = transactionsAfter[i - 1].Credit);
+                        }
                     }
                 }
 
                 transaction.IsDelete = true;
+                context.Transaction.Remove(transaction);
 
                 if (Convert.ToBoolean(context.SaveChanges() > 0))
                 {
@@ -471,15 +692,15 @@ namespace Financial.Controllers
         }
 
         [HttpGet]
-        public IActionResult ChangeState(Guid guid)
+        public IActionResult ChangeState(Guid transactionGuid)
         {
-            if (guid == null)
+            if (transactionGuid == null)
             {
                 return BadRequest();
             }
 
             var transaction = context.Transaction
-                .Where(x => x.Guid == guid)
+                .Where(x => x.TransactionGuid == transactionGuid)
                 .SingleOrDefault();
 
             if (transaction == null)
@@ -489,7 +710,7 @@ namespace Financial.Controllers
 
             ChangeTransactionStateViewModel model = new ChangeTransactionStateViewModel()
             {
-                Guid = transaction.Guid,
+                Guid = transaction.TransactionGuid,
                 StateGuid = transaction.StateCodeGuid
             };
 
@@ -504,7 +725,7 @@ namespace Financial.Controllers
             if (ModelState.IsValid)
             {
                 var transaction = context.Transaction
-                    .Where(x => x.Guid == model.Guid)
+                    .Where(x => x.TransactionGuid == model.Guid)
                     .SingleOrDefault();
 
                 if (transaction == null)
@@ -512,30 +733,96 @@ namespace Financial.Controllers
                     NotFound();
                 }
 
-                if (transaction.AccountGuid.HasValue && transaction.StateCodeGuid != model.StateGuid)
+                if (transaction.AccountGuid.HasValue)
                 {
                     var account = context.Account
-                        .Where(x => x.Guid == transaction.AccountGuid)
+                        .Where(x => x.AccountGuid == transaction.AccountGuid)
                         .SingleOrDefault();
 
-                    if (transaction.StateCodeGuid == Codes.WaitingState && model.StateGuid == Codes.PassedState)
+                    if (account == null)
                     {
-                        account.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? account.Credit + transaction.Cost : account.Credit - transaction.Cost;
-                        account.ModifiedDate = DateTime.Now;
+                        TempData["ToasterState"] = ToasterState.Error;
+                        TempData["ToasterType"] = ToasterType.Message;
+                        TempData["ToasterMessage"] = Messages.CreateTransactionFailedAccountNotValid;
+
+                        return RedirectToAction("Index");
                     }
-                    else if (transaction.StateCodeGuid == Codes.PassedState)
+
+                    if (transaction.StateCodeGuid != model.StateGuid)
                     {
-                        account.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? account.Credit - transaction.Cost : account.Credit + transaction.Cost;
-                        account.ModifiedDate = DateTime.Now;
-                    }
-                    else if (transaction.StateCodeGuid == Codes.NotPassedState && model.StateGuid == Codes.PassedState)
-                    {
-                        account.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? account.Credit + transaction.Cost : account.Credit - transaction.Cost;
-                        account.ModifiedDate = DateTime.Now;
+                        if ((transaction.StateCodeGuid == Codes.WaitingState || transaction.StateCodeGuid == Codes.NotPassedState) && model.StateGuid == Codes.PassedState)
+                        {
+                            account.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? account.Credit + transaction.Cost : account.Credit - transaction.Cost;
+                            account.ModifiedDate = DateTime.Now;
+
+                            var transactionBefore = context.Transaction
+                                .Where(x => !x.IsDelete && x.ReceiptDate < transaction.ReceiptDate)
+                                .OrderByDescending(x => x.ReceiptDate)
+                                .FirstOrDefault();
+
+                            long transactionBeforeCredit = transactionBefore == null ? 0 : transactionBefore.Credit;
+                            transaction.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? transactionBeforeCredit + transaction.Cost : transactionBeforeCredit - transaction.Cost;
+
+                            var transactionsAfter = context.Transaction
+                                .Where(x => !x.IsDelete && x.ReceiptDate > transaction.ReceiptDate)
+                                .OrderBy(x => x.ReceiptDate)
+                                .ToList();
+
+                            if (transactionsAfter.Count > 0)
+                            {
+                                transactionsAfter[0].Credit = transactionsAfter[0].StateCodeGuid == Codes.PassedState ?
+                                    (transactionsAfter[0].TypeCodeGuid == Codes.CreditorType ? transaction.Credit + transactionsAfter[0].Cost : transaction.Credit - transactionsAfter[0].Cost) :
+                                    (transactionsAfter[0].Credit = transaction.Credit);
+
+                                for (int i = 1; i < transactionsAfter.Count; i++)
+                                {
+                                    transactionsAfter[i].Credit = transactionsAfter[i].StateCodeGuid == Codes.PassedState ?
+                                        (transactionsAfter[i].TypeCodeGuid == Codes.CreditorType ? transactionsAfter[i - 1].Credit + transactionsAfter[i].Cost : transactionsAfter[i - 1].Credit - transactionsAfter[i].Cost) :
+                                        (transactionsAfter[i].Credit = transactionsAfter[i - 1].Credit);
+                                }
+                            }
+                        }
+                        else if (transaction.StateCodeGuid == Codes.PassedState)
+                        {
+                            account.Credit = transaction.TypeCodeGuid == Codes.CreditorType ? account.Credit - transaction.Cost : account.Credit + transaction.Cost;
+                            account.ModifiedDate = DateTime.Now;
+
+                            var transactionBefore = context.Transaction
+                                .Where(x => !x.IsDelete && x.ReceiptDate < transaction.ReceiptDate)
+                                .OrderByDescending(x => x.ReceiptDate)
+                                .FirstOrDefault();
+
+                            long transactionBeforeCredit = transactionBefore == null ? 0 : transactionBefore.Credit;
+                            transaction.Credit = transactionBeforeCredit;
+
+                            var transactionsAfter = context.Transaction
+                                .Where(x => !x.IsDelete && x.ReceiptDate > transaction.ReceiptDate)
+                                .OrderBy(x => x.ReceiptDate)
+                                .ToList();
+
+                            if (transactionsAfter.Count > 0)
+                            {
+                                transactionsAfter[0].Credit = transactionsAfter[0].StateCodeGuid == Codes.PassedState ?
+                                    (transactionsAfter[0].TypeCodeGuid == Codes.CreditorType ? transaction.Credit + transactionsAfter[0].Cost : transaction.Credit - transactionsAfter[0].Cost) :
+                                    (transactionsAfter[0].Credit = transaction.Credit);
+
+                                for (int i = 1; i < transactionsAfter.Count; i++)
+                                {
+                                    transactionsAfter[i].Credit = transactionsAfter[i].StateCodeGuid == Codes.PassedState ?
+                                        (transactionsAfter[i].TypeCodeGuid == Codes.CreditorType ? transactionsAfter[i - 1].Credit + transactionsAfter[i].Cost : transactionsAfter[i - 1].Credit - transactionsAfter[i].Cost) :
+                                        (transactionsAfter[i].Credit = transactionsAfter[i - 1].Credit);
+                                }
+                            }
+                        }
+
+                        transaction.StateCodeGuid = model.StateGuid;
                     }
                 }
-
-                transaction.StateCodeGuid = model.StateGuid;
+                else
+                {
+                    transaction.StateCodeGuid = model.StateGuid;
+                }
+                
                 transaction.ModifiedDate = DateTime.Now;
 
                 if (Convert.ToBoolean(context.SaveChanges() > 0))
@@ -558,30 +845,26 @@ namespace Financial.Controllers
         }
 
         [HttpGet]
-        public IActionResult ShowCheckInfo(Guid guid)
+        public IActionResult ShowCheckInfo(Guid transactionGuid)
         {
-            if (guid == null)
+            if (transactionGuid == null)
             {
                 return BadRequest();
             }
 
-            var checkTransactionInfo = context.CheckTransactionInfo
-                .Where(x => x.TransactionGuid == guid)
+            var checkTransaction = context.CheckTransaction
+                .Where(x => x.TransactionGuid == transactionGuid)
                 .SingleOrDefault();
 
-            if (checkTransactionInfo == null)
+            if (checkTransaction == null)
             {
                 return NotFound();
             }
 
-            var transaction = context.Transaction
-                .Where(x => x.Guid == guid)
-                .SingleOrDefault();
-
-            CheckTransitionInfoViewModel model = new CheckTransitionInfoViewModel()
+            CheckTransitionViewModel model = new CheckTransitionViewModel()
             {
-                Serial = checkTransactionInfo.Serial,
-                IssueDate = PersianDateExtensionMethods.ToPeString(checkTransactionInfo.IssueDate, "yyyy/MM/dd")
+                Serial = string.IsNullOrEmpty(checkTransaction.Serial) ? Messages.NotSet : checkTransaction.Serial,
+                IssueDate = PersianDateExtensionMethods.ToPeString(checkTransaction.IssueDate, "yyyy/MM/dd")
             };
 
             return PartialView(model);
